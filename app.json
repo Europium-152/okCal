@@ -1,0 +1,75 @@
+{
+  "expo": {
+    "name": "okCal",
+    "slug": "okcal",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "okcal",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.danielhachmeister.okcal",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.danielhachmeister.okcal",
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff",
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "backgroundColor": "#000000"
+          }
+        }
+      ],
+      "expo-document-picker",
+      "expo-font",
+      "expo-image",
+      "expo-sharing",
+      "expo-status-bar",
+      "expo-web-browser",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "okCal uses the camera to scan barcodes and to let AI estimate calories from a photo of your food."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "okCal uses your photo library so you can pick a food photo for AI calorie estimation.",
+          "cameraPermission": "okCal uses the camera to take a photo of your food for AI calorie estimation."
+        }
+      ]
+    ],
+    "experiments": {
+      "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "070142ce-4643-4370-8efd-c2f6fe0948d7"
+      }
+    },
+    "owner": "europium-152"
+  }
+}

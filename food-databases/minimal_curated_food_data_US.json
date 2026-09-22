@@ -1,0 +1,2559 @@
+{
+  "Foods": [
+    {
+      "description": "Hummus, commercial",
+      "protein": 7.35,
+      "carb": 0.34,
+      "energy": 229,
+      "fat": 17.1
+    },
+    {
+      "description": "Tomatoes, grape, raw",
+      "protein": 0.83,
+      "carb": 5.51,
+      "energy": 27.0,
+      "fat": 0.63
+    },
+    {
+      "description": "Beans, snap, green, canned, regular pack, drained solids",
+      "carb": 1.29,
+      "protein": 1.04,
+      "energy": 21.0,
+      "fat": 0.39
+    },
+    {
+      "description": "Frankfurter, beef, unheated",
+      "carb": 1.26,
+      "protein": 11.7,
+      "energy": 314,
+      "fat": 28.0
+    },
+    {
+      "description": "Nuts, almonds, dry roasted, with salt added",
+      "carb": 4.17,
+      "protein": 20.4,
+      "energy": 620,
+      "fat": 57.8
+    },
+    {
+      "description": "Kale, raw",
+      "protein": 2.92,
+      "carb": 0.8,
+      "energy": 35.0,
+      "fat": 1.49
+    },
+    {
+      "description": "Egg, whole, raw, frozen, pasteurized",
+      "protein": 12.3,
+      "carb": 0.91,
+      "energy": 150,
+      "fat": 10.3
+    },
+    {
+      "description": "Egg, white, raw, frozen, pasteurized",
+      "carb": 0.74,
+      "protein": 10.1,
+      "energy": 48.0,
+      "fat": 0.16
+    },
+    {
+      "description": "Egg, white, dried",
+      "protein": 79.9,
+      "carb": 6.02,
+      "energy": 376,
+      "fat": 0.65
+    },
+    {
+      "description": "Onion rings, breaded, par fried, frozen, prepared, heated in oven",
+      "carb": 4.5,
+      "protein": 4.52,
+      "energy": 288,
+      "fat": 14.4
+    },
+    {
+      "description": "Pickles, cucumber, dill or kosher dill",
+      "carb": 1.28,
+      "protein": 0.48,
+      "energy": 12.0,
+      "fat": 0.43
+    },
+    {
+      "description": "Cheese, parmesan, grated",
+      "carb": 0.07,
+      "protein": 29.6,
+      "energy": 421,
+      "fat": 28.0
+    },
+    {
+      "description": "Cheese, pasteurized process, American, vitamin D fortified",
+      "protein": 18.0,
+      "carb": 2.63,
+      "energy": 366,
+      "fat": 30.6
+    },
+    {
+      "description": "Grapefruit juice, white, canned or bottled, unsweetened",
+      "protein": 0.55,
+      "carb": 7.72,
+      "energy": 37.0,
+      "fat": 0.7
+    },
+    {
+      "description": "Peaches, yellow, raw",
+      "carb": 8.39,
+      "protein": 0.91,
+      "energy": 42.0,
+      "fat": 0.27
+    },
+    {
+      "description": "Seeds, sunflower seed kernels, dry roasted, with salt added",
+      "carb": 3.14,
+      "protein": 21.0,
+      "energy": 612,
+      "fat": 56.1
+    },
+    {
+      "description": "Bread, white, commercially prepared",
+      "carb": 5.34,
+      "protein": 9.43,
+      "energy": 270,
+      "fat": 3.59
+    },
+    {
+      "description": "Kale, frozen, cooked, boiled, drained, without salt",
+      "carb": 1.12,
+      "protein": 2.94,
+      "energy": 36.0,
+      "fat": 1.21
+    },
+    {
+      "description": "Mustard, prepared, yellow",
+      "protein": 4.25,
+      "carb": 1.42,
+      "energy": 61.0,
+      "fat": 3.38
+    },
+    {
+      "description": "Kiwifruit, green, raw",
+      "carb": 14.0,
+      "protein": 1.06,
+      "energy": 58.0,
+      "fat": 0.44
+    },
+    {
+      "description": "Nectarines, raw",
+      "carb": 7.89,
+      "protein": 1.06,
+      "energy": 39.0,
+      "fat": 0.28
+    },
+    {
+      "description": "Cheese, cheddar",
+      "carb": 0.33,
+      "protein": 23.3,
+      "energy": 408,
+      "fat": 34.0
+    },
+    {
+      "description": "Cheese, cottage, lowfat, 2% milkfat",
+      "carb": 4.1,
+      "protein": 11.0,
+      "energy": 84.0,
+      "fat": 2.3
+    },
+    {
+      "description": "Cheese, mozzarella, low moisture, part-skim",
+      "protein": 23.7,
+      "carb": 1.81,
+      "energy": 298,
+      "fat": 20.4
+    },
+    {
+      "description": "Egg, whole, dried",
+      "protein": 48.1,
+      "carb": 1.87,
+      "energy": 575,
+      "fat": 39.8
+    },
+    {
+      "description": "Egg, yolk, raw, frozen, pasteurized",
+      "carb": 0.59,
+      "protein": 15.6,
+      "energy": 296,
+      "fat": 25.1
+    },
+    {
+      "description": "Egg, yolk, dried",
+      "carb": 1.07,
+      "protein": 34.2,
+      "energy": 654,
+      "fat": 55.5
+    },
+    {
+      "description": "Yogurt, Greek, plain, nonfat",
+      "protein": 10.3,
+      "carb": 3.27,
+      "energy": 61.0,
+      "fat": 0.37
+    },
+    {
+      "description": "Yogurt, Greek, strawberry, nonfat",
+      "carb": 11.5,
+      "protein": 8.06,
+      "energy": 83.0,
+      "fat": 0.15
+    },
+    {
+      "description": "Oil, coconut",
+      "protein": 0.0,
+      "carb": 0.84,
+      "energy": 833,
+      "fat": 99.1
+    },
+    {
+      "description": "Chicken, broilers or fryers, drumstick, meat only, cooked, braised",
+      "protein": 23.9,
+      "carb": 0.0,
+      "energy": 156,
+      "fat": 5.95
+    },
+    {
+      "description": "Chicken, broiler or fryers, breast, skinless, boneless, meat only, cooked, braised",
+      "carb": 0.0,
+      "protein": 32.1,
+      "energy": 166,
+      "fat": 3.24
+    },
+    {
+      "description": "Sauce, pasta, spaghetti/marinara, ready-to-serve",
+      "carb": 5.5,
+      "protein": 1.41,
+      "energy": 45.0,
+      "fat": 1.48
+    },
+    {
+      "description": "Ham, sliced, pre-packaged, deli meat (96%fat free, water added)",
+      "protein": 16.7,
+      "carb": 0.27,
+      "energy": 106,
+      "fat": 3.73
+    },
+    {
+      "description": "Olives, green, Manzanilla, stuffed with pimiento",
+      "carb": 4.96,
+      "protein": 1.15,
+      "energy": 130,
+      "fat": 12.9
+    },
+    {
+      "description": "Cookies, oatmeal, soft, with raisins",
+      "carb": 69.6,
+      "protein": 5.79,
+      "energy": 430,
+      "fat": 14.3
+    },
+    {
+      "description": "Tomatoes, canned, red, ripe, diced",
+      "carb": 3.32,
+      "protein": 0.84,
+      "energy": 18.0,
+      "fat": 0.5
+    },
+    {
+      "description": "Fish, haddock, raw",
+      "protein": 16.3,
+      "carb": 0.0,
+      "energy": 74.0,
+      "fat": 0.45
+    },
+    {
+      "description": "Fish, pollock, raw",
+      "protein": 12.3,
+      "carb": 0.0,
+      "energy": 56.0,
+      "fat": 0.41
+    },
+    {
+      "description": "Fish, tuna, light, canned in water, drained solids",
+      "protein": 19.0,
+      "carb": 0.0,
+      "energy": 90.0,
+      "fat": 0.94
+    },
+    {
+      "description": "Restaurant, Chinese, fried rice, without meat",
+      "carb": 0.62,
+      "protein": 3.84,
+      "energy": 174,
+      "fat": 3.19
+    },
+    {
+      "description": "Restaurant, Latino, tamale, pork",
+      "protein": 7.38,
+      "carb": 0.46,
+      "energy": 174,
+      "fat": 9.04
+    },
+    {
+      "description": "Restaurant, Latino, pupusas con frijoles (pupusas, bean)",
+      "protein": 5.59,
+      "carb": 1.3,
+      "energy": 229,
+      "fat": 9.01
+    },
+    {
+      "description": "Bread, whole-wheat, commercially prepared",
+      "carb": 4.41,
+      "protein": 12.3,
+      "energy": 254,
+      "fat": 3.55
+    },
+    {
+      "description": "Beef, loin, tenderloin roast, separable lean only, boneless, trimmed to 0\" fat, select, cooked, roasted",
+      "carb": 0.0,
+      "protein": 27.7,
+      "energy": 176,
+      "fat": 6.36
+    },
+    {
+      "description": "Beef, loin, top loin steak, boneless, lip-on, separable lean only, trimmed to 1/8\" fat, choice, raw",
+      "carb": 0.0,
+      "protein": 22.8,
+      "energy": 155,
+      "fat": 6.39
+    },
+    {
+      "description": "Beef, round, eye of round roast, boneless, separable lean only, trimmed to 0\" fat, select, raw",
+      "protein": 23.4,
+      "carb": 0.0,
+      "energy": 122,
+      "fat": 2.48
+    },
+    {
+      "description": "Beef, round, top round roast, boneless, separable lean only, trimmed to 0\" fat, select, raw",
+      "carb": 0.0,
+      "protein": 23.7,
+      "energy": 123,
+      "fat": 2.41
+    },
+    {
+      "description": "Beef, short loin, porterhouse steak, separable lean only, trimmed to 1/8\" fat, select, raw",
+      "protein": 22.7,
+      "carb": 0.0,
+      "energy": 145,
+      "fat": 5.32
+    },
+    {
+      "description": "Beef, short loin, t-bone steak, bone-in, separable lean only, trimmed to 1/8\" fat, choice, cooked, grilled",
+      "protein": 27.3,
+      "carb": 0.0,
+      "energy": 219,
+      "fat": 11.4
+    },
+    {
+      "description": "Carrots, frozen, unprepared",
+      "protein": 0.81,
+      "carb": 4.2,
+      "energy": 37.0,
+      "fat": 0.47
+    },
+    {
+      "description": "Cheese, dry white, queso seco",
+      "protein": 24.5,
+      "carb": 0.43,
+      "energy": 326,
+      "fat": 24.3
+    },
+    {
+      "description": "Cheese, ricotta, whole milk",
+      "protein": 7.81,
+      "carb": 6.86,
+      "energy": 157,
+      "fat": 11.0
+    },
+    {
+      "description": "Cheese, swiss",
+      "carb": 0.0,
+      "protein": 27.0,
+      "energy": 393,
+      "fat": 31.0
+    },
+    {
+      "description": "Figs, dried, uncooked",
+      "carb": 47.9,
+      "protein": 3.3,
+      "energy": 249,
+      "fat": 0.92
+    },
+    {
+      "description": "Lettuce, cos or romaine, raw",
+      "carb": 1.19,
+      "protein": 1.24,
+      "energy": 17.0,
+      "fat": 0.26
+    },
+    {
+      "description": "Melons, cantaloupe, raw",
+      "carb": 7.88,
+      "protein": 0.82,
+      "energy": 34.0,
+      "fat": 0.18
+    },
+    {
+      "description": "Oranges, raw, navels",
+      "protein": 0.91,
+      "carb": 8.57,
+      "energy": 47.0,
+      "fat": 0.15
+    },
+    {
+      "description": "Milk, lowfat, fluid, 1% milkfat, with added vitamin A and vitamin D",
+      "protein": 3.38,
+      "carb": 4.96,
+      "energy": 43.0,
+      "fat": 0.95
+    },
+    {
+      "description": "Pears, raw, bartlett",
+      "protein": 0.38,
+      "carb": 9.69,
+      "energy": 57.0,
+      "fat": 0.16
+    },
+    {
+      "description": "Restaurant, Chinese, sweet and sour pork",
+      "protein": 8.88,
+      "carb": 10.3,
+      "energy": 260,
+      "fat": 13.6
+    },
+    {
+      "description": "Salt, table, iodized",
+      "fat": 0,
+      "carb": 0,
+      "protein": 0,
+      "energy": 0
+    },
+    {
+      "description": "Milk, nonfat, fluid, with added vitamin A and vitamin D (fat free or skim)",
+      "protein": 3.43,
+      "carb": 5.05,
+      "energy": 34.0,
+      "fat": 0.08
+    },
+    {
+      "description": "Sauce, salsa, ready-to-serve",
+      "protein": 1.44,
+      "carb": 3.81,
+      "energy": 29.0,
+      "fat": 0.19
+    },
+    {
+      "description": "Milk, reduced fat, fluid, 2% milkfat, with added vitamin A and vitamin D",
+      "protein": 3.36,
+      "carb": 4.89,
+      "energy": 50.0,
+      "fat": 1.9
+    },
+    {
+      "description": "Sausage, breakfast sausage, beef, pre-cooked, unprepared",
+      "carb": 1.0,
+      "protein": 13.3,
+      "energy": 328,
+      "fat": 28.7
+    },
+    {
+      "description": "Sausage, Italian, pork, mild, cooked, pan-fried",
+      "carb": 1.46,
+      "protein": 18.2,
+      "energy": 322,
+      "fat": 26.2
+    },
+    {
+      "description": "Sausage, pork, chorizo, link or ground, cooked, pan-fried",
+      "protein": 19.3,
+      "carb": 2.63,
+      "energy": 346,
+      "fat": 28.1
+    },
+    {
+      "description": "Milk, whole, 3.25% milkfat, with added vitamin D",
+      "carb": 4.81,
+      "protein": 3.27,
+      "energy": 60.0,
+      "fat": 3.2
+    },
+    {
+      "description": "Sausage, turkey, breakfast links, mild, raw",
+      "protein": 16.7,
+      "carb": 0.93,
+      "energy": 169,
+      "fat": 10.4
+    },
+    {
+      "description": "Sugars, granulated",
+      "protein": 0.0,
+      "carb": 99.8,
+      "energy": 385,
+      "fat": 0.32
+    },
+    {
+      "description": "Turkey, ground, 93% lean, 7% fat, pan-broiled crumbles",
+      "protein": 27.1,
+      "carb": 0.0,
+      "energy": 220,
+      "fat": 11.6
+    },
+    {
+      "description": "Ham, sliced, restaurant",
+      "carb": 2.36,
+      "protein": 19.6,
+      "energy": 121,
+      "fat": 3.68
+    },
+    {
+      "description": "Cheese, American, restaurant",
+      "carb": 6.35,
+      "protein": 17.5,
+      "energy": 375,
+      "fat": 31.1
+    },
+    {
+      "description": "Beans, Dry, Medium Red (0% moisture)",
+      "protein": 25.5,
+      "fat": 1.04,
+      "carb": 0,
+      "energy": 111.36
+    },
+    {
+      "description": "Beans, Dry, Red (0% moisture)",
+      "protein": 21.3,
+      "fat": 1.16,
+      "carb": 0,
+      "energy": 95.64
+    },
+    {
+      "description": "Beans, Dry, Flor de Mayo (0% moisture)",
+      "protein": 23.3,
+      "fat": 0.86,
+      "carb": 0,
+      "energy": 100.94
+    },
+    {
+      "description": "Beans, Dry, Brown (0% moisture)",
+      "protein": 25.6,
+      "fat": 1.12,
+      "carb": 0,
+      "energy": 112.48
+    },
+    {
+      "description": "Beans, Dry, Tan (0% moisture)",
+      "protein": 26.8,
+      "fat": 1.14,
+      "carb": 0,
+      "energy": 117.46000000000001
+    },
+    {
+      "description": "Beans, Dry, Light Tan (0% moisture)",
+      "protein": 24.6,
+      "fat": 1.28,
+      "carb": 0,
+      "energy": 109.92
+    },
+    {
+      "description": "Beans, Dry, Carioca (0% moisture)",
+      "protein": 25.2,
+      "fat": 1.44,
+      "carb": 0,
+      "energy": 113.75999999999999
+    },
+    {
+      "description": "Beans, Dry, Cranberry (0% moisture)",
+      "protein": 24.4,
+      "fat": 1.23,
+      "carb": 0,
+      "energy": 108.66999999999999
+    },
+    {
+      "description": "Beans, Dry, Light Red Kidney (0% moisture)",
+      "protein": 25.0,
+      "fat": 1.03,
+      "carb": 0,
+      "energy": 109.27
+    },
+    {
+      "description": "Beans, Dry, Pink (0% moisture)",
+      "protein": 23.4,
+      "fat": 1.2,
+      "carb": 0,
+      "energy": 104.39999999999999
+    },
+    {
+      "description": "Beans, Dry, Dark Red Kidney (0% moisture)",
+      "protein": 25.9,
+      "fat": 1.31,
+      "carb": 0,
+      "energy": 115.39
+    },
+    {
+      "description": "Beans, Dry, Navy (0% moisture)",
+      "protein": 24.1,
+      "fat": 1.51,
+      "carb": 0,
+      "energy": 109.99000000000001
+    },
+    {
+      "description": "Beans, Dry, Small White (0% moisture)",
+      "protein": 24.5,
+      "fat": 1.32,
+      "carb": 0,
+      "energy": 109.88
+    },
+    {
+      "description": "Beans, Dry, Small Red (0% moisture)",
+      "protein": 23.5,
+      "fat": 1.28,
+      "carb": 0,
+      "energy": 105.52
+    },
+    {
+      "description": "Beans, Dry, Black (0% moisture)",
+      "protein": 24.4,
+      "fat": 1.45,
+      "carb": 0,
+      "energy": 110.64999999999999
+    },
+    {
+      "description": "Beans, Dry, Pinto (0% moisture)",
+      "protein": 23.7,
+      "fat": 1.24,
+      "carb": 0,
+      "energy": 105.96
+    },
+    {
+      "description": "Beans, Dry, Great Northern (0% moisture)",
+      "protein": 24.7,
+      "fat": 1.24,
+      "carb": 0,
+      "energy": 109.96
+    },
+    {
+      "description": "Broccoli, raw",
+      "carb": 1.4,
+      "protein": 2.57,
+      "energy": 31.0,
+      "fat": 0.34
+    },
+    {
+      "description": "Ketchup, restaurant",
+      "carb": 26.8,
+      "protein": 1.11,
+      "energy": 117,
+      "fat": 0.55
+    },
+    {
+      "description": "Eggs, Grade A, Large, egg white",
+      "protein": 10.7,
+      "carb": 2.36,
+      "energy": 55.0,
+      "fat": 0.0
+    },
+    {
+      "description": "Eggs, Grade A, Large, egg yolk",
+      "protein": 16.2,
+      "carb": 1.02,
+      "energy": 334,
+      "fat": 28.8
+    },
+    {
+      "description": "Oil, canola",
+      "fat": 94.5,
+      "carb": 0,
+      "protein": 0,
+      "energy": 850.5
+    },
+    {
+      "description": "Oil, corn",
+      "fat": 94.0,
+      "carb": 0,
+      "protein": 0,
+      "energy": 846.0
+    },
+    {
+      "description": "Oil, soybean",
+      "fat": 94.6,
+      "carb": 0,
+      "protein": 0,
+      "energy": 851.4
+    },
+    {
+      "description": "Oil, olive, extra virgin",
+      "fat": 93.7,
+      "carb": 0,
+      "protein": 0,
+      "energy": 843.3000000000001
+    },
+    {
+      "description": "Eggs, Grade A, Large, egg whole",
+      "protein": 12.4,
+      "carb": 0.2,
+      "energy": 148,
+      "fat": 9.96
+    },
+    {
+      "description": "Pork, cured, bacon, cooked, restaurant",
+      "carb": 2.1,
+      "protein": 40.9,
+      "energy": 500,
+      "fat": 36.5
+    },
+    {
+      "description": "Butter, stick, unsalted",
+      "fat": 81.5,
+      "carb": 0,
+      "protein": 0,
+      "energy": 733.5
+    },
+    {
+      "description": "Flour, wheat, all-purpose, enriched, bleached",
+      "protein": 10.9,
+      "carb": 77.3,
+      "energy": 366,
+      "fat": 1.48
+    },
+    {
+      "description": "Flour, wheat, all-purpose, enriched, unbleached",
+      "carb": 73.2,
+      "protein": 13.1,
+      "energy": 358,
+      "fat": 1.48
+    },
+    {
+      "description": "Flour, wheat, all-purpose, unenriched, unbleached",
+      "carb": 74.6,
+      "protein": 12.0,
+      "energy": 362,
+      "fat": 1.7
+    },
+    {
+      "description": "Flour, whole wheat, unenriched",
+      "carb": 71.2,
+      "protein": 15.1,
+      "energy": 370,
+      "fat": 2.73
+    },
+    {
+      "description": "Flour, bread, white, enriched, unbleached",
+      "protein": 14.3,
+      "carb": 72.8,
+      "energy": 363,
+      "fat": 1.65
+    },
+    {
+      "description": "Flour, rice, white, unenriched",
+      "carb": 79.8,
+      "protein": 6.94,
+      "energy": 359,
+      "fat": 1.3
+    },
+    {
+      "description": "Flour, corn, yellow, fine meal, enriched",
+      "carb": 80.8,
+      "protein": 6.2,
+      "energy": 364,
+      "fat": 1.74
+    },
+    {
+      "description": "Butter, stick, salted",
+      "carb": 0.58,
+      "fat": 82.2,
+      "protein": 0,
+      "energy": 742.1200000000001
+    },
+    {
+      "description": "Onions, red, raw",
+      "protein": 0.94,
+      "carb": 9.93,
+      "energy": 44.0,
+      "fat": 0.1
+    },
+    {
+      "description": "Onions, yellow, raw",
+      "protein": 0.83,
+      "carb": 8.61,
+      "energy": 38.0,
+      "fat": 0.05
+    },
+    {
+      "description": "Garlic, raw",
+      "protein": 6.62,
+      "carb": 28.2,
+      "energy": 143,
+      "fat": 0.38
+    },
+    {
+      "description": "Flour, soy, defatted",
+      "carb": 32.9,
+      "protein": 51.1,
+      "energy": 366,
+      "fat": 3.33
+    },
+    {
+      "description": "Flour, soy, full-fat",
+      "carb": 27.9,
+      "protein": 38.6,
+      "energy": 452,
+      "fat": 20.7
+    },
+    {
+      "description": "Flour, rice, brown",
+      "protein": 7.19,
+      "carb": 75.5,
+      "energy": 365,
+      "fat": 3.85
+    },
+    {
+      "description": "Flour, rice, glutinous",
+      "protein": 6.69,
+      "carb": 80.1,
+      "energy": 358,
+      "fat": 1.16
+    },
+    {
+      "description": "Flour, pastry, unenriched, unbleached",
+      "protein": 8.75,
+      "carb": 77.2,
+      "energy": 358,
+      "fat": 1.64
+    },
+    {
+      "description": "Onions, white, raw",
+      "carb": 7.68,
+      "protein": 0.89,
+      "energy": 35.0,
+      "fat": 0.13
+    },
+    {
+      "description": "Bananas, overripe, raw",
+      "protein": 0.73,
+      "carb": 15.8,
+      "energy": 85.0,
+      "fat": 0.22
+    },
+    {
+      "description": "Bananas, ripe and slightly ripe, raw",
+      "carb": 15.8,
+      "protein": 0.74,
+      "energy": 97.0,
+      "fat": 0.29
+    },
+    {
+      "description": "Apples, red delicious, with skin, raw",
+      "protein": 0.188,
+      "carb": 12.2,
+      "energy": 61.8,
+      "fat": 0.212
+    },
+    {
+      "description": "Apples, fuji, with skin, raw",
+      "protein": 0.148,
+      "carb": 13.3,
+      "energy": 64.7,
+      "fat": 0.162
+    },
+    {
+      "description": "Apples, gala, with skin, raw",
+      "protein": 0.133,
+      "carb": 11.8,
+      "energy": 61.0,
+      "fat": 0.15
+    },
+    {
+      "description": "Apples, granny smith, with skin, raw",
+      "protein": 0.266,
+      "carb": 10.7,
+      "energy": 58.9,
+      "fat": 0.138
+    },
+    {
+      "description": "Apples, honeycrisp, with skin, raw",
+      "protein": 0.102,
+      "carb": 12.4,
+      "energy": 60.0,
+      "fat": 0.1
+    },
+    {
+      "description": "Oil, peanut",
+      "fat": 93.4,
+      "carb": 0,
+      "protein": 0,
+      "energy": 840.6
+    },
+    {
+      "description": "Oil, sunflower",
+      "fat": 93.2,
+      "carb": 0,
+      "protein": 0,
+      "energy": 838.8000000000001
+    },
+    {
+      "description": "Oil, safflower",
+      "fat": 93.2,
+      "carb": 0,
+      "protein": 0,
+      "energy": 838.8000000000001
+    },
+    {
+      "description": "Oil, olive, extra light",
+      "fat": 92.9,
+      "carb": 0,
+      "protein": 0,
+      "energy": 836.1
+    },
+    {
+      "description": "Mushroom, lion's mane",
+      "protein": 2.5,
+      "carb": 7.59,
+      "energy": 42.7,
+      "fat": 0.256
+    },
+    {
+      "description": "Mushroom, oyster",
+      "protein": 2.9,
+      "carb": 6.94,
+      "energy": 41.0,
+      "fat": 0.188
+    },
+    {
+      "description": "Mushrooms, shiitake",
+      "protein": 2.41,
+      "carb": 8.17,
+      "energy": 44.1,
+      "fat": 0.195
+    },
+    {
+      "description": "Mushrooms, white button",
+      "protein": 2.89,
+      "carb": 4.08,
+      "energy": 31.2,
+      "fat": 0.371
+    },
+    {
+      "description": "Soy milk, unsweetened, plain, shelf stable",
+      "protein": 3.55,
+      "carb": 0.557,
+      "energy": 38.5,
+      "fat": 2.12
+    },
+    {
+      "description": "Almond milk, unsweetened, plain, shelf stable",
+      "protein": 0.555,
+      "carb": 0.0,
+      "energy": 14.6,
+      "fat": 1.22
+    },
+    {
+      "description": "Spinach, baby",
+      "protein": 2.85,
+      "carb": 2.41,
+      "energy": 26.6,
+      "fat": 0.619
+    },
+    {
+      "description": "Spinach, mature",
+      "protein": 2.91,
+      "carb": 2.64,
+      "energy": 27.6,
+      "fat": 0.604
+    },
+    {
+      "description": "Tomato, roma",
+      "protein": 0.696,
+      "carb": 3.84,
+      "energy": 22.0,
+      "fat": 0.425
+    },
+    {
+      "description": "Flour, 00",
+      "protein": 11.4,
+      "carb": 74.4,
+      "energy": 357,
+      "fat": 1.52
+    },
+    {
+      "description": "Flour, spelt, whole grain",
+      "protein": 14.5,
+      "carb": 70.7,
+      "energy": 364,
+      "fat": 2.54
+    },
+    {
+      "description": "Flour, semolina, coarse and semi-coarse",
+      "protein": 11.7,
+      "carb": 73.8,
+      "energy": 357,
+      "fat": 1.6
+    },
+    {
+      "description": "Flour, semolina, fine",
+      "protein": 13.3,
+      "carb": 72.0,
+      "energy": 358,
+      "fat": 1.84
+    },
+    {
+      "description": "Apple juice, with added vitamin C, from concentrate, shelf stable",
+      "protein": 0.086,
+      "carb": 10.3,
+      "energy": 48.4,
+      "fat": 0.286
+    },
+    {
+      "description": "Orange juice, no pulp, not fortified, from concentrate, refrigerated",
+      "protein": 0.734,
+      "carb": 8.28,
+      "energy": 47.2,
+      "fat": 0.325
+    },
+    {
+      "description": "Grape juice, purple, with added vitamin C, from concentrate, shelf stable",
+      "protein": 0.258,
+      "carb": 14.0,
+      "energy": 66.1,
+      "fat": 0.288
+    },
+    {
+      "description": "Grape juice, white, with added vitamin C, from concentrate, shelf stable",
+      "protein": 0.094,
+      "carb": 14.4,
+      "energy": 66.1,
+      "fat": 0.265
+    },
+    {
+      "description": "Cranberry juice, not fortified, from concentrate, shelf stable",
+      "protein": 0.0,
+      "carb": 3.41,
+      "energy": 32.1,
+      "fat": 0.338
+    },
+    {
+      "description": "Grapefruit juice, red, not fortified, not from concentrate, refrigerated",
+      "protein": 0.57,
+      "carb": 7.12,
+      "energy": 41.1,
+      "fat": 0.267
+    },
+    {
+      "description": "Tomato juice, with added ingredients, from concentrate, shelf stable",
+      "protein": 0.859,
+      "carb": 2.57,
+      "energy": 23.3,
+      "fat": 0.288
+    },
+    {
+      "description": "Orange juice, no pulp, not fortified, not from concentrate, refrigerated",
+      "protein": 0.812,
+      "carb": 8.08,
+      "energy": 46.5,
+      "fat": 0.356
+    },
+    {
+      "description": "Mushroom, portabella",
+      "protein": 2.75,
+      "carb": 4.66,
+      "energy": 32.4,
+      "fat": 0.312
+    },
+    {
+      "description": "Mushroom, king oyster",
+      "protein": 2.41,
+      "carb": 8.5,
+      "energy": 46.4,
+      "fat": 0.308
+    },
+    {
+      "description": "Mushroom, enoki",
+      "protein": 2.42,
+      "carb": 8.14,
+      "energy": 44.4,
+      "fat": 0.245
+    },
+    {
+      "description": "Mushroom, crimini",
+      "protein": 3.09,
+      "carb": 4.01,
+      "energy": 30.2,
+      "fat": 0.197
+    },
+    {
+      "description": "Mushroom, maitake",
+      "protein": 2.2,
+      "carb": 6.6,
+      "energy": 37.6,
+      "fat": 0.265
+    },
+    {
+      "description": "Mushroom, beech",
+      "protein": 2.18,
+      "carb": 6.76,
+      "energy": 39.8,
+      "fat": 0.449
+    },
+    {
+      "description": "Mushroom, pioppini",
+      "protein": 3.5,
+      "carb": 5.76,
+      "energy": 39.2,
+      "fat": 0.24
+    },
+    {
+      "description": "Soy milk, sweetened, plain, refrigerated",
+      "protein": 2.78,
+      "carb": 3.0,
+      "energy": 40.7,
+      "fat": 1.96
+    },
+    {
+      "description": "Almond milk, unsweetened, plain, refrigerated",
+      "protein": 0.656,
+      "carb": 0.671,
+      "energy": 19.3,
+      "fat": 1.56
+    },
+    {
+      "description": "Oat milk, unsweetened, plain, refrigerated",
+      "protein": 0.797,
+      "carb": 2.32,
+      "energy": 48.3,
+      "fat": 2.75
+    },
+    {
+      "description": "Carrots, mature, raw",
+      "protein": 0.941,
+      "carb": 10.3,
+      "energy": 48.0,
+      "fat": 0.351
+    },
+    {
+      "description": "Carrots, baby, raw",
+      "protein": 0.805,
+      "carb": 9.08,
+      "energy": 40.8,
+      "fat": 0.138
+    },
+    {
+      "description": "Peppers, bell, green, raw",
+      "protein": 0.715,
+      "carb": 4.78,
+      "energy": 22.9,
+      "fat": 0.106
+    },
+    {
+      "description": "Peppers, bell, yellow, raw",
+      "carb": 6.6,
+      "protein": 0.819,
+      "energy": 30.8,
+      "fat": 0.121
+    },
+    {
+      "description": "Peppers, bell, red, raw",
+      "carb": 6.65,
+      "protein": 0.896,
+      "energy": 31.3,
+      "fat": 0.126
+    },
+    {
+      "description": "Peppers, bell, orange, raw",
+      "protein": 0.882,
+      "carb": 6.7,
+      "energy": 31.7,
+      "fat": 0.156
+    },
+    {
+      "description": "Buttermilk, low fat",
+      "protein": 3.46,
+      "carb": 4.81,
+      "energy": 42.8,
+      "fat": 1.08
+    },
+    {
+      "description": "Yogurt, plain, whole milk",
+      "carb": 4.09,
+      "protein": 3.82,
+      "energy": 78.0,
+      "fat": 4.48
+    },
+    {
+      "description": "Yogurt, Greek, plain, whole milk",
+      "carb": 3.25,
+      "protein": 8.78,
+      "energy": 93.7,
+      "fat": 4.39
+    },
+    {
+      "description": "Cheese, parmesan, grated, refrigerated",
+      "carb": 0.638,
+      "protein": 30.1,
+      "energy": 403,
+      "fat": 29.5
+    },
+    {
+      "description": "Cheese, feta, whole milk, crumbled",
+      "carb": 1.63,
+      "protein": 19.7,
+      "energy": 273,
+      "fat": 19.1
+    },
+    {
+      "description": "Flour, almond",
+      "protein": 26.2,
+      "carb": 16.2,
+      "energy": 622,
+      "fat": 50.2
+    },
+    {
+      "description": "Flour, oat, whole grain",
+      "carb": 69.9,
+      "protein": 13.2,
+      "energy": 389,
+      "fat": 6.31
+    },
+    {
+      "description": "Flour, potato",
+      "carb": 79.9,
+      "protein": 8.11,
+      "energy": 361,
+      "fat": 0.951
+    },
+    {
+      "description": "Peanut butter, creamy",
+      "protein": 24.0,
+      "carb": 22.7,
+      "energy": 632,
+      "fat": 49.4
+    },
+    {
+      "description": "Sesame butter, creamy",
+      "carb": 14.2,
+      "protein": 19.7,
+      "energy": 697,
+      "fat": 62.4
+    },
+    {
+      "description": "Almond butter, creamy",
+      "carb": 21.2,
+      "protein": 20.8,
+      "energy": 645,
+      "fat": 53.0
+    },
+    {
+      "description": "Flaxseed, ground",
+      "carb": 34.4,
+      "protein": 18.0,
+      "energy": 545,
+      "fat": 37.3
+    },
+    {
+      "description": "Cottage cheese, full fat, large or small curd",
+      "protein": 11.6,
+      "carb": 4.6,
+      "energy": 103,
+      "fat": 4.22
+    },
+    {
+      "description": "Cream cheese, full fat, block",
+      "carb": 4.56,
+      "protein": 5.79,
+      "energy": 343,
+      "fat": 33.5
+    },
+    {
+      "description": "Cream, heavy",
+      "protein": 2.02,
+      "carb": 3.8,
+      "energy": 343,
+      "fat": 35.6
+    },
+    {
+      "description": "Cream, sour, full fat",
+      "protein": 3.07,
+      "carb": 5.56,
+      "energy": 196,
+      "fat": 18.0
+    },
+    {
+      "description": "Lettuce, iceberg, raw",
+      "protein": 0.742,
+      "carb": 3.37,
+      "energy": 17.1,
+      "fat": 0.074
+    },
+    {
+      "description": "Lettuce, romaine, green, raw",
+      "protein": 0.977,
+      "carb": 4.06,
+      "energy": 20.8,
+      "fat": 0.071
+    },
+    {
+      "description": "Lettuce, leaf, red, raw",
+      "protein": 0.883,
+      "carb": 3.26,
+      "energy": 17.5,
+      "fat": 0.106
+    },
+    {
+      "description": "Lettuce, leaf, green, raw",
+      "carb": 4.07,
+      "protein": 1.09,
+      "energy": 22.0,
+      "fat": 0.156
+    },
+    {
+      "description": "Nuts, pine nuts, raw",
+      "carb": 18.6,
+      "protein": 15.7,
+      "energy": 689,
+      "fat": 61.3
+    },
+    {
+      "description": "Nuts, almonds, whole, raw",
+      "carb": 20.0,
+      "protein": 21.5,
+      "energy": 626,
+      "fat": 51.1
+    },
+    {
+      "description": "Nuts, walnuts, English, halves, raw",
+      "carb": 10.9,
+      "protein": 14.6,
+      "energy": 730,
+      "fat": 69.7
+    },
+    {
+      "description": "Nuts, pecans, halves, raw",
+      "carb": 12.7,
+      "protein": 9.96,
+      "energy": 750,
+      "fat": 73.3
+    },
+    {
+      "description": "Oats, whole grain, rolled, old fashioned",
+      "carb": 68.7,
+      "protein": 13.5,
+      "energy": 382,
+      "fat": 5.89
+    },
+    {
+      "description": "Oats, whole grain, steel cut",
+      "carb": 69.8,
+      "protein": 12.5,
+      "energy": 381,
+      "fat": 5.8
+    },
+    {
+      "description": "Pineapple, raw",
+      "carb": 11.4,
+      "protein": 0.461,
+      "energy": 60.1,
+      "fat": 0.211
+    },
+    {
+      "description": "Cherries, sweet, dark red, raw",
+      "protein": 1.04,
+      "carb": 13.9,
+      "energy": 70.5,
+      "fat": 0.192
+    },
+    {
+      "description": "Beans, snap, green, raw",
+      "protein": 1.97,
+      "carb": 2.33,
+      "energy": 40.0,
+      "fat": 0.275
+    },
+    {
+      "description": "Potatoes, russet, without skin, raw",
+      "carb": 0.526,
+      "protein": 2.27,
+      "energy": 83.4,
+      "fat": 0.36
+    },
+    {
+      "description": "Potatoes, red, without skin, raw",
+      "protein": 2.06,
+      "carb": 0.664,
+      "energy": 75.6,
+      "fat": 0.248
+    },
+    {
+      "description": "Potatoes, gold, without skin, raw",
+      "protein": 1.81,
+      "carb": 0.645,
+      "energy": 73.5,
+      "fat": 0.264
+    },
+    {
+      "description": "Sweet potatoes, orange flesh, without skin, raw",
+      "carb": 6.06,
+      "protein": 1.58,
+      "energy": 79.0,
+      "fat": 0.375
+    },
+    {
+      "description": "Celery, raw",
+      "protein": 0.492,
+      "carb": 3.32,
+      "energy": 16.7,
+      "fat": 0.162
+    },
+    {
+      "description": "Cucumber, with peel, raw",
+      "protein": 0.625,
+      "carb": 2.95,
+      "energy": 15.9,
+      "fat": 0.178
+    },
+    {
+      "description": "Cabbage, green, raw",
+      "protein": 0.961,
+      "carb": 6.38,
+      "energy": 31.4,
+      "fat": 0.228
+    },
+    {
+      "description": "Cabbage, red, raw",
+      "protein": 1.24,
+      "carb": 6.79,
+      "energy": 34.1,
+      "fat": 0.214
+    },
+    {
+      "description": "Strawberries, raw",
+      "carb": 4.86,
+      "protein": 0.641,
+      "energy": 36.4,
+      "fat": 0.22
+    },
+    {
+      "description": "Raspberries, raw",
+      "carb": 2.68,
+      "protein": 1.01,
+      "energy": 57.3,
+      "fat": 0.188
+    },
+    {
+      "description": "Blueberries, raw",
+      "protein": 0.703,
+      "carb": 9.36,
+      "energy": 63.9,
+      "fat": 0.306
+    },
+    {
+      "description": "Grapes, red, seedless, raw",
+      "protein": 0.914,
+      "carb": 17.3,
+      "energy": 85.9,
+      "fat": 0.164
+    },
+    {
+      "description": "Grapes, green, seedless, raw",
+      "protein": 0.899,
+      "carb": 16.1,
+      "energy": 80.1,
+      "fat": 0.232
+    },
+    {
+      "description": "Applesauce, unsweetened, with added vitamin C",
+      "carb": 9.66,
+      "protein": 0.273,
+      "energy": 51.6,
+      "fat": 0.162
+    },
+    {
+      "description": "Flour, amaranth",
+      "protein": 13.2,
+      "carb": 68.8,
+      "energy": 384,
+      "fat": 6.24
+    },
+    {
+      "description": "Flour, quinoa",
+      "protein": 11.9,
+      "carb": 69.5,
+      "energy": 385,
+      "fat": 6.6
+    },
+    {
+      "description": "Flour, sorghum",
+      "protein": 8.27,
+      "carb": 77.4,
+      "energy": 375,
+      "fat": 3.59
+    },
+    {
+      "description": "Flour, buckwheat",
+      "protein": 8.88,
+      "carb": 75.0,
+      "energy": 358,
+      "fat": 2.48
+    },
+    {
+      "description": "Flour, rye",
+      "protein": 8.4,
+      "carb": 77.2,
+      "energy": 359,
+      "fat": 1.91
+    },
+    {
+      "description": "Flour, barley",
+      "protein": 8.72,
+      "carb": 77.4,
+      "energy": 367,
+      "fat": 2.45
+    },
+    {
+      "description": "Flour, cassava",
+      "protein": 0.918,
+      "carb": 87.3,
+      "energy": 357,
+      "fat": 0.494
+    },
+    {
+      "description": "Buckwheat, whole grain",
+      "protein": 11.1,
+      "carb": 71.1,
+      "energy": 356,
+      "fat": 3.04
+    },
+    {
+      "description": "Millet, whole grain",
+      "protein": 10.0,
+      "carb": 74.4,
+      "energy": 376,
+      "fat": 4.19
+    },
+    {
+      "description": "Rice, brown, long grain, unenriched, raw",
+      "protein": 7.25,
+      "carb": 76.7,
+      "energy": 366,
+      "fat": 3.31
+    },
+    {
+      "description": "Rice, white, long grain, unenriched, raw",
+      "carb": 80.3,
+      "protein": 7.04,
+      "energy": 359,
+      "fat": 1.03
+    },
+    {
+      "description": "Beef, ground, 90% lean meat / 10% fat, raw",
+      "protein": 18.2,
+      "carb": 0.0,
+      "energy": 185,
+      "fat": 12.8
+    },
+    {
+      "description": "Beef, ground, 80% lean meat / 20% fat, raw",
+      "protein": 17.5,
+      "carb": 0.0,
+      "energy": 243,
+      "fat": 19.4
+    },
+    {
+      "description": "Pork, ground, raw",
+      "protein": 17.8,
+      "carb": 0.0,
+      "energy": 228,
+      "fat": 17.5
+    },
+    {
+      "description": "Chicken, ground, with additives, raw",
+      "protein": 17.9,
+      "carb": 0.0,
+      "energy": 133,
+      "fat": 7.16
+    },
+    {
+      "description": "Turkey, ground, 93% lean/ 7% fat, raw",
+      "protein": 17.3,
+      "carb": 0.0,
+      "energy": 153,
+      "fat": 9.59
+    },
+    {
+      "description": "Nuts, brazilnuts, raw",
+      "protein": 15.0,
+      "carb": 21.6,
+      "energy": 664,
+      "fat": 57.4
+    },
+    {
+      "description": "Nuts, cashew nuts, raw",
+      "protein": 17.4,
+      "carb": 36.3,
+      "energy": 565,
+      "fat": 38.9
+    },
+    {
+      "description": "Nuts, hazelnuts or filberts, raw",
+      "protein": 13.5,
+      "carb": 26.5,
+      "energy": 641,
+      "fat": 53.5
+    },
+    {
+      "description": "Peanuts, raw",
+      "protein": 23.2,
+      "carb": 26.5,
+      "energy": 588,
+      "fat": 43.3
+    },
+    {
+      "description": "Flour, chestnut",
+      "protein": 5.29,
+      "carb": 80.5,
+      "energy": 385,
+      "fat": 4.64
+    },
+    {
+      "description": "Nuts, macadamia nuts, raw",
+      "protein": 7.79,
+      "carb": 24.1,
+      "energy": 712,
+      "fat": 64.9
+    },
+    {
+      "description": "Nuts, pistachio nuts, raw",
+      "protein": 20.5,
+      "carb": 27.7,
+      "energy": 598,
+      "fat": 45.0
+    },
+    {
+      "description": "Seeds, pumpkin seeds (pepitas), raw",
+      "protein": 29.9,
+      "carb": 18.7,
+      "energy": 555,
+      "fat": 40.0
+    },
+    {
+      "description": "Seeds, sunflower seed, kernel, raw",
+      "protein": 18.9,
+      "carb": 24.5,
+      "energy": 609,
+      "fat": 48.4
+    },
+    {
+      "description": "Flour, coconut",
+      "protein": 16.1,
+      "carb": 58.9,
+      "energy": 438,
+      "fat": 15.3
+    },
+    {
+      "description": "Beans, cannellini, dry",
+      "protein": 21.6,
+      "carb": 59.8,
+      "energy": 345,
+      "fat": 2.2
+    },
+    {
+      "description": "Chickpeas, (garbanzo beans, bengal gram), dry",
+      "carb": 60.4,
+      "protein": 21.3,
+      "energy": 383,
+      "fat": 6.27
+    },
+    {
+      "description": "Lentils, dry",
+      "protein": 23.6,
+      "carb": 62.2,
+      "energy": 360,
+      "fat": 1.92
+    },
+    {
+      "description": "Blackeye pea, dry",
+      "protein": 21.2,
+      "carb": 61.8,
+      "energy": 354,
+      "fat": 2.42
+    },
+    {
+      "description": "Beans, black, canned, sodium added, drained and rinsed",
+      "protein": 6.91,
+      "carb": 19.8,
+      "energy": 118,
+      "fat": 1.27
+    },
+    {
+      "description": "Beans, navy, canned, sodium added, drained and rinsed",
+      "protein": 6.57,
+      "carb": 20.0,
+      "energy": 119,
+      "fat": 1.4
+    },
+    {
+      "description": "Beans, cannellini, canned, sodium added, drained and rinsed",
+      "protein": 7.41,
+      "carb": 18.8,
+      "energy": 115,
+      "fat": 1.17
+    },
+    {
+      "description": "Chickpeas (garbanzo beans, bengal gram), canned, sodium added, drained and rinsed",
+      "protein": 7.02,
+      "carb": 20.3,
+      "energy": 137,
+      "fat": 3.1
+    },
+    {
+      "description": "Beans, kidney, dark red, canned, sodium added, sugar added, drained and rinsed",
+      "protein": 7.8,
+      "carb": 21.0,
+      "energy": 127,
+      "fat": 1.26
+    },
+    {
+      "description": "Beans, kidney, light red, canned, sodium added, sugar added, drained and rinsed",
+      "protein": 7.31,
+      "carb": 21.4,
+      "energy": 127,
+      "fat": 1.3
+    },
+    {
+      "description": "Peas, green, sweet, canned, sodium added, sugar added, drained and rinsed",
+      "protein": 4.73,
+      "carb": 12.7,
+      "energy": 80.1,
+      "fat": 1.15
+    },
+    {
+      "description": "Beans, pinto, canned, sodium added, drained and rinsed",
+      "carb": 19.6,
+      "protein": 6.69,
+      "energy": 117,
+      "fat": 1.27
+    },
+    {
+      "description": "Blackeye pea, canned, sodium added, drained and rinsed",
+      "carb": 19.2,
+      "protein": 6.92,
+      "energy": 116,
+      "fat": 1.3
+    },
+    {
+      "description": "Beans, great northern, canned, sodium added, drained and rinsed",
+      "carb": 19.3,
+      "protein": 7.03,
+      "energy": 117,
+      "fat": 1.27
+    },
+    {
+      "description": "Pork, loin, boneless, raw",
+      "protein": 21.1,
+      "carb": 0.0,
+      "energy": 168,
+      "fat": 9.47
+    },
+    {
+      "description": "Pork, loin, tenderloin, boneless, raw",
+      "protein": 21.6,
+      "carb": 0.0,
+      "energy": 119,
+      "fat": 3.9
+    },
+    {
+      "description": "Chicken, breast, boneless, skinless, raw",
+      "protein": 22.5,
+      "carb": 0.0,
+      "energy": 106,
+      "fat": 1.93
+    },
+    {
+      "description": "Chicken, thigh, boneless, skinless, raw",
+      "protein": 18.6,
+      "carb": 0.0,
+      "energy": 144,
+      "fat": 7.92
+    },
+    {
+      "description": "Beef, ribeye, steak, boneless, choice, raw",
+      "protein": 18.7,
+      "carb": 0.0,
+      "energy": 254,
+      "fat": 20.0
+    },
+    {
+      "description": "Beef, round, top round, boneless, choice, raw",
+      "protein": 21.5,
+      "carb": 0.852,
+      "energy": 141,
+      "fat": 5.7
+    },
+    {
+      "description": "Beef, chuck, roast, boneless, choice, raw",
+      "protein": 18.4,
+      "carb": 0.0,
+      "energy": 232,
+      "fat": 17.8
+    },
+    {
+      "description": "Beef, flank, steak, boneless, choice, raw",
+      "protein": 20.1,
+      "carb": 0.0,
+      "energy": 164,
+      "fat": 9.4
+    },
+    {
+      "description": "Yogurt, plain, nonfat",
+      "protein": 4.23,
+      "carb": 8.08,
+      "energy": 50.0,
+      "fat": 0.087
+    },
+    {
+      "description": "Cheese, monterey jack, solid",
+      "carb": 1.9,
+      "protein": 22.6,
+      "energy": 392,
+      "fat": 32.6
+    },
+    {
+      "description": "Cheese, pasteurized process cheese food or product, American, singles",
+      "carb": 8.19,
+      "protein": 15.6,
+      "energy": 310,
+      "fat": 23.9
+    },
+    {
+      "description": "Cheese, provolone, sliced",
+      "protein": 23.5,
+      "carb": 2.45,
+      "energy": 357,
+      "fat": 28.1
+    },
+    {
+      "description": "Cheese, oaxaca, solid",
+      "carb": 2.4,
+      "protein": 22.1,
+      "energy": 297,
+      "fat": 22.1
+    },
+    {
+      "description": "Cheese, queso fresco, solid",
+      "carb": 2.96,
+      "protein": 18.9,
+      "energy": 298,
+      "fat": 23.4
+    },
+    {
+      "description": "Cheese, cotija, solid",
+      "protein": 23.8,
+      "carb": 2.72,
+      "energy": 351,
+      "fat": 27.2
+    },
+    {
+      "description": "Fish, salmon, sockeye, wild caught, raw",
+      "protein": 22.3,
+      "carb": 0.0,
+      "energy": 130,
+      "fat": 4.94
+    },
+    {
+      "description": "Fish, salmon, Atlantic, farm raised, raw",
+      "protein": 20.3,
+      "carb": 0.0,
+      "energy": 197,
+      "fat": 13.1
+    },
+    {
+      "description": "Fish, tilapia, farm raised, raw",
+      "carb": 0.0,
+      "protein": 19.0,
+      "energy": 94.7,
+      "fat": 2.48
+    },
+    {
+      "description": "Crustaceans, shrimp, farm raised, raw",
+      "protein": 15.6,
+      "carb": 0.485,
+      "energy": 71.4,
+      "fat": 0.801
+    },
+    {
+      "description": "Fish, cod, Atlantic, wild caught, raw",
+      "protein": 16.1,
+      "carb": 0.0,
+      "energy": 66.0,
+      "fat": 0.668
+    },
+    {
+      "description": "Fish, catfish, farm raised, raw",
+      "protein": 16.5,
+      "carb": 0.0,
+      "energy": 129,
+      "fat": 7.31
+    },
+    {
+      "description": "Crustaceans, crab, blue swimming, lump, pasteurized, refrigerated",
+      "carb": 0.0,
+      "protein": 18.6,
+      "energy": 81.0,
+      "fat": 0.808
+    },
+    {
+      "description": "Squash, summer, green, zucchini, includes skin, raw",
+      "protein": 0.984,
+      "carb": 3.27,
+      "energy": 19.0,
+      "fat": 0.205
+    },
+    {
+      "description": "Squash, summer, yellow, includes skin, raw",
+      "protein": 0.891,
+      "carb": 4.39,
+      "energy": 22.0,
+      "fat": 0.135
+    },
+    {
+      "description": "Squash, winter, butternut, raw",
+      "protein": 1.15,
+      "carb": 10.5,
+      "energy": 48.1,
+      "fat": 0.168
+    },
+    {
+      "description": "Squash, winter, acorn, raw",
+      "protein": 1.25,
+      "carb": 10.5,
+      "energy": 48.6,
+      "fat": 0.182
+    },
+    {
+      "description": "Cabbage, bok choy, raw",
+      "protein": 1.02,
+      "carb": 3.51,
+      "energy": 20.3,
+      "fat": 0.234
+    },
+    {
+      "description": "Cauliflower, raw",
+      "protein": 1.64,
+      "carb": 4.72,
+      "energy": 27.6,
+      "fat": 0.238
+    },
+    {
+      "description": "Collards, raw",
+      "protein": 2.97,
+      "carb": 7.02,
+      "energy": 46.9,
+      "fat": 0.77
+    },
+    {
+      "description": "Brussels sprouts, raw",
+      "protein": 3.98,
+      "carb": 9.62,
+      "energy": 59.5,
+      "fat": 0.565
+    },
+    {
+      "description": "Beets, raw",
+      "carb": 5.1,
+      "protein": 1.69,
+      "energy": 44.6,
+      "fat": 0.302
+    },
+    {
+      "description": "Eggplant, raw",
+      "carb": 5.4,
+      "protein": 0.852,
+      "energy": 26.1,
+      "fat": 0.12
+    },
+    {
+      "description": "Tomatoes, whole, canned, solids and liquids, with salt added",
+      "carb": 4.29,
+      "protein": 0.868,
+      "energy": 22.5,
+      "fat": 0.206
+    },
+    {
+      "description": "Tomato, sauce, canned, with salt added",
+      "protein": 1.35,
+      "carb": 3.52,
+      "energy": 34.2,
+      "fat": 0.382
+    },
+    {
+      "description": "Tomato, paste, canned, without salt added",
+      "protein": 4.23,
+      "carb": 11.7,
+      "energy": 104,
+      "fat": 0.732
+    },
+    {
+      "description": "Tomatoes, crushed, canned",
+      "protein": 1.44,
+      "carb": 3.74,
+      "energy": 37.9,
+      "fat": 0.398
+    },
+    {
+      "description": "Tomato, puree, canned",
+      "protein": 1.58,
+      "carb": 4.31,
+      "energy": 40.8,
+      "fat": 0.265
+    },
+    {
+      "description": "Apricot, with skin, raw",
+      "protein": 0.961,
+      "carb": 6.25,
+      "energy": 48.4,
+      "fat": 0.405
+    },
+    {
+      "description": "Melons, honeydew, raw",
+      "carb": 8.15,
+      "protein": 0.531,
+      "energy": 36.7,
+      "fat": 0.216
+    },
+    {
+      "description": "Plantains, ripe, raw",
+      "protein": 1.16,
+      "carb": 14.2,
+      "energy": 136,
+      "fat": 0.893
+    },
+    {
+      "description": "Plantains, underripe, raw",
+      "carb": 33.6,
+      "protein": 1.23,
+      "energy": 145,
+      "fat": 0.685
+    },
+    {
+      "description": "Chia seeds, dry, raw",
+      "protein": 17.0,
+      "carb": 38.3,
+      "energy": 517,
+      "fat": 32.9
+    },
+    {
+      "description": "Bulgur, dry, raw",
+      "protein": 11.8,
+      "carb": 75.9,
+      "energy": 372,
+      "fat": 2.42
+    },
+    {
+      "description": "Wild rice, dry, raw",
+      "protein": 12.8,
+      "carb": 75.7,
+      "energy": 369,
+      "fat": 1.7
+    },
+    {
+      "description": "Arugula, baby, raw",
+      "protein": 1.65,
+      "carb": 5.37,
+      "energy": 31.0,
+      "fat": 0.325
+    },
+    {
+      "description": "Asparagus, green, raw",
+      "protein": 1.44,
+      "carb": 5.1,
+      "energy": 28.1,
+      "fat": 0.216
+    },
+    {
+      "description": "Avocado, Hass, peeled, raw",
+      "protein": 1.81,
+      "carb": 8.32,
+      "energy": 223,
+      "fat": 20.3
+    },
+    {
+      "description": "Rice, black, unenriched, raw",
+      "protein": 7.57,
+      "carb": 77.2,
+      "energy": 370,
+      "fat": 3.44
+    },
+    {
+      "description": "Corn, sweet, yellow and white kernels, \u00c2\u00a0fresh, raw",
+      "protein": 2.79,
+      "carb": 7.37,
+      "energy": 84.6,
+      "fat": 1.63
+    },
+    {
+      "description": "Einkorn, grain, dry, raw",
+      "protein": 15.1,
+      "carb": 68.7,
+      "energy": 369,
+      "fat": 3.81
+    },
+    {
+      "description": "Farro, pearled, dry, raw",
+      "protein": 12.6,
+      "carb": 72.1,
+      "energy": 367,
+      "fat": 3.1
+    },
+    {
+      "description": "Fonio, grain, dry, raw",
+      "protein": 7.17,
+      "carb": 81.3,
+      "energy": 369,
+      "fat": 1.69
+    },
+    {
+      "description": "Khorasan, grain, dry, raw",
+      "protein": 14.8,
+      "carb": 71.8,
+      "energy": 371,
+      "fat": 2.8
+    },
+    {
+      "description": "Kiwifruit (kiwi), green, peeled, raw",
+      "carb": 13.8,
+      "protein": 1.01,
+      "energy": 65.1,
+      "fat": 0.64
+    },
+    {
+      "description": "Mandarin, seedless, peeled, raw",
+      "protein": 1.04,
+      "carb": 9.12,
+      "energy": 62.0,
+      "fat": 0.458
+    },
+    {
+      "description": "Mango, Tommy Atkins, peeled, raw",
+      "carb": 15.3,
+      "protein": 0.562,
+      "energy": 68.5,
+      "fat": 0.572
+    },
+    {
+      "description": "Mango, Ataulfo, peeled, raw",
+      "carb": 17.4,
+      "protein": 0.688,
+      "energy": 78.5,
+      "fat": 0.681
+    },
+    {
+      "description": "Corn flour, masa harina, white or yellow, dry, raw",
+      "protein": 7.56,
+      "carb": 76.7,
+      "energy": 376,
+      "fat": 4.34
+    },
+    {
+      "description": "Pear, Anjou, green, with skin, raw",
+      "protein": 0.312,
+      "carb": 7.8,
+      "energy": 63.7,
+      "fat": 0.371
+    },
+    {
+      "description": "Plum, black, with skin, raw",
+      "protein": 0.578,
+      "carb": 7.96,
+      "energy": 58.7,
+      "fat": 0.282
+    },
+    {
+      "description": "Rice, red, unenriched, dry, raw",
+      "protein": 8.56,
+      "carb": 76.2,
+      "energy": 370,
+      "fat": 3.44
+    },
+    {
+      "description": "Sorghum bran, white, unenriched, dry, raw",
+      "protein": 11.2,
+      "carb": 68.7,
+      "energy": 403,
+      "fat": 9.26
+    },
+    {
+      "description": "Sorghum flour, white, pearled, unenriched, dry, raw",
+      "protein": 10.2,
+      "carb": 73.5,
+      "energy": 364,
+      "fat": 3.24
+    },
+    {
+      "description": "Sorghum grain, white, pearled, unenriched, dry, raw",
+      "protein": 10.2,
+      "carb": 74.9,
+      "energy": 370,
+      "fat": 3.26
+    },
+    {
+      "description": "Sorghum, whole grain, white, dry, raw",
+      "carb": 73.6,
+      "protein": 10.1,
+      "energy": 373,
+      "fat": 4.22
+    },
+    {
+      "description": "Plantains, overripe, raw",
+      "protein": 1.17,
+      "carb": 19.2,
+      "energy": 130,
+      "fat": 0.99
+    },
+    {
+      "description": "Chicken, drumstick, meat and skin, raw",
+      "protein": 18.4,
+      "carb": 0,
+      "energy": 125,
+      "fat": 5.94
+    },
+    {
+      "description": "Chicken, thigh, meat and skin, raw",
+      "protein": 17.1,
+      "carb": 0,
+      "energy": 188,
+      "fat": 13.4
+    },
+    {
+      "description": "Chicken, wing, meat and skin, raw",
+      "protein": 18.4,
+      "carb": 0,
+      "energy": 168,
+      "fat": 10.6
+    },
+    {
+      "description": "Chicken, breast, meat and skin, raw",
+      "protein": 21.4,
+      "carb": 0,
+      "energy": 127,
+      "fat": 4.78
+    },
+    {
+      "description": "Lamb, ground, raw",
+      "protein": 17.5,
+      "carb": 0,
+      "energy": 237,
+      "fat": 18.6
+    },
+    {
+      "description": "Bison, ground, raw",
+      "protein": 19.9,
+      "carb": 0,
+      "energy": 159,
+      "fat": 8.88
+    },
+    {
+      "description": "Beef, short loin (NY strip steak), raw",
+      "protein": 21.3,
+      "carb": 0.221,
+      "energy": 190,
+      "fat": 11.5
+    },
+    {
+      "description": "Beef,\u00c2\u00a0tenderloin steak, raw",
+      "protein": 21.1,
+      "carb": 0.18,
+      "energy": 143,
+      "fat": 6.46
+    },
+    {
+      "description": "Beef, top sirloin steak, raw",
+      "protein": 22.0,
+      "carb": 0.218,
+      "energy": 140,
+      "fat": 5.71
+    },
+    {
+      "description": "Pork, chop, center cut, raw",
+      "carb": 0,
+      "protein": 22.8,
+      "energy": 138,
+      "fat": 5.48
+    },
+    {
+      "description": "Pork, belly, with skin, raw",
+      "protein": 15.2,
+      "carb": 0,
+      "energy": 380,
+      "fat": 35.8
+    },
+    {
+      "description": "Pawpaw, peeled, seeded, raw",
+      "protein": 1.15,
+      "carb": 14.1,
+      "fat": 0,
+      "energy": 61.0
+    },
+    {
+      "description": "Squash, pie pumpkin, peeled, seeded, raw",
+      "carb": 4.14,
+      "protein": 0.854,
+      "fat": 0,
+      "energy": 19.976
+    },
+    {
+      "description": "Squash, spaghetti, peeled, seeded, raw",
+      "carb": 4.01,
+      "protein": 0.792,
+      "fat": 0,
+      "energy": 19.208
+    },
+    {
+      "description": "Rutabaga, peeled, raw",
+      "carb": 6.01,
+      "protein": 0.888,
+      "fat": 0,
+      "energy": 27.592
+    },
+    {
+      "description": "Blackberries, raw",
+      "carb": 6.52,
+      "protein": 1.53,
+      "fat": 0,
+      "energy": 32.199999999999996
+    },
+    {
+      "description": "Tomatillos, dehusked, raw",
+      "carb": 2.87,
+      "protein": 1.06,
+      "fat": 0,
+      "energy": 15.72
+    },
+    {
+      "description": "Cabbage, napa, leaf, destemmed, raw",
+      "carb": 2.77,
+      "protein": 1.06,
+      "fat": 0,
+      "energy": 15.32
+    },
+    {
+      "description": "Leeks, bulb and greens, root removed, raw",
+      "carb": 3.15,
+      "protein": 1.47,
+      "fat": 0,
+      "energy": 18.48
+    },
+    {
+      "description": "Green onion, (scallion), bulb and greens, root removed, raw",
+      "carb": 2.62,
+      "protein": 0.669,
+      "fat": 0,
+      "energy": 13.156
+    },
+    {
+      "description": "Shallots, bulb, peeled, root removed, raw",
+      "carb": 4.35,
+      "protein": 1.38,
+      "fat": 0,
+      "energy": 22.919999999999998
+    },
+    {
+      "description": "Juice, prune, shelf-stable",
+      "carb": 14.8,
+      "protein": 0.423,
+      "fat": 0,
+      "energy": 60.892
+    },
+    {
+      "description": "Juice, pomegranate, from concentrate, shelf-stable",
+      "carb": 13.3,
+      "protein": 0.0,
+      "fat": 0,
+      "energy": 53.2
+    },
+    {
+      "description": "Juice, tart cherry, from concentrate, shelf-stable",
+      "carb": 10.9,
+      "protein": 0.147,
+      "fat": 0,
+      "energy": 44.188
+    },
+    {
+      "description": "Anchovies, canned in olive oil, with salt, drained",
+      "protein": 26.9,
+      "carb": 2.41,
+      "energy": 206,
+      "fat": 9.85
+    },
+    {
+      "description": "Beet greens, raw",
+      "carb": 4.66,
+      "protein": 1.61,
+      "energy": 26.4,
+      "fat": 0.144
+    },
+    {
+      "description": "Cod, Pacific or Alaskan, frozen, wild caught",
+      "protein": 14.2,
+      "carb": 0.524,
+      "energy": 60.8,
+      "fat": 0.216
+    },
+    {
+      "description": "Fennel, bulb, raw",
+      "carb": 5.49,
+      "protein": 0.922,
+      "energy": 26.9,
+      "fat": 0.14
+    },
+    {
+      "description": "Halibut, frozen, wild caught",
+      "carb": 0,
+      "protein": 19.1,
+      "energy": 81.3,
+      "fat": 0.592
+    },
+    {
+      "description": "Lobster, tail only, frozen, wild caught",
+      "protein": 13.0,
+      "carb": 0.886,
+      "energy": 58.8,
+      "fat": 0.367
+    },
+    {
+      "description": "Mahi mahi, frozen, wild caught",
+      "protein": 19.8,
+      "carb": 0.287,
+      "energy": 83.7,
+      "fat": 0.377
+    },
+    {
+      "description": "Parsnips, raw",
+      "carb": 19.3,
+      "protein": 1.27,
+      "energy": 87.1,
+      "fat": 0.538
+    },
+    {
+      "description": "Peppers, banana or Hungarian wax, seeded, raw",
+      "carb": 4.97,
+      "protein": 0.723,
+      "energy": 23.9,
+      "fat": 0.131
+    },
+    {
+      "description": "Peppers, jalapeno, seeded, raw",
+      "carb": 5.08,
+      "protein": 0.621,
+      "energy": 24.1,
+      "fat": 0.149
+    },
+    {
+      "description": "Peppers, poblano, seeded, raw",
+      "carb": 5.14,
+      "protein": 1.43,
+      "energy": 28.0,
+      "fat": 0.191
+    },
+    {
+      "description": "Peppers, serrano, seeded, raw",
+      "carb": 6.14,
+      "protein": 0.856,
+      "energy": 29.2,
+      "fat": 0.141
+    },
+    {
+      "description": "Radicchio, raw",
+      "carb": 4.96,
+      "protein": 1.31,
+      "energy": 26.4,
+      "fat": 0.143
+    },
+    {
+      "description": "Radishes, red, raw",
+      "carb": 4.06,
+      "protein": 0.656,
+      "energy": 19.6,
+      "fat": 0.083
+    },
+    {
+      "description": "Scallops, bay, Patagonian, frozen, wild caught",
+      "protein": 16.4,
+      "carb": 2.28,
+      "energy": 78.5,
+      "fat": 0.419
+    },
+    {
+      "description": "Scallops, sea, frozen, wild caught",
+      "protein": 13.5,
+      "carb": 1.97,
+      "energy": 66.4,
+      "fat": 0.493
+    },
+    {
+      "description": "Sea bass, Chilean, frozen, wild caught",
+      "protein": 14.9,
+      "carb": 0.139,
+      "energy": 209,
+      "fat": 16.6
+    },
+    {
+      "description": "Snapper, frozen, wild caught",
+      "protein": 20.7,
+      "carb": 0.441,
+      "energy": 89.5,
+      "fat": 0.569
+    },
+    {
+      "description": "Snow crab, legs only, frozen  ",
+      "protein": 15.5,
+      "carb": 1.11,
+      "energy": 69.2,
+      "fat": 0.294
+    },
+    {
+      "description": "Squid (calamari), frozen, tubes only",
+      "protein": 8.81,
+      "carb": 0.932,
+      "energy": 43.9,
+      "fat": 0.551
+    },
+    {
+      "description": "Swordfish, frozen, wild caught",
+      "protein": 19.2,
+      "carb": 0.45,
+      "energy": 152,
+      "fat": 8.12
+    },
+    {
+      "description": "Tuna, ahi or yellowfin, frozen, wild caught",
+      "protein": 24.7,
+      "carb": 0,
+      "energy": 102,
+      "fat": 0.388
+    },
+    {
+      "description": "Turnips, raw",
+      "carb": 7.27,
+      "protein": 0.953,
+      "energy": 34.0,
+      "fat": 0.119
+    },
+    {
+      "description": "Watermelon, seedless, flesh only, raw",
+      "carb": 7.2,
+      "protein": 0.871,
+      "fat": 0,
+      "energy": 32.284
+    },
+    {
+      "description": "Watermelon, seedless, rind only, raw",
+      "carb": 3.27,
+      "protein": 0.531,
+      "energy": 23.9,
+      "fat": 0.966
+    }
+  ]
+}
