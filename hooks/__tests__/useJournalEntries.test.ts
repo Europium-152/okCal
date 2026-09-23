@@ -57,6 +57,9 @@ describe('useJournalEntries', () => {
     },
   ];
 
+  // The hook returns entries newest-first
+  const sortedMockEntries = [...mockEntries].sort((a, b) => b.timestamp - a.timestamp);
+
   beforeEach(() => {
     jest.clearAllMocks();
     (storage.getFoodEntriesByDate as jest.Mock).mockResolvedValue([]);
@@ -82,7 +85,7 @@ describe('useJournalEntries', () => {
       });
 
       expect(storage.getFoodEntriesByDate).toHaveBeenCalledWith(mockDate);
-      expect(result.current.entries).toEqual(mockEntries);
+      expect(result.current.entries).toEqual(sortedMockEntries);
     });
 
     it('should skip cloud fetch when specified', async () => {
@@ -325,16 +328,18 @@ describe('useJournalEntries', () => {
       const { result } = renderHook(() => useJournalEntries(mockDate));
 
       const deletePromise = result.current.deleteEntry('1', 'Test Food');
+      // Attach the rejection handler before the promise rejects
+      const rejection = expect(deletePromise).rejects.toThrow('Delete failed');
 
       // Confirm the alert
       const alertCall = mockAlert.mock.calls[0];
       const deleteButton = alertCall[2][1];
 
       await act(async () => {
-        await deleteButton.onPress().catch(() => {});
+        await deleteButton.onPress();
       });
 
-      await expect(deletePromise).rejects.toThrow('Delete failed');
+      await rejection;
     });
   });
 
@@ -598,7 +603,7 @@ describe('useJournalEntries', () => {
       });
 
       expect(storage.getFoodEntriesByDate).toHaveBeenCalledTimes(3);
-      expect(result.current.entries).toEqual(mockEntries);
+      expect(result.current.entries).toEqual(sortedMockEntries);
     });
 
     it('should handle delete during load', async () => {

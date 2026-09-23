@@ -101,7 +101,11 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.toggleItemSelection('2');
+      });
+      act(() => {
         result.current.toggleItemSelection('3');
       });
 
@@ -168,6 +172,8 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.handleCardPress('1');
+      });
+      act(() => {
         result.current.handleCardPress('2');
       });
 
@@ -190,6 +196,8 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.toggleItemSelection('2');
       });
 
@@ -279,6 +287,8 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.toggleItemSelection('2');
       });
 
@@ -419,7 +429,11 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.setActionMode('copy');
+      });
+      act(() => {
         result.current.setTargetDate('2024-03-20');
       });
 
@@ -445,7 +459,11 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.setActionMode('copy');
+      });
+      act(() => {
         result.current.setTargetDate('2024-03-20');
       });
 
@@ -465,8 +483,14 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.toggleItemSelection('2');
+      });
+      act(() => {
         result.current.setActionMode('move');
+      });
+      act(() => {
         result.current.setTargetDate('2024-03-25');
       });
 
@@ -484,8 +508,14 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.setActionMode('copy');
+      });
+      act(() => {
         result.current.setTargetDate('2024-03-20');
+      });
+      act(() => {
         result.current.setShowDatePicker(true);
       });
 
@@ -501,7 +531,11 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.setActionMode('copy');
+      });
+      act(() => {
         result.current.setTargetDate('2024-03-20');
       });
 
@@ -520,7 +554,11 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.setActionMode('copy');
+      });
+      act(() => {
         result.current.setTargetDate('2024-03-20');
       });
 
@@ -538,7 +576,11 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.toggleItemSelection('2');
+      });
+      act(() => {
         result.current.handleDelete();
       });
 
@@ -554,7 +596,11 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.toggleItemSelection('2');
+      });
+      act(() => {
         result.current.handleDelete();
       });
 
@@ -576,6 +622,8 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.handleDelete();
       });
 
@@ -594,6 +642,8 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.handleDelete();
       });
 
@@ -615,6 +665,8 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.handleDelete();
       });
 
@@ -671,11 +723,12 @@ describe('useBatchOperations', () => {
     it('should handle batch operation with all entries selected', async () => {
       const { result } = renderHook(() => useBatchOperations(mockEntries, onCompleteMock));
 
-      act(() => {
-        mockEntries.forEach(entry => {
+      // One tap per render, like the real UI
+      for (const entry of mockEntries) {
+        act(() => {
           result.current.toggleItemSelection(entry.id);
         });
-      });
+      }
 
       expect(result.current.selectedItems.size).toBe(mockEntries.length);
 
@@ -691,6 +744,8 @@ describe('useBatchOperations', () => {
 
       act(() => {
         result.current.toggleItemSelection('1');
+      });
+      act(() => {
         result.current.toggleItemSelection('2');
       });
 

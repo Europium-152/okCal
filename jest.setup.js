@@ -43,9 +43,10 @@ jest.mock('expo-haptics', () => ({
 }));
 
 // Mock Alert
-jest.mock('react-native/Libraries/Alert/Alert', () => ({
-  alert: jest.fn(),
-}));
+jest.mock('react-native/Libraries/Alert/Alert', () => {
+  const Alert = { alert: jest.fn() };
+  return { __esModule: true, default: Alert, ...Alert };
+});
 
 // Mock react-native-svg
 jest.mock('react-native-svg', () => ({

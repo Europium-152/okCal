@@ -156,65 +156,22 @@ describe('EntryListItem', () => {
   });
 
   describe('selection mode', () => {
-    it('should show checkbox when in selection mode', () => {
-      const props = {
-        ...defaultProps,
-        selectionMode: true,
-      };
+    it('should not render checkbox icons (selection is shown by highlighting the card)', () => {
+      const { UNSAFE_root } = render(
+        <EntryListItem {...defaultProps} selectionMode={true} isSelected={true} />
+      );
 
-      const { UNSAFE_root } = render(<EntryListItem {...props} />);
-
-      const checkbox = UNSAFE_root.findAllByProps({ name: 'ellipse-outline' });
-      expect(checkbox.length).toBeGreaterThan(0);
+      expect(UNSAFE_root.findAllByProps({ name: 'ellipse-outline' }).length).toBe(0);
+      expect(UNSAFE_root.findAllByProps({ name: 'checkmark-circle' }).length).toBe(0);
     });
 
-    it('should not show checkbox when not in selection mode', () => {
-      const { UNSAFE_root } = render(<EntryListItem {...defaultProps} />);
+    it('should not trigger edit when quantity button is pressed in selection mode', () => {
+      const { getByText } = render(
+        <EntryListItem {...defaultProps} selectionMode={true} />
+      );
 
-      const checkbox = UNSAFE_root.findAllByProps({ name: 'ellipse-outline' });
-      expect(checkbox.length).toBe(0);
-    });
-
-    it('should show checked icon when item is selected', () => {
-      const props = {
-        ...defaultProps,
-        selectionMode: true,
-        isSelected: true,
-      };
-
-      const { UNSAFE_root } = render(<EntryListItem {...props} />);
-
-      const checkedIcon = UNSAFE_root.findAllByProps({
-        name: 'checkmark-circle',
-      });
-      expect(checkedIcon.length).toBeGreaterThan(0);
-    });
-
-    it('should show unchecked icon when item is not selected', () => {
-      const props = {
-        ...defaultProps,
-        selectionMode: true,
-        isSelected: false,
-      };
-
-      const { UNSAFE_root } = render(<EntryListItem {...props} />);
-
-      const uncheckedIcon = UNSAFE_root.findAllByProps({
-        name: 'ellipse-outline',
-      });
-      expect(uncheckedIcon.length).toBeGreaterThan(0);
-    });
-
-    it('should hide edit button in selection mode', () => {
-      const props = {
-        ...defaultProps,
-        selectionMode: true,
-      };
-
-      const { UNSAFE_root } = render(<EntryListItem {...props} />);
-
-      const pencilIcon = UNSAFE_root.findAllByProps({ name: 'pencil' });
-      expect(pencilIcon.length).toBe(0);
+      fireEvent.press(getByText('100g'));
+      expect(defaultProps.onEdit).not.toHaveBeenCalled();
     });
 
     it('should show edit button when not in selection mode', () => {

@@ -4,6 +4,7 @@ import JournalHeader from '../journal/JournalHeader';
 
 // Mock dateHelpers
 jest.mock('@/utils/dateHelpers', () => ({
+  parseDate: jest.requireActual('@/utils/dateHelpers').parseDate,
   formatDisplayDate: jest.fn((date: string) => {
     if (date === '2024-03-15') return 'Today';
     if (date === '2024-03-14') return 'Yesterday';

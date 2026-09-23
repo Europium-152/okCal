@@ -7,7 +7,8 @@ export const formatDate = (date: Date): string => {
 
 export const parseDate = (dateString: string): Date => {
   // Parse the date string as local date, not UTC
-  const [year, month, day] = dateString.split('-').map(Number);
+  // Ignore any time suffix (e.g. '2024-03-15T10:30:00')
+  const [year, month, day] = dateString.slice(0, 10).split('-').map(Number);
   return new Date(year, month - 1, day);
 };
 
@@ -35,8 +36,9 @@ export const formatDisplayDate = (dateString: string): string => {
   }
 
   // For dates within the same week (±6 days from today), show day of week
-  const diffInMs = date.getTime() - today.getTime();
-  const diffInDays = Math.abs(Math.floor(diffInMs / (1000 * 60 * 60 * 24)));
+  // Compare calendar days (both at local midnight) so the time of day doesn't skew the count
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const diffInDays = Math.abs(Math.round((date.getTime() - startOfToday.getTime()) / (1000 * 60 * 60 * 24)));
 
   if (diffInDays <= 6) {
     return date.toLocaleDateString('en-US', {

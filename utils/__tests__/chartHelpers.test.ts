@@ -239,7 +239,8 @@ describe('chartHelpers', () => {
 
       expect(result).not.toBeNull();
       if (result) {
-        expect(result instanceof Date).toBe(true);
+        expect(Object.prototype.toString.call(result)).toBe('[object Date]');
+        expect(result.getTime()).not.toBeNaN();
       }
     });
 

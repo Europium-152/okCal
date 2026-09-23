@@ -88,10 +88,15 @@ describe('dateHelpers', () => {
       expect(result).toBe('Yesterday');
     });
 
-    it('should return formatted date for other dates', () => {
-      const result = formatDisplayDate('2024-03-10');
+    it('should return the weekday for dates within 6 days', () => {
+      expect(formatDisplayDate('2024-03-10')).toBe('Sunday');
+      expect(formatDisplayDate('2024-03-09')).toBe('Saturday');
+    });
+
+    it('should return formatted date for dates more than 6 days away', () => {
+      const result = formatDisplayDate('2024-03-08');
       expect(result).toMatch(/Mar/);
-      expect(result).toMatch(/10/);
+      expect(result).toMatch(/8/);
       expect(result).toMatch(/2024/);
     });
 

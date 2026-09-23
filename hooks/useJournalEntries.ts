@@ -52,8 +52,11 @@ export function useJournalEntries(selectedDate: string) {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await loadEntries();
-    setRefreshing(false);
+    try {
+      await loadEntries();
+    } finally {
+      setRefreshing(false);
+    }
   }, [loadEntries]);
 
   const deleteEntry = useCallback(async (id: string, name: string) => {

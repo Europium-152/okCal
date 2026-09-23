@@ -51,3 +51,6 @@ tmpclaude-*
 coverage/
 *.zip
 error_message_*.txt
+
+# Needed so EAS Build installs with legacy peer deps
+!.npmrc
