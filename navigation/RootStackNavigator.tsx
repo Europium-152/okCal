@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { RootStackParamList } from './types';
 
 // Import screens
@@ -23,10 +23,13 @@ export default function RootStackNavigator({
   return (
     <Stack.Navigator
       initialRouteName={initialRouteName}
+      // react-native-screens crashes natively (RNSScreenContainerView updateContainer,
+      // "collection mutated while being enumerated") when the JS stack drives a screen's
+      // activityState through the native animated driver. Keep inactive screens attached.
+      detachInactiveScreens={false}
       screenOptions={{
         headerShown: false,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        animationEnabled: false,
+        animation: 'none',
       }}
     >
       {/* Onboarding Screens */}
@@ -72,32 +75,28 @@ export default function RootStackNavigator({
         component={AddIngredientScreen}
         options={{
           presentation: 'modal',
-          headerShown: true,
-          title: 'Add Ingredient'
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="Recipes"
         component={RecipesScreen}
         options={{
-          headerShown: true,
-          title: 'My Recipes'
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="EditRecipe"
         component={EditRecipeScreen}
         options={{
-          headerShown: true,
-          title: 'Edit Recipe'
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="ExportImport"
         component={ExportImportScreen}
         options={{
-          headerShown: true,
-          title: 'Export / Import Data'
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

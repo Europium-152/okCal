@@ -505,11 +505,13 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
   // Offline search view
   if (inputMethod === 'offline-search') {
     return (
-      <OfflineFoodSearch
-        onSelectFood={handleSelectOfflineFood}
-        onCancel={() => setInputMethod('select')}
-        database={foodDatabase}
-      />
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <OfflineFoodSearch
+          onSelectFood={handleSelectOfflineFood}
+          onCancel={() => setInputMethod('select')}
+          database={foodDatabase}
+        />
+      </SafeAreaView>
     );
   }
 

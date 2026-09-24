@@ -24,15 +24,6 @@ type DateRange = '2W' | '1M' | '6M' | '1Y' | 'All';
 export function WeightChart({ data, height = 250, unit = 'kg' }: WeightChartProps) {
   const [selectedRange, setSelectedRange] = useState<DateRange>('1M');
 
-  // Handle empty state
-  if (data.length === 0) {
-    return (
-      <View style={[styles.container, { height }]}>
-        <Text style={styles.emptyText}>No weight data yet</Text>
-      </View>
-    );
-  }
-
   // OPTIMIZED: Memoize filtered data to prevent recalculation on every render
   const filteredData = useMemo(() => {
     // Skip expensive filtering if "All" is selected
@@ -113,6 +104,15 @@ export function WeightChart({ data, height = 250, unit = 'kg' }: WeightChartProp
       maxWeight: max + padding,
     };
   }, [chartData]);
+
+  // Handle empty state (after all hooks so hook order stays stable)
+  if (data.length === 0) {
+    return (
+      <View style={[styles.container, { height }]}>
+        <Text style={styles.emptyText}>No weight data yet</Text>
+      </View>
+    );
+  }
 
   // Decorator for scale weight dots (small, light)
   const ScaleWeightDots = ({ x, y, data }: any) => {
