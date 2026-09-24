@@ -44,7 +44,7 @@ async function resizeImage(uri: string): Promise<string> {
 
   const resizedImage = await ImageManipulator.manipulateAsync(
     uri,
-    [{ resize: { width: targetWidth, height: targetHeight } }],
+    [{ resize: isLandscape ? { width: targetWidth } : { height: targetHeight } }],
     { compress: 0.8, format: ImageManipulator.SaveFormat.JPEG }
   );
 
@@ -72,16 +72,75 @@ async function imageToBase64(uri: string): Promise<string> {
 
 
 const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
-const OPENAI_MODEL = 'gpt-4o-mini';
+const OPENAI_MODEL = 'gpt-4.1-mini';
 
-const SYSTEM_PROMPT = `You are a nutrition estimator for a calorie tracking app.
-Estimate the nutrition of the meal you are given and return ONE consolidated entry for the whole meal.
-Respond with JSON only, using exactly this shape:
-{"name": string, "calories": number, "protein": number, "carbs": number, "fat": number, "servingSize": number, "servingUnit": "g" | "ml"}
-- name: a short description of the whole meal (e.g. "Roasted lamb with potatoes and a bread roll")
-- protein, carbs, fat: total grams for the whole meal
-- servingSize: total estimated weight (g) or volume (ml) of the meal
-- Include cooking oils, butter, sauces and dressings in your estimate.`;
+const JSON_SUMMARY_SPEC = `5. JSON nutrition summary formatted as single json object at the end of your answer, json_summary = {
+  "name": "Descriptive name of the complete meal/food",
+  "calories": total_calories_as_number,
+  "protein": total_protein_grams_as_number,
+  "carbs": total_carbs_grams_as_number,
+  "fat": total_fat_grams_as_number,
+  "servingSize": total_weight_or_volume_as_number,
+  "servingUnit": "g" or "ml"
+}`;
+
+function buildImagePrompt(userContext?: string): string {
+  let prompt = `Analyze this food image and provide a detailed calorie estimation. Be specific and detailed in your analysis. Include:
+1. Food items identified with specificity
+2. Estimated portion sizes in grams
+3. Calorie and macro nutrient breakdown by ingredient
+4. Total estimated calories and total estimated macro nutrients
+${JSON_SUMMARY_SPEC}`;
+  if (userContext) prompt += `\n\nHint: ${userContext}`;
+  return prompt;
+}
+
+function buildTextPrompt(description: string, userContext?: string): string {
+  let prompt = `Analyze this meal description and provide a detailed calorie estimation. Be specific and detailed in your analysis. Include:
+1. Food items identified from the description with specificity
+2. Estimated portion sizes in grams based on typical serving sizes
+3. Calorie and macro nutrient breakdown by ingredient
+4. Total estimated calories and total estimated macro nutrients
+${JSON_SUMMARY_SPEC}
+
+Meal description: "${description}"`;
+  if (userContext) prompt += `\n\nHint: ${userContext}`;
+  return prompt;
+}
+
+/**
+ * Extract the json_summary from the model's free-text analysis.
+ * Tries a fenced json block, then `json_summary = {...}`, then a bare object,
+ * then falls back to regex extraction of individual fields.
+ */
+function parseNutrition(text: string): Partial<EstimatedFood> {
+  const match =
+    text.match(/```json\s*(\{.*?\})\s*```/s) ||
+    text.match(/json_summary\s*=\s*(\{[^}]+\})/s) ||
+    text.match(/\{[^{}]*"name"[^{}]*"calories"[^{}]*\}/s);
+
+  if (match) {
+    try {
+      return JSON.parse(match[1] || match[0]);
+    } catch {
+      // fall through to manual extraction
+    }
+  }
+
+  const num = (key: string) => {
+    const m = text.match(new RegExp(`"${key}"\\s*:\\s*(\\d+\\.?\\d*)`));
+    return m ? parseFloat(m[1]) : 0;
+  };
+  return {
+    name: text.match(/"name"\s*:\s*"([^"]+)"/)?.[1] || 'Unknown',
+    calories: num('calories'),
+    protein: num('protein'),
+    carbs: num('carbs'),
+    fat: num('fat'),
+    servingSize: num('servingSize'),
+    servingUnit: (text.match(/"servingUnit"\s*:\s*"([^"]+)"/)?.[1] as 'g' | 'ml') || 'g',
+  };
+}
 
 async function requestEstimate(
   userContent: string | object[]
@@ -99,11 +158,8 @@ async function requestEstimate(
     },
     body: JSON.stringify({
       model: OPENAI_MODEL,
-      response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: userContent },
-      ],
+      messages: [{ role: 'user', content: userContent }],
+      max_tokens: 2000,
     }),
   });
 
@@ -114,24 +170,32 @@ async function requestEstimate(
   }
 
   const data = await response.json();
-  const content = data.choices?.[0]?.message?.content;
-  const estimatedFood: EstimatedFood = JSON.parse(content);
+  const content: string | undefined = data.choices?.[0]?.message?.content;
+  if (!content) {
+    throw new Error('Invalid response format from OpenAI');
+  }
+  const parsed = parseNutrition(content);
 
-  if (
-    !estimatedFood.name ||
-    typeof estimatedFood.protein !== 'number' ||
-    typeof estimatedFood.carbs !== 'number' ||
-    typeof estimatedFood.fat !== 'number' ||
-    typeof estimatedFood.servingSize !== 'number' ||
-    !['g', 'ml'].includes(estimatedFood.servingUnit)
-  ) {
+  const estimatedFood: EstimatedFood = {
+    name: parsed.name || 'Unknown',
+    calories: Number(parsed.calories) || 0,
+    protein: Number(parsed.protein) || 0,
+    carbs: Number(parsed.carbs) || 0,
+    fat: Number(parsed.fat) || 0,
+    servingSize: Number(parsed.servingSize) || 0,
+    servingUnit: parsed.servingUnit === 'ml' ? 'ml' : 'g',
+  };
+
+  if (estimatedFood.name === 'Unknown' && !estimatedFood.calories) {
     throw new Error('Invalid response format from OpenAI');
   }
 
   // Always derive calories from macros so the numbers are consistent
-  estimatedFood.calories = Math.round(
-    estimatedFood.protein * 4 + estimatedFood.carbs * 4 + estimatedFood.fat * 9
-  );
+  if (estimatedFood.protein || estimatedFood.carbs || estimatedFood.fat) {
+    estimatedFood.calories = Math.round(
+      estimatedFood.protein * 4 + estimatedFood.carbs * 4 + estimatedFood.fat * 9
+    );
+  }
 
   return estimatedFood;
 }
@@ -164,15 +228,10 @@ export async function processFoodImage(
     const base64Image = await imageToBase64(resizedUri);
 
     return await requestEstimate([
-      {
-        type: 'text',
-        text: `Estimate the nutrition of the food in this photo.${
-          userContext ? ` The user says: ${userContext}` : ''
-        }`,
-      },
+      { type: 'text', text: buildImagePrompt(userContext) },
       {
         type: 'image_url',
-        image_url: { url: `data:image/jpeg;base64,${base64Image}` },
+        image_url: { url: `data:image/jpeg;base64,${base64Image}`, detail: 'high' },
       },
     ]);
   } catch (error) {
@@ -191,12 +250,7 @@ export async function processFoodDescription(
   userContext?: string
 ): Promise<EstimatedFood> {
   try {
-    return await requestEstimate(
-      `Estimate the nutrition of this meal: ${description.trim()}${
-        userContext ? `
-Additional context: ${userContext}` : ''
-      }`
-    );
+    return await requestEstimate(buildTextPrompt(description.trim(), userContext));
   } catch (error) {
     console.error('Error analyzing food description:', error);
     throw toFriendlyError(error, 'Failed to analyze description. Please try again.');
