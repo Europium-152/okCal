@@ -34,4 +34,4 @@ If this policy changes, the updated version will be posted on this page with a n
 
 ## Contact
 
-Questions? Open an issue at https://github.com/Europium-152/okCal/issues.
+Questions? Email [info@okcal.app](mailto:info@okcal.app) or open an issue at https://github.com/Europium-152/okCal/issues.
