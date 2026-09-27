@@ -573,10 +573,11 @@ export const getAppSettings = async (): Promise<AppSettings> => {
   try {
     // Read from local AsyncStorage (fast - no network call)
     const data = await AsyncStorage.getItem(APP_SETTINGS_KEY);
-    return data ? JSON.parse(data) : { units: 'imperial', foodDatabase: 'US' };
+    const defaults: AppSettings = { units: 'imperial', foodDatabase: 'US', offSearchRegion: 'US' };
+    return data ? { ...defaults, ...JSON.parse(data) } : defaults;
   } catch (error) {
     console.error('Error getting app settings:', error);
-    return { units: 'imperial', foodDatabase: 'US' };
+    return { units: 'imperial', foodDatabase: 'US', offSearchRegion: 'US' };
   }
 };
 

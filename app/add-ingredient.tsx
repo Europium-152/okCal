@@ -15,7 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackScreenProps } from '@/navigation/types';
 import { Ionicons } from '@expo/vector-icons';
 import { getFoodEntries, getRecipes, getAppSettings } from '@/utils/storage';
-import { FoodEntry, Recipe, UnifiedFoodItem, FoodDatabase } from '@/types';
+import { FoodEntry, Recipe, UnifiedFoodItem, FoodDatabase, OFFSearchRegion } from '@/types';
 import { lookupProductByBarcode, searchOFFFoods } from '@/services/foodLookup';
 import { OfflineFoodItem } from '@/services/offlineFoodSearch';
 import OfflineFoodSearch from '@/components/add-food/OfflineFoodSearch';
@@ -30,6 +30,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
   const recipeId = params.recipeId as string | undefined;
   const [inputMethod, setInputMethod] = useState<InputMethod>('select');
   const [foodDatabase, setFoodDatabase] = useState<FoodDatabase>('US');
+  const [offSearchRegion, setOffSearchRegion] = useState<OFFSearchRegion>('US');
 
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState('100');
@@ -56,6 +57,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
       try {
         const settings = await getAppSettings();
         setFoodDatabase(settings.foodDatabase || 'US');
+        setOffSearchRegion(settings.offSearchRegion || 'US');
       } catch (error) {
         console.error('Error loading food database setting:', error);
       }
@@ -130,7 +132,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
 
     setSearching(true);
     try {
-      const results = await searchOFFFoods(searchQuery);
+      const results = await searchOFFFoods(searchQuery, offSearchRegion);
       setSearchResults(results);
     } catch (error) {
       Alert.alert('Error', 'Failed to search foods');

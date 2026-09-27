@@ -15,6 +15,7 @@ import { UnifiedFoodItem } from '@/types';
 interface SearchFoodInputProps {
   searchQuery: string;
   onSearchQueryChange: (query: string) => void;
+  onSearch: () => void;
   searchResults: UnifiedFoodItem[];
   searching: boolean;
   onSelectFood: (food: UnifiedFoodItem) => void;
@@ -24,6 +25,7 @@ interface SearchFoodInputProps {
 export default function SearchFoodInput({
   searchQuery,
   onSearchQueryChange,
+  onSearch,
   searchResults,
   searching,
   onSelectFood,
@@ -42,27 +44,41 @@ export default function SearchFoodInput({
           <Text style={styles.searchTitle}>Search Foods</Text>
         </View>
 
-        <View style={styles.searchInputContainer}>
-          <Ionicons name="search" size={20} color="#666" />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search for a food (e.g., chicken, apple)..."
-            value={searchQuery}
-            onChangeText={onSearchQueryChange}
-            autoFocus
-          />
-          {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={() => onSearchQueryChange('')}>
-              <Ionicons name="close-circle" size={20} color="#666" />
+        <View style={styles.searchRow}>
+          <View style={styles.searchInputContainer}>
+            <TouchableOpacity onPress={onSearch}>
+              <Ionicons name="search" size={20} color="#666" />
             </TouchableOpacity>
-          )}
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search for a food (e.g., chicken, apple)..."
+              value={searchQuery}
+              onChangeText={onSearchQueryChange}
+              onSubmitEditing={onSearch}
+              returnKeyType="search"
+              autoFocus
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={() => onSearchQueryChange('')}>
+                <Ionicons name="close-circle" size={20} color="#666" />
+              </TouchableOpacity>
+            )}
+          </View>
+          <TouchableOpacity style={styles.searchButton} onPress={onSearch}>
+            {searching ? (
+              <ActivityIndicator color="#fff" size="small" />
+            ) : (
+              <Text style={styles.searchButtonText}>Search</Text>
+            )}
+          </TouchableOpacity>
         </View>
 
         {/* Info Banner */}
         <View style={styles.searchInfoBanner}>
           <Ionicons name="information-circle" size={16} color="#10b981" />
           <Text style={styles.searchInfoText}>
-            Searching Open Food Facts - 2M+ products from around the world
+            Open Food Facts - 2M+ products from around the world. Type a food
+            name, then tap Search or press enter.
           </Text>
         </View>
 
@@ -145,7 +161,7 @@ export default function SearchFoodInput({
                   Search for common foods
                 </Text>
                 <Text style={styles.searchPromptSubtext}>
-                  Start typing to search 2M+ products from around the world
+                  Type a food name and tap Search to look through 2M+ products
                 </Text>
               </View>
             ) : null
@@ -181,11 +197,18 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#1a1a1a',
   },
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 16,
+    gap: 8,
+  },
   searchInputContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'white',
-    margin: 16,
+    marginVertical: 16,
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 8,
@@ -197,6 +220,20 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     color: '#333',
+  },
+  searchButton: {
+    backgroundColor: Colors.primary,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 72,
+  },
+  searchButtonText: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '600',
   },
   searchInfoBanner: {
     flexDirection: 'row',

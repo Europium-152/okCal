@@ -27,7 +27,7 @@ import {
   saveOpenAIApiKey,
   clearAllUserData,
 } from '@/utils/storage';
-import { Units, WeightEntry, FoodDatabase } from '@/types';
+import { Units, WeightEntry, FoodDatabase, OFFSearchRegion } from '@/types';
 import { kgFromLbs, lbsFromKg } from '@/constants/nutrition';
 import { importMacroFactorFoodLog, previewMacroFactorImport } from '@/services/importService';
 import { importMacroFactorWeightLog, previewMacroFactorWeightImport } from '@/services/weightImportService';
@@ -38,6 +38,7 @@ export default function SettingsScreen() {
   const navigation = useNavigation();
   const [units, setUnits] = useState<Units>('imperial');
   const [foodDatabase, setFoodDatabase] = useState<FoodDatabase>('US');
+  const [offSearchRegion, setOffSearchRegion] = useState<OFFSearchRegion>('US');
   const [loading, setLoading] = useState(true);
   const [weightEntries, setWeightEntries] = useState<WeightEntry[]>([]);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -80,6 +81,7 @@ export default function SettingsScreen() {
       const settings = await getAppSettings();
       setUnits(settings.units);
       setFoodDatabase(settings.foodDatabase || 'US');
+      setOffSearchRegion(settings.offSearchRegion || 'US');
       setOpenAIKey((await getOpenAIApiKey()) || '');
     } catch (error) {
       console.error('Error loading settings:', error);
@@ -100,7 +102,7 @@ export default function SettingsScreen() {
   const handleUnitsChange = async (newUnits: Units) => {
     try {
       setUnits(newUnits);
-      await saveAppSettings({ units: newUnits, foodDatabase });
+      await saveAppSettings({ units: newUnits, foodDatabase, offSearchRegion });
       Alert.alert('Success', 'Units setting updated!');
     } catch (error) {
       console.error('Error saving units setting:', error);
@@ -111,10 +113,21 @@ export default function SettingsScreen() {
   const handleFoodDatabaseChange = async (newDatabase: FoodDatabase) => {
     try {
       setFoodDatabase(newDatabase);
-      await saveAppSettings({ units, foodDatabase: newDatabase });
+      await saveAppSettings({ units, foodDatabase: newDatabase, offSearchRegion });
       Alert.alert('Success', 'Food database updated!');
     } catch (error) {
       console.error('Error saving food database setting:', error);
+      Alert.alert('Error', 'Failed to save setting. Please try again.');
+    }
+  };
+
+  const handleOFFSearchRegionChange = async (newRegion: OFFSearchRegion) => {
+    try {
+      setOffSearchRegion(newRegion);
+      await saveAppSettings({ units, foodDatabase, offSearchRegion: newRegion });
+      Alert.alert('Success', 'Online search region updated!');
+    } catch (error) {
+      console.error('Error saving OFF search region setting:', error);
       Alert.alert('Error', 'Failed to save setting. Please try again.');
     }
   };
@@ -541,6 +554,92 @@ export default function SettingsScreen() {
                   </Text>
                   <Text style={styles.optionSubtext}>
                     Portuguese food database with regional foods
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Online Database (Open Food Facts) Section */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="globe-outline" size={24} color={Colors.primary} />
+            <Text style={styles.sectionTitle}>Online Database</Text>
+          </View>
+          <Text style={styles.sectionDescription}>
+            Open Food Facts is a worldwide, crowdsourced database. Narrow results to
+            a region to make searches more relevant.
+          </Text>
+
+          <View style={styles.optionGroup}>
+            <TouchableOpacity
+              style={[
+                styles.optionButton,
+                offSearchRegion === 'US' && styles.optionButtonActive,
+              ]}
+              onPress={() => handleOFFSearchRegionChange('US')}
+            >
+              <View style={styles.optionContent}>
+                <View>
+                  <Text
+                    style={[
+                      styles.optionTitle,
+                      offSearchRegion === 'US' && styles.optionTitleActive,
+                    ]}
+                  >
+                    United States (US)
+                  </Text>
+                  <Text style={styles.optionSubtext}>
+                    Only show products sold in the US
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.optionButton,
+                offSearchRegion === 'PT' && styles.optionButtonActive,
+              ]}
+              onPress={() => handleOFFSearchRegionChange('PT')}
+            >
+              <View style={styles.optionContent}>
+                <View>
+                  <Text
+                    style={[
+                      styles.optionTitle,
+                      offSearchRegion === 'PT' && styles.optionTitleActive,
+                    ]}
+                  >
+                    Portugal (PT)
+                  </Text>
+                  <Text style={styles.optionSubtext}>
+                    Only show products sold in Portugal
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.optionButton,
+                offSearchRegion === 'WORLD' && styles.optionButtonActive,
+              ]}
+              onPress={() => handleOFFSearchRegionChange('WORLD')}
+            >
+              <View style={styles.optionContent}>
+                <View>
+                  <Text
+                    style={[
+                      styles.optionTitle,
+                      offSearchRegion === 'WORLD' && styles.optionTitleActive,
+                    ]}
+                  >
+                    Worldwide
+                  </Text>
+                  <Text style={styles.optionSubtext}>
+                    Search all products with no region filter
                   </Text>
                 </View>
               </View>

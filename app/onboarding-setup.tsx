@@ -135,8 +135,8 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
 
     setIsSaving(true);
     try {
-      // Save app settings
-      await saveAppSettings({ units, foodDatabase });
+      // Save app settings (OFF search region defaults to US; adjustable later in Settings)
+      await saveAppSettings({ units, foodDatabase, offSearchRegion: 'US' });
 
       // Calculate height in cm
       let heightInCm: number;

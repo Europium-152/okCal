@@ -6,9 +6,14 @@ export type Units = 'metric' | 'imperial';
 
 export type FoodDatabase = 'US' | 'PT';
 
+// Region used to narrow Open Food Facts online search results.
+// 'WORLD' applies no country filter and searches the whole OFF database.
+export type OFFSearchRegion = 'US' | 'PT' | 'WORLD';
+
 export interface AppSettings {
   units: Units;
   foodDatabase: FoodDatabase;
+  offSearchRegion: OFFSearchRegion;
 }
 
 export interface UserProfile {

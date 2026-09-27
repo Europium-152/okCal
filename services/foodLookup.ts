@@ -19,11 +19,34 @@ export interface USDAFoodItem {
   fat?: number;
 }
 
-import { UnifiedFoodItem } from '@/types';
+import { UnifiedFoodItem, OFFSearchRegion } from '@/types';
 
 /**
- * Rate limiter for Open Food Facts API
- * OFF limits search requests to 10 per minute
+ * User-Agent sent on every Open Food Facts request, per their API guidelines:
+ * https://openfoodfacts.github.io/documentation/docs/Product-Opener/api/
+ * Format: AppName/Version (contact email). Uses the app's contact address,
+ * not a personal one.
+ */
+const OFF_USER_AGENT = 'okCal/1.0.0 (info@okcal.app)';
+
+/**
+ * Maps an OFF search region setting to the Open Food Facts country tag used
+ * to filter search results, or null to search worldwide with no filter.
+ */
+export const offCountryTagForRegion = (region: OFFSearchRegion): string | null => {
+  switch (region) {
+    case 'US':
+      return 'en:united-states';
+    case 'PT':
+      return 'en:portugal';
+    case 'WORLD':
+      return null;
+  }
+};
+
+/**
+ * Simple per-endpoint-class rate limiter, used to stay under Open Food Facts'
+ * documented limits (10 req/min for search, 15 req/min for read/product queries).
  */
 class RateLimiter {
   private lastRequestTime: number = 0;
@@ -46,11 +69,12 @@ class RateLimiter {
   }
 }
 
-// OFF API rate limiter (10 requests per minute)
-const offRateLimiter = new RateLimiter(10);
+// OFF limits search queries to 10/min/IP and read (product) queries to 15/min/IP
+const offSearchRateLimiter = new RateLimiter(10);
+const offReadRateLimiter = new RateLimiter(15);
 
 /**
- * Lookup product information by barcode using Open Food Facts API
+ * Lookup product information by barcode using the Open Food Facts v3 API
  * @param barcode The barcode number to lookup
  * @returns Product information or null if not found
  */
@@ -58,8 +82,17 @@ export const lookupProductByBarcode = async (
   barcode: string
 ): Promise<ProductInfo | null> => {
   try {
+    // Respect rate limits
+    await offReadRateLimiter.waitIfNeeded();
+
     const response = await fetch(
-      `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
+      `https://world.openfoodfacts.org/api/v3/product/${barcode}.json?` +
+      `fields=product_name,product_name_en,generic_name,brands,nutriments,serving_size,serving_quantity`,
+      {
+        headers: {
+          'User-Agent': OFF_USER_AGENT,
+        },
+      }
     );
 
     if (!response.ok) {
@@ -68,7 +101,7 @@ export const lookupProductByBarcode = async (
 
     const data = await response.json();
 
-    if (data.status !== 1 || !data.product) {
+    if (data.status !== 'success' || !data.product) {
       return null;
     }
 
@@ -114,91 +147,41 @@ export const lookupProductByBarcode = async (
 };
 
 /**
- * Search for products by name using Open Food Facts API
+ * Search for foods using the Open Food Facts search-a-licious API.
+ *
+ * The legacy cgi/search.pl endpoint does unranked full-text matching over the
+ * whole world database (so "apple" returns French "pomme" compotes). This one
+ * ranks by relevance and lets us restrict by language and country.
+ *
  * @param query The search query
- * @returns Array of product information
- */
-export const searchProductsByName = async (
-  query: string
-): Promise<ProductInfo[]> => {
-  try {
-    const response = await fetch(
-      `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(
-        query
-      )}&search_simple=1&json=1&page_size=10`
-    );
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const data = await response.json();
-
-    if (!data.products || data.products.length === 0) {
-      return [];
-    }
-
-    return data.products.map((product: any) => {
-      const nutriments = product.nutriments || {};
-
-      const caloriesPer100g =
-        nutriments['energy-kcal_100g'] ||
-        nutriments['energy-kcal'] ||
-        nutriments.energy_100g / 4.184 ||
-        0;
-
-      const proteinPer100g =
-        nutriments.proteins_100g || nutriments.proteins || 0;
-      const carbsPer100g =
-        nutriments.carbohydrates_100g || nutriments.carbohydrates || 0;
-      const fatPer100g = nutriments.fat_100g || nutriments.fat || 0;
-
-      return {
-        name:
-          product.product_name ||
-          product.product_name_en ||
-          product.generic_name ||
-          'Unknown Product',
-        calories: Math.round(caloriesPer100g),
-        protein:
-          proteinPer100g > 0 ? Math.round(proteinPer100g * 10) / 10 : undefined,
-        carbs: carbsPer100g > 0 ? Math.round(carbsPer100g * 10) / 10 : undefined,
-        fat: fatPer100g > 0 ? Math.round(fatPer100g * 10) / 10 : undefined,
-        servingSize: product.serving_size || product.serving_quantity || '100g',
-        brand: product.brands || undefined,
-      };
-    });
-  } catch (error) {
-    console.error('Error searching products:', error);
-    return [];
-  }
-};
-
-
-/**
- * Search for foods using Open Food Facts API
- * @param query The search query
+ * @param region OFF search region setting; determines the country filter applied.
+ *   Defaults to 'US' if not provided. Use offCountryTagForRegion to see the mapping.
  * @returns Array of unified food items from OFF
  */
 export const searchOFFFoods = async (
-  query: string
+  query: string,
+  region: OFFSearchRegion = 'US'
 ): Promise<UnifiedFoodItem[]> => {
+  const countryTag = offCountryTagForRegion(region);
   if (!query || query.trim().length < 2) {
     return [];
   }
 
   try {
     // Respect rate limits
-    await offRateLimiter.waitIfNeeded();
+    await offSearchRateLimiter.waitIfNeeded();
+
+    const q = countryTag
+      ? `${query.trim()} AND countries_tags:"${countryTag}"`
+      : query.trim();
 
     const response = await fetch(
-      `https://world.openfoodfacts.org/cgi/search.pl?` +
-      `search_terms=${encodeURIComponent(query)}&` +
-      `search_simple=1&action=process&json=1&page_size=20&` +
-      `fields=code,product_name,brands,categories,nutriments,image_url,nutriscore_grade,ecoscore_grade,allergens`,
+      `https://search.openfoodfacts.org/search?` +
+      `q=${encodeURIComponent(q)}&langs=en&page_size=40&` +
+      `fields=code,product_name,brands,nutriments,serving_size,image_url,nutriscore_grade,ecoscore_grade,allergens_tags`,
       {
         headers: {
-          'User-Agent': 'MacroTracker/1.0 (nutrition.app@example.com)',
+          'User-Agent': OFF_USER_AGENT,
         },
       }
     );
@@ -210,27 +193,42 @@ export const searchOFFFoods = async (
 
     const data = await response.json();
 
-    if (!data.products || data.products.length === 0) {
+    if (!data.hits || data.hits.length === 0) {
       return [];
     }
 
-    const foods = data.products.map((product: any) => {
-      const nutriments = product.nutriments || {};
+    const seen = new Set<string>();
+    const foods: UnifiedFoodItem[] = [];
 
-      // Extract calories per 100g
+    for (const product of data.hits) {
+      const nutriments = product.nutriments || {};
+      const name = product.product_name?.trim();
+      if (!name) continue;
+
+      // search-a-licious returns brands as an array
+      const brand = Array.isArray(product.brands)
+        ? product.brands[0]
+        : product.brands || undefined;
+
       const caloriesPer100g =
         nutriments['energy-kcal_100g'] ||
         nutriments['energy-kcal'] ||
         (nutriments.energy_100g ? nutriments.energy_100g / 4.184 : 0);
+      if (!(caloriesPer100g > 0)) continue; // Skip items without calorie data
+
+      // Collapse duplicate listings of the same product
+      const key = `${name.toLowerCase()}|${(brand || '').toLowerCase()}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
 
       const proteinPer100g = nutriments.proteins_100g || nutriments.proteins || 0;
       const carbsPer100g = nutriments.carbohydrates_100g || nutriments.carbohydrates || 0;
       const fatPer100g = nutriments.fat_100g || nutriments.fat || 0;
 
-      return {
-        id: product.code || `off-${Date.now()}`,
-        description: product.product_name || 'Unknown Product',
-        brandName: product.brands || undefined,
+      foods.push({
+        id: product.code || `off-${name}-${brand || ''}`,
+        description: name,
+        brandName: brand,
         source: 'OFF' as const,
         calories: Math.round(caloriesPer100g),
         protein: proteinPer100g > 0 ? Math.round(proteinPer100g * 10) / 10 : undefined,
@@ -240,9 +238,11 @@ export const searchOFFFoods = async (
         imageUrl: product.image_url || undefined,
         nutriScore: product.nutriscore_grade?.toLowerCase() || undefined,
         ecoScore: product.ecoscore_grade?.toLowerCase() || undefined,
-        allergens: product.allergens || undefined,
-      };
-    }).filter((item: UnifiedFoodItem) => item.calories > 0); // Filter out items without calorie data
+        allergens: Array.isArray(product.allergens_tags)
+          ? product.allergens_tags.map((t: string) => t.replace(/^en:/, '')).join(', ')
+          : undefined,
+      });
+    }
 
     return foods.slice(0, 20);
   } catch (error) {

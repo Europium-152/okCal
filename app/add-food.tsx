@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { RootStackScreenProps } from '@/navigation/types';
 import { saveFoodEntry, getFoodEntries, getRecipes, getAppSettings } from '@/utils/storage';
-import { FoodEntry, Recipe, UnifiedFoodItem, FoodDatabase } from '@/types';
+import { FoodEntry, Recipe, UnifiedFoodItem, FoodDatabase, OFFSearchRegion } from '@/types';
 import BarcodeScanner from '@/components/BarcodeScanner';
 import { lookupProductByBarcode, ProductInfo, searchOFFFoods } from '@/services/foodLookup';
 import { OfflineFoodItem } from '@/services/offlineFoodSearch';
@@ -36,6 +36,7 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
 
   const [inputMethod, setInputMethod] = useState<InputMethod>('select');
   const [foodDatabase, setFoodDatabase] = useState<FoodDatabase>('US');
+  const [offSearchRegion, setOffSearchRegion] = useState<OFFSearchRegion>('US');
 
   const [loading, setLoading] = useState(false);
   const [scannedProduct, setScannedProduct] = useState<ProductInfo | null>(null);
@@ -68,6 +69,7 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
       try {
         const settings = await getAppSettings();
         setFoodDatabase(settings.foodDatabase || 'US');
+        setOffSearchRegion(settings.offSearchRegion || 'US');
       } catch (error) {
         console.error('Error loading food database setting:', error);
       }
@@ -386,7 +388,7 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
     setSearching(true);
     try {
       // Search Open Food Facts (no API key required)
-      const results = await searchOFFFoods(searchQuery);
+      const results = await searchOFFFoods(searchQuery, offSearchRegion);
       setSearchResults(results);
       setSearching(false);
     } catch (error: any) {
@@ -397,17 +399,13 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
     }
   };
 
-  // Debounced search
+  // Online search (Open Food Facts) is triggered explicitly via the Search
+  // button / submit, not as-you-type, to stay well under OFF's rate limits.
+  // Just clear stale results when the box is emptied.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery.trim().length >= 2) {
-        handleSearch();
-      } else {
-        setSearchResults([]);
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+    }
   }, [searchQuery]);
 
   const handleSelectFood = (food: UnifiedFoodItem) => {
@@ -631,6 +629,7 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
       <SearchFoodInput
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
+        onSearch={handleSearch}
         searchResults={searchResults}
         searching={searching}
         onSelectFood={handleSelectFood}
