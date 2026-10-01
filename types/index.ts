@@ -21,9 +21,11 @@ export interface UserProfile {
   sex: Sex;
   birthDate: string;          // ISO date string
   heightCm: number;
-  goal: Goal;
   targetWeightLbs: number;    // Target weight goal
-  goalRatePerWeek: number;    // lbs per week (positive for gain, negative for loss)
+  // Maximum desired rate of weight change, in lbs per week. Always positive —
+  // whether the user is losing or gaining is inferred from current vs. target
+  // weight, and the actual (signed) rate used tapers to 0 near the target.
+  maxRatePerWeek: number;
   createdAt: string;          // ISO datetime string
   updatedAt: string;
 }

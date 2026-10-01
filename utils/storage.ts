@@ -339,8 +339,7 @@ export const generateTDEEDataHash = (
     profile.heightCm,
     profile.birthDate,
     profile.sex,
-    profile.goal,
-    profile.goalRatePerWeek,
+    profile.maxRatePerWeek,
     profile.targetWeightLbs,
     // Entry counts (excluding today for food/fasting, including today for weight)
     sortedWeight.length,

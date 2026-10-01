@@ -384,8 +384,7 @@ describe('storage', () => {
         heightCm: 170,
         birthDate: '1990-01-01',
         sex: 'male',
-        goal: 'maintain',
-        goalRatePerWeek: 0,
+        maxRatePerWeek: 0,
         targetWeightLbs: 150,
       };
 
@@ -423,8 +422,7 @@ describe('storage', () => {
         heightCm: 170,
         birthDate: '1990-01-01',
         sex: 'male',
-        goal: 'maintain',
-        goalRatePerWeek: 0,
+        maxRatePerWeek: 0,
         targetWeightLbs: 150,
       };
 
@@ -476,8 +474,7 @@ describe('storage', () => {
         heightCm: 170,
         birthDate: '1990-01-01',
         sex: 'male',
-        goal: 'maintain',
-        goalRatePerWeek: 0,
+        maxRatePerWeek: 0,
         targetWeightLbs: 150,
       };
 

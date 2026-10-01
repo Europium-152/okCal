@@ -8,6 +8,36 @@ import {
   Sex,
   Goal,
 } from '@/types';
+
+/**
+ * Infer the weight-change direction from current vs. target weight.
+ */
+const inferGoal = (currentWeight: number, targetWeight: number): Goal => {
+  const WEIGHT_MATCH_EPSILON_LBS = 0.1;
+  const diff = targetWeight - currentWeight;
+  if (Math.abs(diff) < WEIGHT_MATCH_EPSILON_LBS) return 'maintain';
+  return diff > 0 ? 'gain' : 'lose';
+};
+
+/**
+ * Compute the signed rate of weight change (lbs/week) to apply right now.
+ * Uses the user's max rate when far from target, then tapers linearly to
+ * zero over WEEKS_TO_TARGET_FACTOR weeks as the target is approached, so the
+ * target is converged on rather than overshot.
+ */
+const calculateAdaptiveRate = (
+  currentWeight: number,
+  targetWeight: number,
+  maxRatePerWeek: number
+): number => {
+  const diff = targetWeight - currentWeight;
+  const far = maxRatePerWeek * WEEKS_TO_TARGET_FACTOR;
+
+  if (Math.abs(diff) > far) {
+    return Math.sign(diff) * maxRatePerWeek;
+  }
+  return diff / WEEKS_TO_TARGET_FACTOR;
+};
 import {
   ACTIVITY_MULTIPLIER,
   CALORIES_PER_LB_PER_WEEK,
@@ -19,6 +49,7 @@ import {
   MATURE_DATA_DAYS,
   WEIGHT_TREND_DAYS,
   INTAKE_AVERAGE_DAYS,
+  WEEKS_TO_TARGET_FACTOR,
   PROTEIN_G_PER_LB,
   MIN_FAT_G_PER_LB,
   FAT_PERCENT_OF_CALORIES,
@@ -391,24 +422,17 @@ export class TDEECalculator {
    */
   calculateNutritionTarget(tdeeEstimate: TDEEEstimate): NutritionTarget {
     const currentWeight = this.getMostRecentWeight() || this.profile.targetWeightLbs;
-    const goal = this.profile.goal;
-    let goalRatePerWeek = this.profile.goalRatePerWeek;
+    const targetWeight = this.profile.targetWeightLbs;
+    const goal = inferGoal(currentWeight, targetWeight);
 
-    // For maintain goal, auto-adjust based on weight deviation from target
-    if (goal === 'maintain') {
-      const weightDeviation = currentWeight - this.profile.targetWeightLbs;
-      const MAX_MAINTAIN_RATE = 0.4; // Max 0.4 lbs per week adjustment
-
-      // If more than 1 lb over target, aim to lose 0.4 lbs/week
-      // If more than 1 lb under target, aim to gain 0.4 lbs/week
-      // Linear scaling between -1 and +1 lb deviation
-      if (Math.abs(weightDeviation) > 1) {
-        goalRatePerWeek = weightDeviation > 0 ? -MAX_MAINTAIN_RATE : MAX_MAINTAIN_RATE;
-      } else {
-        // Proportional adjustment for smaller deviations
-        goalRatePerWeek = -weightDeviation * MAX_MAINTAIN_RATE;
-      }
-    }
+    // Adaptive rate: use the user's max rate while far from target, then
+    // taper linearly to zero as the target is approached (see
+    // calculateAdaptiveRate), so the target is converged on, not overshot.
+    const goalRatePerWeek = calculateAdaptiveRate(
+      currentWeight,
+      targetWeight,
+      this.profile.maxRatePerWeek
+    );
 
     // Calculate deficit or surplus
     // 3500 calories per pound, divide by 7 for daily amount

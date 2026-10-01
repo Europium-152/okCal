@@ -15,6 +15,16 @@ export const MAX_SURPLUS = 500;
 
 export const MIN_DATA_DAYS = 7;
 export const MATURE_DATA_DAYS = 28;
+
+// Number of weeks over which the rate of weight change tapers linearly to
+// zero as the user approaches their target weight (the "f" factor).
+export const WEEKS_TO_TARGET_FACTOR = 1;
+
+// Hard cap on the user-specified maximum rate of weight change: always 1
+// kg/week in absolute terms, regardless of which unit system the user has
+// selected (so the imperial equivalent is ~2.2 lb/week, not 1 lb/week).
+export const MAX_RATE_KG_PER_WEEK = 1;
+
 export const MAX_DAILY_TDEE_CHANGE = 75;
 export const WEIGHT_TREND_DAYS = 11;
 export const INTAKE_AVERAGE_DAYS = 11;
@@ -39,3 +49,7 @@ export const lbsFromKg = (kg: number): number => kg * 2.205;
 export const cmFromInches = (inches: number): number => inches * 2.54;
 export const cmFromFeet = (feet: number, inches: number): number =>
   (feet * 12 + inches) * 2.54;
+
+// MAX_RATE_KG_PER_WEEK expressed in lbs, for validating/clamping values that
+// are already in lbs (the unit UserProfile.maxRatePerWeek is stored in).
+export const MAX_RATE_LBS_PER_WEEK = lbsFromKg(MAX_RATE_KG_PER_WEEK);

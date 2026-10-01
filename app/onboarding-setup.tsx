@@ -15,8 +15,8 @@ import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { RootStackScreenProps } from '@/navigation/types';
 import { saveAppSettings, saveUserProfile, saveWeightEntry } from '@/utils/storage';
-import { Units, FoodDatabase, Sex, Goal, UserProfile, WeightEntry } from '@/types';
-import { lbsFromKg, cmFromInches } from '@/constants/nutrition';
+import { Units, FoodDatabase, Sex, UserProfile, WeightEntry } from '@/types';
+import { lbsFromKg, cmFromInches, MAX_RATE_LBS_PER_WEEK, MAX_RATE_KG_PER_WEEK } from '@/constants/nutrition';
 import { getTodayString, formatDate, parseDate } from '@/utils/dateHelpers';
 
 const getDateYearsAgo = (years: number): Date => {
@@ -49,7 +49,6 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
   const [heightCm, setHeightCm] = useState('');
 
   // Goals
-  const [goal, setGoal] = useState<Goal>('maintain');
   const [currentWeight, setCurrentWeight] = useState('');
   const [targetWeight, setTargetWeight] = useState('');
   const [goalRate, setGoalRate] = useState('');
@@ -151,14 +150,21 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
       return false;
     }
 
-    // Only validate rate for lose/gain goals
-    if (goal !== 'maintain') {
-      const rate = parseFloat(goalRate);
+    const rate = parseFloat(goalRate);
+    if (!rate || rate <= 0) {
+      Alert.alert('Invalid Rate', 'Please enter a positive rate of weight change');
+      return false;
+    }
 
-      if (!rate || rate <= 0) {
-        Alert.alert('Invalid Goal Rate', 'Please enter a positive goal rate');
-        return false;
-      }
+    // The cap is always 1 kg/week in absolute terms, so convert to lbs
+    // before comparing regardless of which units the user entered it in.
+    const rateLbs = units === 'metric' ? lbsFromKg(rate) : rate;
+    if (rateLbs > MAX_RATE_LBS_PER_WEEK) {
+      Alert.alert(
+        'Rate Too High',
+        `For safety, the rate of weight change can't exceed ${MAX_RATE_KG_PER_WEEK} kg (${MAX_RATE_LBS_PER_WEEK.toFixed(1)} lb) per week.`
+      );
+      return false;
     }
 
     return true;
@@ -193,26 +199,10 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
         targetWeightLbs = parseFloat(targetWeight);
       }
 
-      // Calculate goal rate in lbs per week
-      let goalRateLbs: number;
-      if (goal === 'maintain') {
-        goalRateLbs = 0;
-      } else {
-        // Convert to lbs (rate is always entered as positive)
-        if (units === 'metric') {
-          goalRateLbs = lbsFromKg(parseFloat(goalRate));
-        } else {
-          goalRateLbs = parseFloat(goalRate);
-        }
-
-        // Make goal rate negative for weight loss
-        if (goal === 'lose') {
-          goalRateLbs = -Math.abs(goalRateLbs);
-        } else {
-          // Ensure positive for weight gain
-          goalRateLbs = Math.abs(goalRateLbs);
-        }
-      }
+      // Max rate of weight change, in lbs/week (always positive; the
+      // calculator infers direction and tapers the rate near the target).
+      const maxRateLbs =
+        units === 'metric' ? lbsFromKg(parseFloat(goalRate)) : parseFloat(goalRate);
 
       // Create user profile
       const profile: UserProfile = {
@@ -220,9 +210,8 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
         sex,
         birthDate,
         heightCm: heightInCm,
-        goal,
         targetWeightLbs,
-        goalRatePerWeek: goalRateLbs,
+        maxRatePerWeek: maxRateLbs,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -481,53 +470,6 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
       </Text>
 
       <View style={styles.formGroup}>
-        <Text style={styles.label}>What's your goal?</Text>
-        <View style={styles.goalButtons}>
-          <TouchableOpacity
-            style={[styles.goalButton, goal === 'lose' && styles.goalButtonActive]}
-            onPress={() => setGoal('lose')}
-          >
-            <Ionicons
-              name="trending-down"
-              size={24}
-              color={goal === 'lose' ? '#fff' : '#4ECDC4'}
-            />
-            <Text style={[styles.goalButtonText, goal === 'lose' && styles.goalButtonTextActive]}>
-              Lose Weight
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.goalButton, goal === 'maintain' && styles.goalButtonActive]}
-            onPress={() => setGoal('maintain')}
-          >
-            <Ionicons
-              name="remove"
-              size={24}
-              color={goal === 'maintain' ? '#fff' : '#4ECDC4'}
-            />
-            <Text style={[styles.goalButtonText, goal === 'maintain' && styles.goalButtonTextActive]}>
-              Maintain
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.goalButton, goal === 'gain' && styles.goalButtonActive]}
-            onPress={() => setGoal('gain')}
-          >
-            <Ionicons
-              name="trending-up"
-              size={24}
-              color={goal === 'gain' ? '#fff' : '#4ECDC4'}
-            />
-            <Text style={[styles.goalButtonText, goal === 'gain' && styles.goalButtonTextActive]}>
-              Gain Weight
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.formGroup}>
         <Text style={styles.label}>
           Current Weight ({units === 'metric' ? 'kg' : 'lbs'})
         </Text>
@@ -555,71 +497,38 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
         />
       </View>
 
-      {goal !== 'maintain' && (
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>
-            Goal Rate ({units === 'metric' ? 'kg' : 'lbs'} per week)
-          </Text>
-          <TextInput
-            style={styles.input}
-            value={goalRate}
-            onChangeText={setGoalRate}
-            placeholder={
-              goal === 'lose'
-                ? units === 'metric' ? '0.5' : '1'
-                : units === 'metric' ? '0.25' : '0.5'
-            }
-            placeholderTextColor="#999"
-            keyboardType="decimal-pad"
-          />
-          <Text style={styles.hint}>
-            {goal === 'lose'
-              ? 'Recommended: 0.5 to 1 kg/week (1 to 2 lbs/week)'
-              : 'Recommended: 0.25 to 0.5 kg/week (0.5 to 1 lb/week)'}
-          </Text>
-        </View>
-      )}
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>
+          Max Rate of Change ({units === 'metric' ? 'kg' : 'lbs'} per week)
+        </Text>
+        <TextInput
+          style={styles.input}
+          value={goalRate}
+          onChangeText={setGoalRate}
+          placeholder={units === 'metric' ? '0.5' : '1'}
+          placeholderTextColor="#999"
+          keyboardType="decimal-pad"
+        />
+        <Text style={styles.hint}>
+          Up to {units === 'metric' ? MAX_RATE_KG_PER_WEEK : MAX_RATE_LBS_PER_WEEK.toFixed(1)}{' '}
+          {units === 'metric' ? 'kg' : 'lb'}/week. This is a ceiling — the app slows the rate down
+          automatically as you get close to your target.
+        </Text>
+      </View>
 
-      {/* Lose weight goal explanation */}
-      {goal === 'lose' && (
-        <View style={styles.infoBox}>
-          <Ionicons name="information-circle" size={20} color={Colors.primary} />
-          <Text style={styles.infoBoxText}>
-            The app will automatically adjust your calorie recommendations to help you lose weight safely.
-            {'\n\n'}
-            <Text style={styles.infoBoxBold}>Recommended rate:</Text> {units === 'imperial' ? '1-2 lbs' : '0.5-1 kg'} per week (deficit of 500-1000 calories/day).
-            Slower rates ({units === 'imperial' ? '0.5-1 lb' : '0.25-0.5 kg'}/week) help maximize muscle retention.
-            {'\n\n'}
-            <Text style={styles.infoBoxBold}>Why it matters:</Text> Very rapid weight loss increases risk of muscle loss, nutrient deficiencies, and makes weight regain more likely.
-          </Text>
-        </View>
-      )}
-
-      {/* Gain weight goal explanation */}
-      {goal === 'gain' && (
-        <View style={styles.infoBox}>
-          <Ionicons name="information-circle" size={20} color={Colors.primary} />
-          <Text style={styles.infoBoxText}>
-            The app will automatically adjust your calorie recommendations to help you gain weight and build muscle.
-            {'\n\n'}
-            <Text style={styles.infoBoxBold}>Recommended rate:</Text> {units === 'imperial' ? '0.5-1 lb' : '0.25-0.5 kg'} per week (surplus of 250-500 calories/day) combined with resistance training.
-            {'\n\n'}
-            <Text style={styles.infoBoxBold}>Why it matters:</Text> Modest rates minimize fat accumulation while building lean muscle. Beginners may gain faster initially, while trained individuals need slower, consistent progress.
-          </Text>
-        </View>
-      )}
-
-      {/* Maintain goal explanation */}
-      {goal === 'maintain' && (
-        <View style={styles.infoBox}>
-          <Ionicons name="information-circle" size={20} color={Colors.primary} />
-          <Text style={styles.infoBoxText}>
-            The app will automatically adjust your calorie recommendations to help you maintain
-            your target weight. If your weight deviates, the algorithm will make small adjustments
-            (within ±{units === 'imperial' ? '0.4' : '0.2'} {units === 'imperial' ? 'lbs' : 'kg'} per week) to bring you back to your target.
-          </Text>
-        </View>
-      )}
+      <View style={styles.infoBox}>
+        <Ionicons name="information-circle" size={20} color={Colors.primary} />
+        <Text style={styles.infoBoxText}>
+          The app compares your current and target weight to figure out whether you're losing,
+          gaining, or maintaining, and sets your calorie recommendation accordingly — no need to
+          pick a goal yourself.
+          {'\n\n'}
+          <Text style={styles.infoBoxBold}>Why it matters:</Text> Rates that are too aggressive
+          increase the risk of muscle loss, nutrient deficiencies, and weight regain, and the app
+          will automatically taper your rate down as you approach your target to avoid
+          over- or undershooting it.
+        </Text>
+      </View>
     </View>
   );
 
@@ -853,32 +762,6 @@ const styles = StyleSheet.create({
   heightSeparator: {
     fontSize: 16,
     color: '#666',
-  },
-  goalButtons: {
-    gap: 12,
-  },
-  goalButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-    backgroundColor: '#fff',
-    gap: 12,
-  },
-  goalButtonActive: {
-    borderColor: '#4ECDC4',
-    backgroundColor: '#4ECDC4',
-  },
-  goalButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-  },
-  goalButtonTextActive: {
-    color: '#fff',
   },
   hint: {
     fontSize: 13,
