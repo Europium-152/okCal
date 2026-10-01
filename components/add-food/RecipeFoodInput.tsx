@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Recipe } from '@/types';
+import { sortByRelevance } from '@/utils/fuzzySearch';
 
 interface RecipeFoodInputProps {
   recipes: Recipe[];
@@ -17,7 +18,6 @@ interface RecipeFoodInputProps {
   onSearchQueryChange: (query: string) => void;
   onSelectRecipe: (recipe: Recipe) => void;
   onCancel: () => void;
-  fuzzyMatch: (text: string, query: string) => boolean;
 }
 
 export default function RecipeFoodInput({
@@ -26,10 +26,12 @@ export default function RecipeFoodInput({
   onSearchQueryChange,
   onSelectRecipe,
   onCancel,
-  fuzzyMatch,
 }: RecipeFoodInputProps) {
-  const filteredRecipes = recipes.filter(recipe =>
-    fuzzyMatch(recipe.name, searchQuery)
+  const filteredRecipes = sortByRelevance(
+    recipes,
+    searchQuery,
+    recipe => recipe.name,
+    recipe => new Date(recipe.updatedAt).getTime()
   );
 
   return (

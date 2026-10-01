@@ -16,6 +16,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Recipe } from '@/types';
 import { getRecipes, deleteRecipe } from '@/utils/storage';
+import { sortByRelevance } from '@/utils/fuzzySearch';
 
 export default function RecipesScreen({ navigation }: RootStackScreenProps<'Recipes'>) {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -61,26 +62,11 @@ export default function RecipesScreen({ navigation }: RootStackScreenProps<'Reci
     navigation.navigate('EditRecipe', { recipeId: undefined });
   };
 
-  const fuzzyMatch = (text: string, query: string): boolean => {
-    if (!query) return true;
-
-    const textLower = text.toLowerCase();
-    const queryLower = query.toLowerCase();
-
-    if (textLower.includes(queryLower)) return true;
-
-    let queryIndex = 0;
-    for (let i = 0; i < textLower.length && queryIndex < queryLower.length; i++) {
-      if (textLower[i] === queryLower[queryIndex]) {
-        queryIndex++;
-      }
-    }
-
-    return queryIndex === queryLower.length;
-  };
-
-  const filteredRecipes = recipes.filter((recipe) =>
-    fuzzyMatch(recipe.name, searchQuery)
+  const filteredRecipes = sortByRelevance(
+    recipes,
+    searchQuery,
+    recipe => recipe.name,
+    recipe => new Date(recipe.updatedAt).getTime()
   );
 
   const renderRecipe = ({ item }: { item: Recipe }) => {

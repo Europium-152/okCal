@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { RootStackScreenProps } from '@/navigation/types';
 import { Ionicons } from '@expo/vector-icons';
 import { getFoodEntries, getRecipes, getAppSettings } from '@/utils/storage';
+import { sortByRelevance } from '@/utils/fuzzySearch';
 import { FoodEntry, Recipe, UnifiedFoodItem, FoodDatabase, OFFSearchRegion } from '@/types';
 import { lookupProductByBarcode, searchOFFFoods } from '@/services/foodLookup';
 import { OfflineFoodItem } from '@/services/offlineFoodSearch';
@@ -343,20 +344,6 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
     setRecipesSearchQuery('');
   };
 
-  const fuzzyMatch = (text: string, query: string): boolean => {
-    if (!query) return true;
-    const textLower = text.toLowerCase();
-    const queryLower = query.toLowerCase();
-    if (textLower.includes(queryLower)) return true;
-    let queryIndex = 0;
-    for (let i = 0; i < textLower.length && queryIndex < queryLower.length; i++) {
-      if (textLower[i] === queryLower[queryIndex]) {
-        queryIndex++;
-      }
-    }
-    return queryIndex === queryLower.length;
-  };
-
   // Barcode scanner view
   if (inputMethod === 'barcode') {
     if (loading) {
@@ -571,8 +558,11 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
 
   // History view
   if (inputMethod === 'history') {
-    const filteredHistory = historyEntries.filter(entry =>
-      fuzzyMatch(entry.name, historySearchQuery)
+    const filteredHistory = sortByRelevance(
+      historyEntries,
+      historySearchQuery,
+      entry => entry.name,
+      entry => entry.timestamp
     );
 
     return (
@@ -617,8 +607,11 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
 
   // Recipes view
   if (inputMethod === 'recipes') {
-    const filteredRecipes = recipes.filter(recipe =>
-      fuzzyMatch(recipe.name, recipesSearchQuery)
+    const filteredRecipes = sortByRelevance(
+      recipes,
+      recipesSearchQuery,
+      recipe => recipe.name,
+      recipe => new Date(recipe.updatedAt).getTime()
     );
 
     return (

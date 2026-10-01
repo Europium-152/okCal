@@ -574,27 +574,6 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
     );
   }
 
-  // Fuzzy search function
-  const fuzzyMatch = (text: string, query: string): boolean => {
-    if (!query) return true;
-
-    const textLower = text.toLowerCase();
-    const queryLower = query.toLowerCase();
-
-    // Exact substring match
-    if (textLower.includes(queryLower)) return true;
-
-    // Fuzzy match: all characters in query must appear in order in text
-    let queryIndex = 0;
-    for (let i = 0; i < textLower.length && queryIndex < queryLower.length; i++) {
-      if (textLower[i] === queryLower[queryIndex]) {
-        queryIndex++;
-      }
-    }
-
-    return queryIndex === queryLower.length;
-  };
-
   // Show history search screen
   if (inputMethod === 'history') {
     return (
@@ -604,7 +583,6 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
         onSearchQueryChange={setHistorySearchQuery}
         onSelectEntry={handleSelectHistoryEntry}
         onCancel={() => setInputMethod('select')}
-        fuzzyMatch={fuzzyMatch}
       />
     );
   }
@@ -618,7 +596,6 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
         onSearchQueryChange={setRecipesSearchQuery}
         onSelectRecipe={handleSelectRecipe}
         onCancel={() => setInputMethod('select')}
-        fuzzyMatch={fuzzyMatch}
       />
     );
   }
