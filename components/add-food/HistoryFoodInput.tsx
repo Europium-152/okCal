@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FoodEntry } from '@/types';
+import { sortByRelevance } from '@/utils/fuzzySearch';
 
 interface HistoryFoodInputProps {
   historyEntries: FoodEntry[];
@@ -17,7 +18,6 @@ interface HistoryFoodInputProps {
   onSearchQueryChange: (query: string) => void;
   onSelectEntry: (entry: FoodEntry) => void;
   onCancel: () => void;
-  fuzzyMatch: (text: string, query: string) => boolean;
 }
 
 export default function HistoryFoodInput({
@@ -26,10 +26,12 @@ export default function HistoryFoodInput({
   onSearchQueryChange,
   onSelectEntry,
   onCancel,
-  fuzzyMatch,
 }: HistoryFoodInputProps) {
-  const filteredHistory = historyEntries.filter(entry =>
-    fuzzyMatch(entry.name, searchQuery)
+  const filteredHistory = sortByRelevance(
+    historyEntries,
+    searchQuery,
+    entry => entry.name,
+    entry => entry.timestamp
   );
 
   return (
