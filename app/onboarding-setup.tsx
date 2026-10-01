@@ -9,13 +9,25 @@ import {
   TextInput,
   Alert,
   Platform,
+  Modal,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { RootStackScreenProps } from '@/navigation/types';
 import { saveAppSettings, saveUserProfile, saveWeightEntry } from '@/utils/storage';
 import { Units, FoodDatabase, Sex, Goal, UserProfile, WeightEntry } from '@/types';
 import { lbsFromKg, cmFromInches } from '@/constants/nutrition';
-import { getTodayString } from '@/utils/dateHelpers';
+import { getTodayString, formatDate, parseDate } from '@/utils/dateHelpers';
+
+const getDateYearsAgo = (years: number): Date => {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - years);
+  return date;
+};
+
+const MIN_BIRTH_DATE = getDateYearsAgo(120);
+const MAX_BIRTH_DATE = getDateYearsAgo(13);
+const DEFAULT_BIRTH_DATE = getDateYearsAgo(25);
 
 type OnboardingStep = 'units' | 'database' | 'profile' | 'goals';
 
@@ -30,6 +42,8 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
   // Profile
   const [sex, setSex] = useState<Sex>('male');
   const [birthDate, setBirthDate] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [tempBirthDate, setTempBirthDate] = useState<Date>(DEFAULT_BIRTH_DATE);
   const [heightFeet, setHeightFeet] = useState('');
   const [heightInches, setHeightInches] = useState('');
   const [heightCm, setHeightCm] = useState('');
@@ -67,19 +81,40 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
     }
   };
 
-  const validateProfile = (): boolean => {
-    // Validate birth date (YYYY-MM-DD format)
-    if (!birthDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
-      Alert.alert('Invalid Date', 'Please enter your birth date in YYYY-MM-DD format');
-      return false;
-    }
+  const openDatePicker = () => {
+    setTempBirthDate(birthDate ? parseDate(birthDate) : DEFAULT_BIRTH_DATE);
+    setShowDatePicker(true);
+  };
 
-    // Validate age (must be between 13 and 120)
-    const birthYear = parseInt(birthDate.split('-')[0]);
-    const currentYear = new Date().getFullYear();
-    const age = currentYear - birthYear;
-    if (age < 13 || age > 120) {
-      Alert.alert('Invalid Age', 'Please enter a valid birth date');
+  const handleDateChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    if (Platform.OS === 'android') {
+      setShowDatePicker(false);
+      if (event.type === 'set' && selectedDate) {
+        setBirthDate(formatDate(selectedDate));
+      }
+      return;
+    }
+    // iOS spinner reports intermediate values as the user scrolls; stage them
+    // until "Done" is tapped.
+    if (selectedDate) {
+      setTempBirthDate(selectedDate);
+    }
+  };
+
+  const confirmIosDate = () => {
+    setBirthDate(formatDate(tempBirthDate));
+    setShowDatePicker(false);
+  };
+
+  const cancelIosDate = () => {
+    setShowDatePicker(false);
+  };
+
+  const validateProfile = (): boolean => {
+    // Birth date is picked via a native date picker constrained to the 13-120 age
+    // range (see MIN_BIRTH_DATE/MAX_BIRTH_DATE), so only presence needs checking here.
+    if (!birthDate) {
+      Alert.alert('Missing Birth Date', 'Please select your birth date');
       return false;
     }
 
@@ -342,15 +377,60 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
       </View>
 
       <View style={styles.formGroup}>
-        <Text style={styles.label}>Birth Date (YYYY-MM-DD)</Text>
-        <TextInput
-          style={styles.input}
-          value={birthDate}
-          onChangeText={setBirthDate}
-          placeholder="1990-01-01"
-          placeholderTextColor="#999"
-          keyboardType="numbers-and-punctuation"
-        />
+        <Text style={styles.label}>Birth Date</Text>
+        <TouchableOpacity style={styles.input} onPress={openDatePicker}>
+          <Text style={birthDate ? styles.dateValueText : styles.dateValuePlaceholder}>
+            {birthDate
+              ? parseDate(birthDate).toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })
+              : 'Select your birth date'}
+          </Text>
+        </TouchableOpacity>
+
+        {Platform.OS === 'android' && showDatePicker && (
+          <DateTimePicker
+            value={birthDate ? parseDate(birthDate) : DEFAULT_BIRTH_DATE}
+            mode="date"
+            display="default"
+            maximumDate={MAX_BIRTH_DATE}
+            minimumDate={MIN_BIRTH_DATE}
+            onChange={handleDateChange}
+          />
+        )}
+
+        {Platform.OS === 'ios' && (
+          <Modal
+            visible={showDatePicker}
+            transparent
+            animationType="slide"
+            onRequestClose={cancelIosDate}
+          >
+            <View style={styles.datePickerOverlay}>
+              <View style={styles.datePickerSheet}>
+                <View style={styles.datePickerHeader}>
+                  <TouchableOpacity onPress={cancelIosDate}>
+                    <Text style={styles.datePickerCancel}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={confirmIosDate}>
+                    <Text style={styles.datePickerDone}>Done</Text>
+                  </TouchableOpacity>
+                </View>
+                <DateTimePicker
+                  value={tempBirthDate}
+                  mode="date"
+                  display="spinner"
+                  themeVariant="light"
+                  maximumDate={MAX_BIRTH_DATE}
+                  minimumDate={MIN_BIRTH_DATE}
+                  onChange={handleDateChange}
+                />
+              </View>
+            </View>
+          </Modal>
+        )}
       </View>
 
       <View style={styles.formGroup}>
@@ -701,6 +781,43 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     color: '#333',
+  },
+  dateValueText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  dateValuePlaceholder: {
+    fontSize: 16,
+    color: '#999',
+  },
+  datePickerOverlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  datePickerSheet: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingBottom: 20,
+  },
+  datePickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  datePickerCancel: {
+    fontSize: 16,
+    color: '#999',
+  },
+  datePickerDone: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.primary,
   },
   segmentedControl: {
     flexDirection: 'row',

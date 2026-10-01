@@ -60,7 +60,8 @@
           "photosPermission": "okCal uses your photo library so you can pick a food photo for AI calorie estimation.",
           "cameraPermission": "okCal uses the camera to take a photo of your food for AI calorie estimation."
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "reactCompiler": true
