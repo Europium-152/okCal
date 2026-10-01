@@ -2,6 +2,7 @@
 
 .*
 !.gitignore
+!.github/
 
 # dependencies
 node_modules/
