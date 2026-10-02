@@ -505,28 +505,22 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
           style={styles.input}
           value={goalRate}
           onChangeText={setGoalRate}
-          placeholder={units === 'metric' ? '0.5' : '1'}
+          placeholder={units === 'metric' ? '0.25' : '0.5'}
           placeholderTextColor="#999"
           keyboardType="decimal-pad"
         />
         <Text style={styles.hint}>
-          Up to {units === 'metric' ? MAX_RATE_KG_PER_WEEK : MAX_RATE_LBS_PER_WEEK.toFixed(1)}{' '}
-          {units === 'metric' ? 'kg' : 'lb'}/week. This is a ceiling — the app slows the rate down
-          automatically as you get close to your target.
+          Choose a value up to {units === 'imperial' ? MAX_RATE_LBS_PER_WEEK.toFixed(1) : MAX_RATE_KG_PER_WEEK}{' '}
+                    {units === 'imperial' ? 'lb' : 'kg'}/week. 
         </Text>
       </View>
 
       <View style={styles.infoBox}>
         <Ionicons name="information-circle" size={20} color={Colors.primary} />
         <Text style={styles.infoBoxText}>
-          The app compares your current and target weight to figure out whether you're losing,
-          gaining, or maintaining, and sets your calorie recommendation accordingly — no need to
-          pick a goal yourself.
-          {'\n\n'}
-          <Text style={styles.infoBoxBold}>Why it matters:</Text> Rates that are too aggressive
-          increase the risk of muscle loss, nutrient deficiencies, and weight regain, and the app
-          will automatically taper your rate down as you approach your target to avoid
-          over- or undershooting it.
+          Large rates of weight change can be unhealthy and unsustainable. 
+            If you are unsure, we recommend starting with a moderate rate like {units === 'imperial' ? '0.5 lb' : '0.25 kg'}. 
+            The app automatically adjust this value as you get close to your target weight. 
         </Text>
       </View>
     </View>
