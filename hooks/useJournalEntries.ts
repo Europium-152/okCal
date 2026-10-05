@@ -6,6 +6,7 @@ import {
   saveFoodEntry,
 } from '@/utils/storage';
 import { FoodEntry } from '@/types';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 export function useJournalEntries(selectedDate: string) {
   const [entries, setEntries] = useState<FoodEntry[]>([]);
@@ -98,11 +99,11 @@ export function useJournalEntries(selectedDate: string) {
     editDate: string,
     editTime: string
   ) => {
-    const newQty = parseFloat(editQuantity);
-    const newCaloriesPer100 = parseFloat(editCaloriesPer100);
-    const newProteinPer100 = parseFloat(editProteinPer100);
-    const newCarbsPer100 = parseFloat(editCarbsPer100);
-    const newFatPer100 = parseFloat(editFatPer100);
+    const newQty = parseDecimal(editQuantity);
+    const newCaloriesPer100 = parseDecimal(editCaloriesPer100);
+    const newProteinPer100 = parseDecimal(editProteinPer100);
+    const newCarbsPer100 = parseDecimal(editCarbsPer100);
+    const newFatPer100 = parseDecimal(editFatPer100);
 
     if (isNaN(newQty) || newQty <= 0) {
       Alert.alert('Error', 'Please enter a valid quantity');

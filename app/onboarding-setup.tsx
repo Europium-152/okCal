@@ -18,6 +18,7 @@ import { saveAppSettings, saveUserProfile, saveWeightEntry } from '@/utils/stora
 import { Units, FoodDatabase, Sex, UserProfile, WeightEntry } from '@/types';
 import { lbsFromKg, cmFromInches, MAX_RATE_LBS_PER_WEEK, MAX_RATE_KG_PER_WEEK } from '@/constants/nutrition';
 import { getTodayString, formatDate, parseDate } from '@/utils/dateHelpers';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 const getDateYearsAgo = (years: number): Date => {
   const date = new Date();
@@ -119,14 +120,14 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
 
     // Validate height
     if (units === 'imperial') {
-      const feet = parseFloat(heightFeet);
-      const inches = parseFloat(heightInches);
+      const feet = parseDecimal(heightFeet);
+      const inches = parseDecimal(heightInches);
       if (!feet || feet < 3 || feet > 8 || isNaN(inches) || inches < 0 || inches >= 12) {
         Alert.alert('Invalid Height', 'Please enter a valid height');
         return false;
       }
     } else {
-      const cm = parseFloat(heightCm);
+      const cm = parseDecimal(heightCm);
       if (!cm || cm < 100 || cm > 250) {
         Alert.alert('Invalid Height', 'Please enter a valid height (100-250 cm)');
         return false;
@@ -137,8 +138,8 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
   };
 
   const validateGoals = (): boolean => {
-    const weight = parseFloat(currentWeight);
-    const target = parseFloat(targetWeight);
+    const weight = parseDecimal(currentWeight);
+    const target = parseDecimal(targetWeight);
 
     if (!weight || weight <= 0) {
       Alert.alert('Invalid Weight', 'Please enter your current weight');
@@ -150,7 +151,7 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
       return false;
     }
 
-    const rate = parseFloat(goalRate);
+    const rate = parseDecimal(goalRate);
     if (!rate || rate <= 0) {
       Alert.alert('Invalid Rate', 'Please enter a positive rate of weight change');
       return false;
@@ -182,27 +183,27 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
       // Calculate height in cm
       let heightInCm: number;
       if (units === 'imperial') {
-        const totalInches = parseFloat(heightFeet) * 12 + parseFloat(heightInches);
+        const totalInches = parseDecimal(heightFeet) * 12 + parseDecimal(heightInches);
         heightInCm = cmFromInches(totalInches);
       } else {
-        heightInCm = parseFloat(heightCm);
+        heightInCm = parseDecimal(heightCm);
       }
 
       // Calculate weights in lbs
       let currentWeightLbs: number;
       let targetWeightLbs: number;
       if (units === 'metric') {
-        currentWeightLbs = lbsFromKg(parseFloat(currentWeight));
-        targetWeightLbs = lbsFromKg(parseFloat(targetWeight));
+        currentWeightLbs = lbsFromKg(parseDecimal(currentWeight));
+        targetWeightLbs = lbsFromKg(parseDecimal(targetWeight));
       } else {
-        currentWeightLbs = parseFloat(currentWeight);
-        targetWeightLbs = parseFloat(targetWeight);
+        currentWeightLbs = parseDecimal(currentWeight);
+        targetWeightLbs = parseDecimal(targetWeight);
       }
 
       // Max rate of weight change, in lbs/week (always positive; the
       // calculator infers direction and tapers the rate near the target).
       const maxRateLbs =
-        units === 'metric' ? lbsFromKg(parseFloat(goalRate)) : parseFloat(goalRate);
+        units === 'metric' ? lbsFromKg(parseDecimal(goalRate)) : parseDecimal(goalRate);
 
       // Create user profile
       const profile: UserProfile = {

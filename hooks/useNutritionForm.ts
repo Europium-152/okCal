@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { calculateNutrition } from '@/utils/nutritionCalculator';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 /**
  * Custom hook for managing nutrition form state and calculations
@@ -32,11 +33,11 @@ export function useNutritionForm() {
 
   // Auto-calculate totals when quantity or per100 values change
   useEffect(() => {
-    const qty = parseFloat(quantity) || 0;
-    const cal = parseFloat(caloriesPer100) || 0;
-    const prot = parseFloat(proteinPer100) || 0;
-    const carb = parseFloat(carbsPer100) || 0;
-    const f = parseFloat(fatPer100) || 0;
+    const qty = parseDecimal(quantity) || 0;
+    const cal = parseDecimal(caloriesPer100) || 0;
+    const prot = parseDecimal(proteinPer100) || 0;
+    const carb = parseDecimal(carbsPer100) || 0;
+    const f = parseDecimal(fatPer100) || 0;
 
     if (qty > 0 && cal > 0) {
       const nutrition = calculateNutrition(

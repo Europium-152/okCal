@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FoodEntry } from '@/types';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 interface EntryEditModalProps {
   visible: boolean;
@@ -56,16 +57,16 @@ export default function EntryEditModal({
 }: EntryEditModalProps) {
   // Calculate total preview values
   const totalCalories = editQuantity && editCaloriesPer100
-    ? Math.round((parseFloat(editCaloriesPer100) * parseFloat(editQuantity)) / 100)
+    ? Math.round((parseDecimal(editCaloriesPer100) * parseDecimal(editQuantity)) / 100)
     : 0;
   const totalProtein = editQuantity && editProteinPer100
-    ? Math.round((parseFloat(editProteinPer100) * parseFloat(editQuantity)) / 100 * 10) / 10
+    ? Math.round((parseDecimal(editProteinPer100) * parseDecimal(editQuantity)) / 100 * 10) / 10
     : 0;
   const totalCarbs = editQuantity && editCarbsPer100
-    ? Math.round((parseFloat(editCarbsPer100) * parseFloat(editQuantity)) / 100 * 10) / 10
+    ? Math.round((parseDecimal(editCarbsPer100) * parseDecimal(editQuantity)) / 100 * 10) / 10
     : 0;
   const totalFat = editQuantity && editFatPer100
-    ? Math.round((parseFloat(editFatPer100) * parseFloat(editQuantity)) / 100 * 10) / 10
+    ? Math.round((parseDecimal(editFatPer100) * parseDecimal(editQuantity)) / 100 * 10) / 10
     : 0;
 
   return (

@@ -33,6 +33,7 @@ import { importMacroFactorFoodLog, previewMacroFactorImport } from '@/services/i
 import { importMacroFactorWeightLog, previewMacroFactorWeightImport } from '@/services/weightImportService';
 import { DONATION_URL } from '@/constants/links';
 import { parseDate, getTodayString } from '@/utils/dateHelpers';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
@@ -237,7 +238,7 @@ export default function SettingsScreen() {
     }
 
     // Validate weight
-    const weightNum = parseFloat(editWeight);
+    const weightNum = parseDecimal(editWeight);
     if (isNaN(weightNum) || weightNum <= 0) {
       Alert.alert('Invalid Weight', 'Please enter a valid weight');
       return;

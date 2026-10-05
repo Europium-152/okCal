@@ -23,6 +23,7 @@ import OfflineFoodSearch from '@/components/add-food/OfflineFoodSearch';
 import * as ImagePicker from 'expo-image-picker';
 import { processFoodImage, processFoodDescription, EstimatedFood } from '@/services/aiService';
 import BarcodeScanner from '@/components/BarcodeScanner';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 type InputMethod = 'select' | 'manual' | 'barcode' | 'search' | 'offline-search' | 'photo' | 'text' | 'history' | 'recipes';
 
@@ -72,8 +73,8 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
       return;
     }
 
-    const qty = parseFloat(quantity);
-    const cal = parseFloat(caloriesPer100);
+    const qty = parseDecimal(quantity);
+    const cal = parseDecimal(caloriesPer100);
 
     if (!qty || qty <= 0 || !cal || cal <= 0) {
       Alert.alert('Error', 'Please enter valid quantity and calories');
@@ -86,9 +87,9 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
       quantity: qty,
       unit,
       caloriesPer100: cal,
-      proteinPer100: parseFloat(proteinPer100) || 0,
-      carbsPer100: parseFloat(carbsPer100) || 0,
-      fatPer100: parseFloat(fatPer100) || 0,
+      proteinPer100: parseDecimal(proteinPer100) || 0,
+      carbsPer100: parseDecimal(carbsPer100) || 0,
+      fatPer100: parseDecimal(fatPer100) || 0,
       timestamp: Date.now(),
     };
 
@@ -365,11 +366,11 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
 
   // Manual entry view
   if (inputMethod === 'manual') {
-    const qty = parseFloat(quantity) || 0;
-    const cal = parseFloat(caloriesPer100) || 0;
-    const prot = parseFloat(proteinPer100) || 0;
-    const carb = parseFloat(carbsPer100) || 0;
-    const f = parseFloat(fatPer100) || 0;
+    const qty = parseDecimal(quantity) || 0;
+    const cal = parseDecimal(caloriesPer100) || 0;
+    const prot = parseDecimal(proteinPer100) || 0;
+    const carb = parseDecimal(carbsPer100) || 0;
+    const f = parseDecimal(fatPer100) || 0;
 
     const totalCalories = qty > 0 && cal > 0 ? Math.round((cal * qty) / 100) : 0;
     const totalProtein = qty > 0 && prot > 0 ? Math.round(((prot * qty) / 100) * 10) / 10 : 0;

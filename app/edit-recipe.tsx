@@ -19,6 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Recipe, RecipeIngredient } from '@/types';
 import { saveRecipe, getRecipeById } from '@/utils/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 export default function EditRecipe({ navigation, route }: RootStackScreenProps<'EditRecipe'>) {
   const params = route.params || {};
@@ -147,7 +148,7 @@ export default function EditRecipe({ navigation, route }: RootStackScreenProps<'
   };
 
   const calculateRecipeNutrition = () => {
-    const prepWeight = parseFloat(preparedWeight);
+    const prepWeight = parseDecimal(preparedWeight);
     if (!prepWeight || prepWeight <= 0 || ingredients.length === 0) {
       return {
         caloriesPer100: 0,
@@ -178,7 +179,7 @@ export default function EditRecipe({ navigation, route }: RootStackScreenProps<'
       return;
     }
 
-    const prepWeight = parseFloat(preparedWeight);
+    const prepWeight = parseDecimal(preparedWeight);
     if (!prepWeight || prepWeight <= 0) {
       Alert.alert('Error', 'Please enter the prepared weight');
       return;
@@ -294,7 +295,7 @@ export default function EditRecipe({ navigation, route }: RootStackScreenProps<'
 
         </View>
 
-        {ingredients.length > 0 && parseFloat(preparedWeight) > 0 && (
+        {ingredients.length > 0 && parseDecimal(preparedWeight) > 0 && (
           <View style={styles.nutritionPreview}>
             <Text style={styles.previewTitle}>Nutritional Info (per 100g)</Text>
             <View style={styles.previewRow}>

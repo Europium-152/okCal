@@ -22,6 +22,7 @@ import {
   MAX_RATE_LBS_PER_WEEK,
   MAX_RATE_KG_PER_WEEK,
 } from '@/constants/nutrition';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 export default function GoalsScreen() {
   const [loading, setLoading] = useState(true);
@@ -107,7 +108,7 @@ export default function GoalsScreen() {
       heightInCm = cmFromFeet(feet, inches);
     } else {
       // Validate height (metric)
-      const cm = parseFloat(heightCm);
+      const cm = parseDecimal(heightCm);
       if (isNaN(cm) || cm <= 0 || cm > 300) {
         Alert.alert('Invalid Height', 'Please enter a valid height in cm (1-300)');
         return;
@@ -116,7 +117,7 @@ export default function GoalsScreen() {
     }
 
     // Validate target weight
-    const targetWeightNum = parseFloat(targetWeight);
+    const targetWeightNum = parseDecimal(targetWeight);
     if (isNaN(targetWeightNum) || targetWeightNum <= 0) {
       Alert.alert('Invalid Weight', 'Please enter a valid target weight');
       return;
@@ -124,7 +125,7 @@ export default function GoalsScreen() {
 
     // Validate max rate of change (always positive; direction is inferred
     // from current vs. target weight, not chosen by the user)
-    const goalRateNum = parseFloat(goalRate);
+    const goalRateNum = parseDecimal(goalRate);
     if (!goalRateNum || goalRateNum <= 0) {
       Alert.alert('Invalid Rate', 'Please enter a positive rate of weight change');
       return;

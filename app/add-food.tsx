@@ -24,6 +24,7 @@ import OfflineFoodSearch from '@/components/add-food/OfflineFoodSearch';
 import HistoryFoodInput from '@/components/add-food/HistoryFoodInput';
 import RecipeFoodInput from '@/components/add-food/RecipeFoodInput';
 import ManualFoodInput from '@/components/add-food/ManualFoodInput';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 type InputMethod = 'select' | 'manual' | 'barcode' | 'search' | 'offline-search' | 'photo' | 'text' | 'history' | 'recipes';
 
@@ -329,12 +330,12 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
       return;
     }
 
-    if (!nutritionForm.quantity.trim() || isNaN(Number(nutritionForm.quantity)) || Number(nutritionForm.quantity) <= 0) {
+    if (!nutritionForm.quantity.trim() || isNaN(parseDecimal(nutritionForm.quantity)) || parseDecimal(nutritionForm.quantity) <= 0) {
       Alert.alert('Error', 'Please enter a valid quantity');
       return;
     }
 
-    if (!nutritionForm.caloriesPer100.trim() || isNaN(Number(nutritionForm.caloriesPer100)) || Number(nutritionForm.caloriesPer100) < 0) {
+    if (!nutritionForm.caloriesPer100.trim() || isNaN(parseDecimal(nutritionForm.caloriesPer100)) || parseDecimal(nutritionForm.caloriesPer100) < 0) {
       Alert.alert('Error', 'Please enter valid calories per 100' + nutritionForm.unit);
       return;
     }
@@ -358,16 +359,16 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
       id: Date.now().toString(),
       date: dateTime.entryDate,
       name: nutritionForm.name.trim(),
-      quantity: Number(nutritionForm.quantity),
+      quantity: parseDecimal(nutritionForm.quantity),
       unit: nutritionForm.unit,
-      caloriesPer100: Number(nutritionForm.caloriesPer100),
-      proteinPer100: nutritionForm.proteinPer100 ? Number(nutritionForm.proteinPer100) : undefined,
-      carbsPer100: nutritionForm.carbsPer100 ? Number(nutritionForm.carbsPer100) : undefined,
-      fatPer100: nutritionForm.fatPer100 ? Number(nutritionForm.fatPer100) : undefined,
-      calories: Number(nutritionForm.totalCalories),
-      protein: nutritionForm.totalProtein ? Number(nutritionForm.totalProtein) : undefined,
-      carbs: nutritionForm.totalCarbs ? Number(nutritionForm.totalCarbs) : undefined,
-      fat: nutritionForm.totalFat ? Number(nutritionForm.totalFat) : undefined,
+      caloriesPer100: parseDecimal(nutritionForm.caloriesPer100),
+      proteinPer100: nutritionForm.proteinPer100 ? parseDecimal(nutritionForm.proteinPer100) : undefined,
+      carbsPer100: nutritionForm.carbsPer100 ? parseDecimal(nutritionForm.carbsPer100) : undefined,
+      fatPer100: nutritionForm.fatPer100 ? parseDecimal(nutritionForm.fatPer100) : undefined,
+      calories: parseDecimal(nutritionForm.totalCalories),
+      protein: nutritionForm.totalProtein ? parseDecimal(nutritionForm.totalProtein) : undefined,
+      carbs: nutritionForm.totalCarbs ? parseDecimal(nutritionForm.totalCarbs) : undefined,
+      fat: nutritionForm.totalFat ? parseDecimal(nutritionForm.totalFat) : undefined,
       timestamp,
     };
 

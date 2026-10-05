@@ -15,6 +15,7 @@ import { WeightEntry, Units } from '@/types';
 import { getTodayString } from '@/utils/dateHelpers';
 import { lbsFromKg } from '@/constants/nutrition';
 import { RootStackScreenProps } from '@/navigation/types';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 export default function LogWeight({ navigation }: RootStackScreenProps<'LogWeight'>) {
   const [weight, setWeight] = useState('');
@@ -34,13 +35,13 @@ export default function LogWeight({ navigation }: RootStackScreenProps<'LogWeigh
   };
 
   const handleSave = async () => {
-    if (!weight.trim() || isNaN(Number(weight)) || Number(weight) <= 0) {
+    if (!weight.trim() || isNaN(parseDecimal(weight)) || parseDecimal(weight) <= 0) {
       Alert.alert('Error', 'Please enter a valid weight');
       return;
     }
 
     // Convert to lbs if user entered kg
-    const weightInLbs = units === 'metric' ? lbsFromKg(Number(weight)) : Number(weight);
+    const weightInLbs = units === 'metric' ? lbsFromKg(parseDecimal(weight)) : parseDecimal(weight);
 
     const entry: WeightEntry = {
       id: Date.now().toString(),
