@@ -59,6 +59,9 @@ export default function BarcodeScanner({ onBarcodeScanned, onClose }: BarcodeSca
     <View style={styles.container}>
       <CameraView
         style={styles.camera}
+        facing="back"
+        active
+        onMountError={(e) => Alert.alert('Camera error', e.message)}
         onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
         barcodeScannerSettings={{
           barcodeTypes: ['ean13', 'ean8', 'upc_a', 'upc_e', 'code128', 'code39'],
@@ -106,11 +109,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   camera: {
-    flex: 1,
-    width: '100%',
+    ...StyleSheet.absoluteFill,
   },
   overlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: 'transparent',
   },
   header: {
