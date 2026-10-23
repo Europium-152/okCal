@@ -61,7 +61,15 @@
           "cameraPermission": "okCal uses the camera to take a photo of your food for AI calorie estimation."
         }
       ],
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": true
+          }
+        }
+      ]
     ],
     "experiments": {
       "reactCompiler": true

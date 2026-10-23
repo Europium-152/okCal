@@ -26,6 +26,7 @@
     "d3-scale": "^4.0.2",
     "d3-shape": "^3.2.0",
     "expo": "^57.0.24",
+    "expo-build-properties": "~57.0.22",
     "expo-camera": "~57.0.5",
     "expo-constants": "~57.0.19",
     "expo-document-picker": "~57.0.2",
