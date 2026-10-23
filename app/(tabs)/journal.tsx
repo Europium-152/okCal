@@ -318,7 +318,9 @@ export default function Journal() {
         title={batchOps.actionMode === 'copy' ? 'Copy to Date' : 'Move to Date'}
         selectedCount={batchOps.selectedItems.size}
         targetDate={batchOps.targetDate}
+        targetTime={batchOps.targetTime}
         onDateChange={batchOps.setTargetDate}
+        onTimeChange={batchOps.setTargetTime}
         onConfirm={batchOps.confirmDateSelection}
         onCancel={() => batchOps.setShowDatePicker(false)}
       />

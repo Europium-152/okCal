@@ -13,6 +13,7 @@ jest.mock('@/utils/storage', () => ({
 
 // Mock dateHelpers
 jest.mock('@/utils/dateHelpers', () => ({
+  ...jest.requireActual('@/utils/dateHelpers'),
   getTodayString: jest.fn(() => '2024-03-15'),
 }));
 
@@ -76,6 +77,7 @@ describe('useBatchOperations', () => {
       expect(result.current.actionMode).toBe('main');
       expect(result.current.showDatePicker).toBe(false);
       expect(result.current.targetDate).toBe('');
+      expect(result.current.targetTime).toBe('');
     });
   });
 
@@ -567,6 +569,105 @@ describe('useBatchOperations', () => {
       });
 
       expect(mockAlert).toHaveBeenCalledWith('Error', 'Failed to process items');
+    });
+  });
+
+  describe('date and time selection', () => {
+    const localTime = (ts: number) => {
+      const d = new Date(ts);
+      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    };
+
+    const openFor = (mode: 'copy' | 'move', ids: string[]) => {
+      const hook = renderHook(() => useBatchOperations(mockEntries, onCompleteMock));
+      for (const id of ids) {
+        act(() => {
+          hook.result.current.toggleItemSelection(id);
+        });
+      }
+      act(() => {
+        hook.result.current.setActionMode(mode);
+      });
+      act(() => {
+        if (mode === 'copy') hook.result.current.handleCopyToDate('2024-03-01');
+        else hook.result.current.handleMoveToDate('2024-03-01');
+      });
+      return hook.result;
+    };
+
+    it('defaults to the date and time of the selected log', () => {
+      const result = openFor('copy', ['1']);
+
+      expect(result.current.targetDate).toBe('2024-03-14');
+      expect(result.current.targetTime).toBe(localTime(mockEntries[0].timestamp));
+    });
+
+    it('uses the entered time when copying to a date', async () => {
+      const result = openFor('copy', ['1']);
+
+      act(() => {
+        result.current.setTargetDate('2024-03-20');
+        result.current.setTargetTime('07:45');
+      });
+      await act(async () => {
+        await result.current.confirmDateSelection();
+      });
+
+      const saved = (storage.saveFoodEntry as jest.Mock).mock.calls[0][0];
+      const savedDate = new Date(saved.timestamp);
+      expect(saved.date).toBe('2024-03-20');
+      expect(savedDate.getFullYear()).toBe(2024);
+      expect(savedDate.getMonth()).toBe(2);
+      expect(savedDate.getDate()).toBe(20);
+      expect(savedDate.getHours()).toBe(7);
+      expect(savedDate.getMinutes()).toBe(45);
+    });
+
+    it('uses the entered time when moving to a date', async () => {
+      const result = openFor('move', ['1']);
+
+      act(() => {
+        result.current.setTargetTime('23:05');
+      });
+      await act(async () => {
+        await result.current.confirmDateSelection();
+      });
+
+      const saved = (storage.saveFoodEntry as jest.Mock).mock.calls[0][0];
+      expect(storage.deleteFoodEntry).toHaveBeenCalledWith('1');
+      expect(saved.date).toBe('2024-03-14');
+      expect(new Date(saved.timestamp).getHours()).toBe(23);
+      expect(new Date(saved.timestamp).getMinutes()).toBe(5);
+    });
+
+    it('keeps each item\'s own time when the time is left unchanged', async () => {
+      const result = openFor('copy', ['1', '3']);
+
+      act(() => {
+        result.current.setTargetDate('2024-03-20');
+      });
+      await act(async () => {
+        await result.current.confirmDateSelection();
+      });
+
+      const calls = (storage.saveFoodEntry as jest.Mock).mock.calls;
+      expect(calls).toHaveLength(2);
+      expect(localTime(calls[0][0].timestamp)).toBe(localTime(mockEntries[0].timestamp));
+      expect(localTime(calls[1][0].timestamp)).toBe(localTime(mockEntries[2].timestamp));
+    });
+
+    it('rejects an invalid time', async () => {
+      const result = openFor('copy', ['1']);
+
+      act(() => {
+        result.current.setTargetTime('25:99');
+      });
+      await act(async () => {
+        await result.current.confirmDateSelection();
+      });
+
+      expect(mockAlert).toHaveBeenCalledWith('Error', 'Please enter time in HH:MM format');
+      expect(storage.saveFoodEntry).not.toHaveBeenCalled();
     });
   });
 

@@ -16,7 +16,9 @@ interface DatePickerModalProps {
   title: string;
   selectedCount: number;
   targetDate: string;
+  targetTime: string;
   onDateChange: (value: string) => void;
+  onTimeChange: (value: string) => void;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -26,7 +28,9 @@ export default function DatePickerModal({
   title,
   selectedCount,
   targetDate,
+  targetTime,
   onDateChange,
+  onTimeChange,
   onConfirm,
   onCancel,
 }: DatePickerModalProps) {
@@ -44,14 +48,28 @@ export default function DatePickerModal({
             {selectedCount} item(s) selected
           </Text>
 
-          <Text style={styles.datePickerLabel}>Date (YYYY-MM-DD)</Text>
-          <TextInput
-            style={styles.datePickerInput}
-            value={targetDate}
-            onChangeText={onDateChange}
-            placeholder="2024-01-01"
-            placeholderTextColor="#999"
-          />
+          <View style={styles.dateTimeRow}>
+            <View style={styles.dateField}>
+              <Text style={styles.datePickerLabel}>Date (YYYY-MM-DD)</Text>
+              <TextInput
+                style={styles.datePickerInput}
+                value={targetDate}
+                onChangeText={onDateChange}
+                placeholder="2024-01-01"
+                placeholderTextColor="#999"
+              />
+            </View>
+            <View style={styles.timeField}>
+              <Text style={styles.datePickerLabel}>Time (HH:MM)</Text>
+              <TextInput
+                style={styles.datePickerInput}
+                value={targetTime}
+                onChangeText={onTimeChange}
+                placeholder="HH:MM"
+                placeholderTextColor="#999"
+              />
+            </View>
+          </View>
 
           <View style={styles.modalButtons}>
             <TouchableOpacity
@@ -97,6 +115,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#666',
     marginBottom: 16,
+  },
+  dateTimeRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  dateField: {
+    flex: 3,
+  },
+  timeField: {
+    flex: 2,
   },
   datePickerLabel: {
     fontSize: 14,
