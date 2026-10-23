@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Colors } from '@/constants/colors';
+import { keyboardScrollProps } from '@/constants/keyboard';
 import {
   View,
   Text,
@@ -813,6 +814,7 @@ export default function SettingsScreen() {
                 persistentScrollbar={true}
                 indicatorStyle="black"
                 nestedScrollEnabled={true}
+                {...keyboardScrollProps}
               >
               {weightEntries.map((entry) => {
                 const displayWeight = units === 'metric'

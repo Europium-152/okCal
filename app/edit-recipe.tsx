@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Colors } from '@/constants/colors';
+import { keyboardScrollProps } from '@/constants/keyboard';
 import {
   View,
   Text,
@@ -253,7 +254,7 @@ export default function EditRecipe({ navigation, route }: RootStackScreenProps<'
           </TouchableOpacity>
         </View>
 
-      <ScrollView style={styles.content} keyboardShouldPersistTaps="handled">
+      <ScrollView style={styles.content} {...keyboardScrollProps}>
         <View style={styles.section}>
           <Text style={styles.label}>Recipe Name</Text>
           <TextInput
@@ -289,6 +290,7 @@ export default function EditRecipe({ navigation, route }: RootStackScreenProps<'
               renderItem={renderIngredient}
               keyExtractor={(item) => item.id}
               scrollEnabled={false}
+              {...keyboardScrollProps}
               style={styles.ingredientsList}
             />
           )}

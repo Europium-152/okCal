@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { Colors } from '@/constants/colors';
+import { keyboardScrollProps } from '@/constants/keyboard';
 import {
   View,
   Text,
@@ -580,6 +581,7 @@ export default function Dashboard() {
   return (
     <ScrollView
       style={styles.container}
+      {...keyboardScrollProps}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }

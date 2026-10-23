@@ -10,6 +10,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import { keyboardScrollProps } from '@/constants/keyboard';
 
 interface KeyboardAwareScrollViewProps extends ScrollViewProps {
   /** Pinned below the scroll area; rides on top of the keyboard (e.g. a Save button). */
@@ -76,8 +77,7 @@ export default function KeyboardAwareScrollView({
       style={[styles.container, containerStyle, { paddingBottom: inset }]}
     >
       <ScrollView
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
+        {...keyboardScrollProps}
         automaticallyAdjustKeyboardInsets
         {...scrollProps}
         style={[styles.scroll, scrollProps.style]}

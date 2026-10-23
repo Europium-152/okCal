@@ -79,7 +79,6 @@ export default function EntryEditModal({
       <View style={styles.modalOverlay}>
         <KeyboardAwareScrollView
           contentContainerStyle={styles.modalScrollContent}
-          keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={true}
         >
           <View style={styles.modalContent}>

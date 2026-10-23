@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Colors } from '@/constants/colors';
+import { keyboardScrollProps, searchInputProps } from '@/constants/keyboard';
 import {
   View,
   Text,
@@ -55,7 +56,9 @@ export default function OfflineFoodSearch({
             placeholder="Search offline database (e.g., chicken, apple)..."
             value={searchQuery}
             onChangeText={setSearchQuery}
+            returnKeyType="done"
             autoFocus
+            {...searchInputProps}
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
@@ -91,6 +94,7 @@ export default function OfflineFoodSearch({
           data={searchResults}
           keyExtractor={(item, index) => `${item.description}-${index}`}
           contentContainerStyle={styles.searchResults}
+          {...keyboardScrollProps}
           renderItem={({ item }) => {
             const calories = item.energy != null ? Math.round(item.energy) : 0;
             const protein = item.protein != null ? item.protein.toFixed(1) : '0.0';

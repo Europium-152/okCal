@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Colors } from '@/constants/colors';
+import { keyboardScrollProps, searchInputProps } from '@/constants/keyboard';
 import {
   View,
   Text,
@@ -526,7 +527,9 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
               value={searchQuery}
               onChangeText={setSearchQuery}
               onSubmitEditing={handleSearch}
+              returnKeyType="search"
               autoFocus
+              {...searchInputProps}
             />
           </View>
           <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
@@ -541,6 +544,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
         <FlatList
           data={searchResults}
           keyExtractor={(item) => item.id}
+          {...keyboardScrollProps}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.resultCard}
@@ -583,13 +587,16 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
             placeholder="Search history..."
             value={historySearchQuery}
             onChangeText={setHistorySearchQuery}
+            returnKeyType="done"
             autoFocus
+            {...searchInputProps}
           />
         </View>
 
         <FlatList
           data={filteredHistory}
           keyExtractor={(item) => item.id}
+          {...keyboardScrollProps}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.resultCard}
@@ -632,13 +639,16 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
             placeholder="Search recipes..."
             value={recipesSearchQuery}
             onChangeText={setRecipesSearchQuery}
+            returnKeyType="done"
             autoFocus
+            {...searchInputProps}
           />
         </View>
 
         <FlatList
           data={filteredRecipes}
           keyExtractor={(item) => item.id}
+          {...keyboardScrollProps}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.resultCard}

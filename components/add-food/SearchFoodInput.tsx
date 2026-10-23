@@ -1,5 +1,6 @@
 import React from 'react';
 import { Colors } from '@/constants/colors';
+import { keyboardScrollProps, searchInputProps } from '@/constants/keyboard';
 import {
   View,
   Text,
@@ -57,6 +58,7 @@ export default function SearchFoodInput({
               onSubmitEditing={onSearch}
               returnKeyType="search"
               autoFocus
+              {...searchInputProps}
             />
             {searchQuery.length > 0 && (
               <TouchableOpacity onPress={() => onSearchQueryChange('')}>
@@ -101,6 +103,7 @@ export default function SearchFoodInput({
           data={searchResults}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.searchResults}
+          {...keyboardScrollProps}
           renderItem={({ item }) => {
             const brandName = item.brandName ? String(item.brandName) : '';
             const description = item.description ? String(item.description) : 'Unknown Food';

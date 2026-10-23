@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackScreenProps } from '@/navigation/types';
 import AppleLogo from '@/components/AppleLogo';
+import { keyboardScrollProps } from '@/constants/keyboard';
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,7 +23,11 @@ export default function OnboardingWelcome({ navigation }: RootStackScreenProps<'
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      {...keyboardScrollProps}
+    >
       <LinearGradient
         colors={['#4ECDC4', '#44A08D']}
         style={styles.gradientHeader}

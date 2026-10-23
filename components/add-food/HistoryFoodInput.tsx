@@ -1,5 +1,6 @@
 import React from 'react';
 import { Colors } from '@/constants/colors';
+import { keyboardScrollProps, searchInputProps } from '@/constants/keyboard';
 import {
   View,
   Text,
@@ -54,7 +55,9 @@ export default function HistoryFoodInput({
             placeholder="Search your previous foods..."
             value={searchQuery}
             onChangeText={onSearchQueryChange}
+            returnKeyType="done"
             autoFocus
+            {...searchInputProps}
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => onSearchQueryChange('')}>
@@ -79,6 +82,7 @@ export default function HistoryFoodInput({
           data={filteredHistory}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.searchResults}
+          {...keyboardScrollProps}
           renderItem={({ item }) => {
             const displayWeight = `${item.quantity || 0}${item.unit || 'g'}`;
             const lastUsed = new Date(item.timestamp).toLocaleDateString('en-US', {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Colors } from '@/constants/colors';
+import { keyboardScrollProps } from '@/constants/keyboard';
 import {
   View,
   Text,
@@ -290,7 +291,7 @@ export default function ExportImportScreen({ navigation }: RootStackScreenProps<
         <View style={styles.placeholder} />
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView style={styles.content} {...keyboardScrollProps}>
         {/* Info Card */}
         <View style={styles.infoCard}>
           <Ionicons name="information-circle-outline" size={24} color={Colors.primary} />

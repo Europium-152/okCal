@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Colors } from '@/constants/colors';
+import { keyboardScrollProps, searchInputProps } from '@/constants/keyboard';
 import {
   View,
   Text,
@@ -138,6 +139,8 @@ export default function RecipesScreen({ navigation }: RootStackScreenProps<'Reci
           placeholder="Search recipes..."
           value={searchQuery}
           onChangeText={setSearchQuery}
+          returnKeyType="done"
+          {...searchInputProps}
         />
         {searchQuery.length > 0 && (
           <TouchableOpacity onPress={() => setSearchQuery('')}>
@@ -168,6 +171,7 @@ export default function RecipesScreen({ navigation }: RootStackScreenProps<'Reci
           renderItem={renderRecipe}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
+          {...keyboardScrollProps}
         />
       )}
     </SafeAreaView>

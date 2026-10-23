@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Colors } from '@/constants/colors';
+import { keyboardScrollProps } from '@/constants/keyboard';
 import {
   View,
   Text,
@@ -272,6 +273,7 @@ export default function Journal() {
         renderItem={renderMeal}
         keyExtractor={(item, index) => `meal-${index}`}
         contentContainerStyle={styles.listContainer}
+        {...keyboardScrollProps}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Ionicons name="restaurant-outline" size={64} color="#ccc" />
