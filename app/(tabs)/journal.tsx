@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Colors } from '@/constants/colors';
 import {
   View,
@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
+  AppState,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
@@ -18,7 +19,11 @@ import {
 } from '@/utils/storage';
 import { FoodEntry, FastingDay } from '@/types';
 import { addDays, getTodayString, formatDate, parseDate } from '@/utils/dateHelpers';
-import { useJournalEntries } from '@/hooks/useJournalEntries';
+import {
+  useJournalEntries,
+  formatCaloriesForEdit,
+  formatMacroForEdit,
+} from '@/hooks/useJournalEntries';
 import { useBatchOperations } from '@/hooks/useBatchOperations';
 import JournalHeader from '@/components/journal/JournalHeader';
 import EntryListItem from '@/components/journal/EntryListItem';
@@ -54,9 +59,35 @@ export default function Journal() {
 
   const batchOps = useBatchOperations(entries, () => loadEntries());
 
+  // The screen stays mounted across days, so roll "today" forward when the date changes.
+  // Only moves the selection if the user was viewing the previous day's "today".
+  const lastTodayRef = useRef(getTodayString());
+  const selectedDateRef = useRef(selectedDate);
+  selectedDateRef.current = selectedDate;
+
+  const syncToToday = useCallback((): boolean => {
+    const today = getTodayString();
+    const previousToday = lastTodayRef.current;
+    if (today === previousToday) return false;
+    lastTodayRef.current = today;
+    if (selectedDateRef.current !== previousToday) return false;
+    setSelectedDate(today);
+    return true;
+  }, []);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (state) => {
+      if (state === 'active') syncToToday();
+    });
+    return () => subscription.remove();
+  }, [syncToToday]);
+
   // Load entries and fasting status when screen is focused or date changes
   useFocusEffect(
     useCallback(() => {
+      // selectedDate changing re-runs this effect, which loads the new day
+      if (syncToToday()) return;
+
       console.log(`[JOURNAL] useFocusEffect TRIGGERED (selectedDate: ${selectedDate})`);
       const focusStartTime = Date.now();
       loadEntries().then(async () => {
@@ -68,7 +99,7 @@ export default function Journal() {
         console.log(`[JOURNAL] useFocusEffect isFastingDay took ${Date.now() - fastingStart}ms`);
         setIsFasting(fastingStatus);
       });
-    }, [selectedDate])
+    }, [selectedDate, syncToToday])
   );
 
   const handleMarkAsFasting = async () => {
@@ -89,10 +120,10 @@ export default function Journal() {
   const handleEditQuantity = (entry: FoodEntry) => {
     setEditingEntry(entry);
     setEditQuantity(entry.quantity.toString());
-    setEditCaloriesPer100(entry.caloriesPer100.toString());
-    setEditProteinPer100((entry.proteinPer100 || 0).toString());
-    setEditCarbsPer100((entry.carbsPer100 || 0).toString());
-    setEditFatPer100((entry.fatPer100 || 0).toString());
+    setEditCaloriesPer100(formatCaloriesForEdit(entry.caloriesPer100));
+    setEditProteinPer100(formatMacroForEdit(entry.proteinPer100 || 0));
+    setEditCarbsPer100(formatMacroForEdit(entry.carbsPer100 || 0));
+    setEditFatPer100(formatMacroForEdit(entry.fatPer100 || 0));
 
     // Set date and time from timestamp
     const entryDate = new Date(entry.timestamp);

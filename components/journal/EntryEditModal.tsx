@@ -7,12 +7,12 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
-  ScrollView,
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FoodEntry } from '@/types';
 import { parseDecimal } from '@/utils/parseDecimal';
+import KeyboardAwareScrollView from '@/components/KeyboardAwareScrollView';
 
 interface EntryEditModalProps {
   visible: boolean;
@@ -77,7 +77,7 @@ export default function EntryEditModal({
       onRequestClose={onCancel}
     >
       <View style={styles.modalOverlay}>
-        <ScrollView
+        <KeyboardAwareScrollView
           contentContainerStyle={styles.modalScrollContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={true}
@@ -219,7 +219,7 @@ export default function EntryEditModal({
               </TouchableOpacity>
             </View>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </View>
     </Modal>
   );

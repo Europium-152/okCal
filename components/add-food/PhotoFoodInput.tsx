@@ -1,7 +1,8 @@
 import React from 'react';
 import { Colors } from '@/constants/colors';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import KeyboardAwareScrollView from '@/components/KeyboardAwareScrollView';
 
 interface PhotoFoodInputProps {
   photoContext: string;
@@ -20,7 +21,7 @@ export default function PhotoFoodInput({
 }: PhotoFoodInputProps) {
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.selectionContainer}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.selectionContainer}>
         <TouchableOpacity
           onPress={onCancel}
           style={styles.backButton}
@@ -82,7 +83,7 @@ export default function PhotoFoodInput({
         >
           <Text style={styles.cancelLinkText}>Cancel</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   );
 }

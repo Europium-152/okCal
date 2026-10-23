@@ -8,6 +8,10 @@ import {
 import { FoodEntry } from '@/types';
 import { parseDecimal } from '@/utils/parseDecimal';
 
+/** Display formats for the edit form; the stored values keep full precision. */
+export const formatCaloriesForEdit = (value: number) => Math.round(value).toString();
+export const formatMacroForEdit = (value: number) => parseFloat(value.toFixed(1)).toString();
+
 export function useJournalEntries(selectedDate: string) {
   const [entries, setEntries] = useState<FoodEntry[]>([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -100,10 +104,26 @@ export function useJournalEntries(selectedDate: string) {
     editTime: string
   ) => {
     const newQty = parseDecimal(editQuantity);
-    const newCaloriesPer100 = parseDecimal(editCaloriesPer100);
-    const newProteinPer100 = parseDecimal(editProteinPer100);
-    const newCarbsPer100 = parseDecimal(editCarbsPer100);
-    const newFatPer100 = parseDecimal(editFatPer100);
+    // The edit form shows rounded values; if a field still shows the rounded original,
+    // it was not edited, so keep the full-precision stored value.
+    const resolve = (text: string, original: number, format: (v: number) => string) =>
+      text === format(original) ? original : parseDecimal(text);
+    const newCaloriesPer100 = resolve(
+      editCaloriesPer100,
+      editingEntry.caloriesPer100,
+      formatCaloriesForEdit
+    );
+    const newProteinPer100 = resolve(
+      editProteinPer100,
+      editingEntry.proteinPer100 || 0,
+      formatMacroForEdit
+    );
+    const newCarbsPer100 = resolve(
+      editCarbsPer100,
+      editingEntry.carbsPer100 || 0,
+      formatMacroForEdit
+    );
+    const newFatPer100 = resolve(editFatPer100, editingEntry.fatPer100 || 0, formatMacroForEdit);
 
     if (isNaN(newQty) || newQty <= 0) {
       Alert.alert('Error', 'Please enter a valid quantity');

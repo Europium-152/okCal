@@ -1,15 +1,7 @@
 import React from 'react';
 import { Colors } from '@/constants/colors';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import KeyboardAwareScrollView from '@/components/KeyboardAwareScrollView';
 import { Ionicons } from '@expo/vector-icons';
 import { ProductInfo } from '@/services/foodLookup';
 
@@ -68,169 +60,165 @@ export default function ManualFoodInput({
   onCancel,
 }: ManualFoodInputProps) {
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
-        {scannedProduct && (
-          <View style={styles.scannedBanner}>
-            <Ionicons name="checkmark-circle" size={20} color="#10b981" />
-            <Text style={styles.scannedText}>
-              Product scanned! Values per 100g. Adjust as needed.
-            </Text>
-          </View>
-        )}
-
-        <View style={styles.form}>
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>
-              Food Name <Text style={styles.required}>*</Text>
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="e.g., Chicken Breast, Oatmeal"
-              value={name}
-              onChangeText={setName}
-              autoFocus={!scannedProduct}
-            />
-          </View>
-
-          {/* Quantity Input */}
-          <View style={styles.row}>
-            <View style={[styles.inputGroup, styles.flex2]}>
-              <Text style={styles.label}>
-                Quantity <Text style={styles.required}>*</Text>
-              </Text>
-              <TextInput
-                style={styles.input}
-                placeholder="100"
-                value={quantity}
-                onChangeText={setQuantity}
-                keyboardType="decimal-pad"
-              />
-            </View>
-
-            <View style={[styles.inputGroup, styles.flex1]}>
-              <Text style={styles.label}>Unit</Text>
-              <View style={styles.unitSelector}>
-                <TouchableOpacity
-                  style={[styles.unitButton, unit === 'g' && styles.unitButtonActive]}
-                  onPress={() => setUnit('g')}
-                >
-                  <Text style={[styles.unitButtonText, unit === 'g' && styles.unitButtonTextActive]}>g</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.unitButton, unit === 'ml' && styles.unitButtonActive]}
-                  onPress={() => setUnit('ml')}
-                >
-                  <Text style={[styles.unitButtonText, unit === 'ml' && styles.unitButtonTextActive]}>ml</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-
-          <Text style={styles.sectionTitle}>Nutritional Values (per 100{unit})</Text>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>
-              Calories <Text style={styles.required}>*</Text>
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="0"
-              value={caloriesPer100}
-              onChangeText={setCaloriesPer100}
-              keyboardType="decimal-pad"
-            />
-          </View>
-
-          <View style={styles.row}>
-            <View style={[styles.inputGroup, styles.flex1]}>
-              <Text style={styles.label}>Protein (g)</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="0"
-                value={proteinPer100}
-                onChangeText={setProteinPer100}
-                keyboardType="decimal-pad"
-              />
-            </View>
-
-            <View style={[styles.inputGroup, styles.flex1]}>
-              <Text style={styles.label}>Carbs (g)</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="0"
-                value={carbsPer100}
-                onChangeText={setCarbsPer100}
-                keyboardType="decimal-pad"
-              />
-            </View>
-          </View>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Fat (g)</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="0"
-              value={fatPer100}
-              onChangeText={setFatPer100}
-              keyboardType="decimal-pad"
-            />
-          </View>
-
-          {/* Total Values Display */}
-          {totalCalories && (
-            <>
-              <Text style={styles.sectionTitle}>Total Values</Text>
-              <View style={styles.totalsContainer}>
-                <View style={styles.totalItem}>
-                  <Text style={styles.totalLabel}>Calories</Text>
-                  <Text style={styles.totalValue}>{totalCalories}</Text>
-                </View>
-                {totalProtein && (
-                  <View style={styles.totalItem}>
-                    <Text style={styles.totalLabel}>Protein</Text>
-                    <Text style={styles.totalValue}>{totalProtein}g</Text>
-                  </View>
-                )}
-                {totalCarbs && (
-                  <View style={styles.totalItem}>
-                    <Text style={styles.totalLabel}>Carbs</Text>
-                    <Text style={styles.totalValue}>{totalCarbs}g</Text>
-                  </View>
-                )}
-                {totalFat && (
-                  <View style={styles.totalItem}>
-                    <Text style={styles.totalLabel}>Fat</Text>
-                    <Text style={styles.totalValue}>{totalFat}g</Text>
-                  </View>
-                )}
-              </View>
-            </>
-          )}
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.cancelButton]}
-            onPress={onCancel}
-          >
-            <Text style={styles.cancelButtonText}>
-              {scannedProduct ? 'Back' : 'Cancel'}
-            </Text>
+    <KeyboardAwareScrollView
+      containerStyle={styles.container}
+      style={styles.scrollView}
+      contentContainerStyle={styles.content}
+      footer={
+        <View style={styles.footer}>
+          <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onCancel}>
+            <Text style={styles.cancelButtonText}>{scannedProduct ? 'Back' : 'Cancel'}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.button, styles.saveButton]}
-            onPress={onSave}
-          >
+          <TouchableOpacity style={[styles.button, styles.saveButton]} onPress={onSave}>
             <Text style={styles.saveButtonText}>Save Entry</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      }
+    >
+      {scannedProduct && (
+        <View style={styles.scannedBanner}>
+          <Ionicons name="checkmark-circle" size={20} color="#10b981" />
+          <Text style={styles.scannedText}>
+            Product scanned! Values per 100g. Adjust as needed.
+          </Text>
+        </View>
+      )}
+
+      <View style={styles.form}>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>
+            Food Name <Text style={styles.required}>*</Text>
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="e.g., Chicken Breast, Oatmeal"
+            value={name}
+            onChangeText={setName}
+            autoFocus={!scannedProduct}
+          />
+        </View>
+
+        {/* Quantity Input */}
+        <View style={styles.row}>
+          <View style={[styles.inputGroup, styles.flex2]}>
+            <Text style={styles.label}>
+              Quantity <Text style={styles.required}>*</Text>
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="100"
+              value={quantity}
+              onChangeText={setQuantity}
+              keyboardType="decimal-pad"
+            />
+          </View>
+
+          <View style={[styles.inputGroup, styles.flex1]}>
+            <Text style={styles.label}>Unit</Text>
+            <View style={styles.unitSelector}>
+              <TouchableOpacity
+                style={[styles.unitButton, unit === 'g' && styles.unitButtonActive]}
+                onPress={() => setUnit('g')}
+              >
+                <Text style={[styles.unitButtonText, unit === 'g' && styles.unitButtonTextActive]}>
+                  g
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.unitButton, unit === 'ml' && styles.unitButtonActive]}
+                onPress={() => setUnit('ml')}
+              >
+                <Text style={[styles.unitButtonText, unit === 'ml' && styles.unitButtonTextActive]}>
+                  ml
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        <Text style={styles.sectionTitle}>Nutritional Values (per 100{unit})</Text>
+
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>
+            Calories <Text style={styles.required}>*</Text>
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="0"
+            value={caloriesPer100}
+            onChangeText={setCaloriesPer100}
+            keyboardType="decimal-pad"
+          />
+        </View>
+
+        <View style={styles.row}>
+          <View style={[styles.inputGroup, styles.flex1]}>
+            <Text style={styles.label}>Protein (g)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="0"
+              value={proteinPer100}
+              onChangeText={setProteinPer100}
+              keyboardType="decimal-pad"
+            />
+          </View>
+
+          <View style={[styles.inputGroup, styles.flex1]}>
+            <Text style={styles.label}>Carbs (g)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="0"
+              value={carbsPer100}
+              onChangeText={setCarbsPer100}
+              keyboardType="decimal-pad"
+            />
+          </View>
+        </View>
+
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>Fat (g)</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="0"
+            value={fatPer100}
+            onChangeText={setFatPer100}
+            keyboardType="decimal-pad"
+          />
+        </View>
+
+        {/* Total Values Display */}
+        {totalCalories && (
+          <>
+            <Text style={styles.sectionTitle}>Total Values</Text>
+            <View style={styles.totalsContainer}>
+              <View style={styles.totalItem}>
+                <Text style={styles.totalLabel}>Calories</Text>
+                <Text style={styles.totalValue}>{totalCalories}</Text>
+              </View>
+              {totalProtein && (
+                <View style={styles.totalItem}>
+                  <Text style={styles.totalLabel}>Protein</Text>
+                  <Text style={styles.totalValue}>{totalProtein}g</Text>
+                </View>
+              )}
+              {totalCarbs && (
+                <View style={styles.totalItem}>
+                  <Text style={styles.totalLabel}>Carbs</Text>
+                  <Text style={styles.totalValue}>{totalCarbs}g</Text>
+                </View>
+              )}
+              {totalFat && (
+                <View style={styles.totalItem}>
+                  <Text style={styles.totalLabel}>Fat</Text>
+                  <Text style={styles.totalValue}>{totalFat}g</Text>
+                </View>
+              )}
+            </View>
+          </>
+        )}
+      </View>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -343,11 +331,15 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.primary,
   },
-  buttonContainer: {
+  footer: {
     flexDirection: 'row',
     gap: 12,
-    marginTop: 24,
-    marginBottom: 32,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 16,
+    backgroundColor: '#f8f9fa',
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
   },
   button: {
     flex: 1,

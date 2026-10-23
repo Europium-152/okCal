@@ -1,7 +1,8 @@
 import React from 'react';
 import { Colors } from '@/constants/colors';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import KeyboardAwareScrollView from '@/components/KeyboardAwareScrollView';
 
 type InputMethod = 'select' | 'manual' | 'barcode' | 'search' | 'offline-search' | 'photo' | 'text' | 'history' | 'recipes';
 
@@ -28,7 +29,7 @@ export default function InputMethodSelector({
 }: InputMethodSelectorProps) {
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.selectionContainer}>
+      <KeyboardAwareScrollView contentContainerStyle={styles.selectionContainer}>
         <Text style={styles.selectionTitle}>How would you like to add food?</Text>
 
         {/* Date and Time Fields */}
@@ -156,7 +157,7 @@ export default function InputMethodSelector({
         >
           <Text style={styles.cancelLinkText}>Cancel</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </View>
   );
 }

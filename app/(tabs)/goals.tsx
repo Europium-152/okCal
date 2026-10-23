@@ -4,7 +4,6 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TextInput,
   TouchableOpacity,
   Alert,
@@ -23,6 +22,7 @@ import {
   MAX_RATE_KG_PER_WEEK,
 } from '@/constants/nutrition';
 import { parseDecimal } from '@/utils/parseDecimal';
+import KeyboardAwareScrollView from '@/components/KeyboardAwareScrollView';
 
 export default function GoalsScreen() {
   const [loading, setLoading] = useState(true);
@@ -178,7 +178,7 @@ export default function GoalsScreen() {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Goals & Profile</Text>
         <Text style={styles.subtitle}>
@@ -307,7 +307,7 @@ export default function GoalsScreen() {
           </View>
         )}
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
 

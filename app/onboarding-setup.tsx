@@ -5,7 +5,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
   TextInput,
   Alert,
   Platform,
@@ -19,6 +18,7 @@ import { Units, FoodDatabase, Sex, UserProfile, WeightEntry } from '@/types';
 import { lbsFromKg, cmFromInches, MAX_RATE_LBS_PER_WEEK, MAX_RATE_KG_PER_WEEK } from '@/constants/nutrition';
 import { getTodayString, formatDate, parseDate } from '@/utils/dateHelpers';
 import { parseDecimal } from '@/utils/parseDecimal';
+import KeyboardAwareScrollView from '@/components/KeyboardAwareScrollView';
 
 const getDateYearsAgo = (years: number): Date => {
   const date = new Date();
@@ -544,13 +544,13 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
     <View style={styles.container}>
       {renderProgressBar()}
 
-      <ScrollView
+      <KeyboardAwareScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {renderStep()}
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       <View style={styles.footer}>
         {currentStepIndex > 0 && (

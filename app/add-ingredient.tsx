@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  ScrollView,
   Alert,
   FlatList,
   ActivityIndicator,
@@ -24,6 +23,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { processFoodImage, processFoodDescription, EstimatedFood } from '@/services/aiService';
 import BarcodeScanner from '@/components/BarcodeScanner';
 import { parseDecimal } from '@/utils/parseDecimal';
+import KeyboardAwareScrollView from '@/components/KeyboardAwareScrollView';
 
 type InputMethod = 'select' | 'manual' | 'barcode' | 'search' | 'offline-search' | 'photo' | 'text' | 'history' | 'recipes';
 
@@ -389,7 +389,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
           </TouchableOpacity>
         </View>
 
-        <ScrollView style={styles.content}>
+        <KeyboardAwareScrollView style={styles.content}>
           <View style={styles.section}>
             <Text style={styles.label}>Ingredient Name</Text>
             <TextInput
@@ -487,7 +487,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
               </View>
             </View>
           )}
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     );
   }
@@ -679,7 +679,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
           <View style={{ width: 24 }} />
         </View>
 
-        <ScrollView style={styles.photoContainer}>
+        <KeyboardAwareScrollView style={styles.photoContainer}>
           <View style={styles.photoContextSection}>
             <Text style={styles.photoLabel}>Hint (Optional)</Text>
             <TextInput
@@ -713,7 +713,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
               Select an existing photo from your library
             </Text>
           </TouchableOpacity>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     );
   }
@@ -742,7 +742,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
           <View style={{ width: 24 }} />
         </View>
 
-        <ScrollView style={styles.photoContainer}>
+        <KeyboardAwareScrollView style={styles.photoContainer}>
           <View style={styles.photoContextSection}>
             <Text style={styles.photoLabel}>
               Describe the ingredient <Text style={{ color: '#FF3B30' }}>*</Text>
@@ -776,7 +776,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
               Get instant calorie and macro estimates
             </Text>
           </TouchableOpacity>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     );
   }
@@ -792,7 +792,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView style={styles.content}>
+      <KeyboardAwareScrollView style={styles.content}>
         <Text style={styles.selectionTitle}>How would you like to add this ingredient?</Text>
 
         <View style={styles.gridContainer}>
@@ -882,7 +882,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
             <Text style={styles.gridTitle}>My Recipes</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }

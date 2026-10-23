@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   Modal,
+  KeyboardAvoidingView,
   TextInput,
   TouchableOpacity,
   Dimensions,
@@ -36,7 +37,7 @@ export default function DatePickerModal({
       animationType="fade"
       onRequestClose={onCancel}
     >
-      <View style={styles.modalOverlay}>
+      <KeyboardAvoidingView style={styles.modalOverlay} behavior="padding">
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>{title}</Text>
           <Text style={styles.modalFoodName}>
@@ -68,7 +69,7 @@ export default function DatePickerModal({
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

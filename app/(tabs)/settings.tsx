@@ -9,6 +9,7 @@ import {
   Alert,
   TextInput,
   Modal,
+  KeyboardAvoidingView,
   ActivityIndicator,
   Linking,
 } from 'react-native';
@@ -34,6 +35,7 @@ import { importMacroFactorWeightLog, previewMacroFactorWeightImport } from '@/se
 import { DONATION_URL } from '@/constants/links';
 import { parseDate, getTodayString } from '@/utils/dateHelpers';
 import { parseDecimal } from '@/utils/parseDecimal';
+import KeyboardAwareScrollView from '@/components/KeyboardAwareScrollView';
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
@@ -435,7 +437,7 @@ export default function SettingsScreen() {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Settings</Text>
 
@@ -885,7 +887,7 @@ export default function SettingsScreen() {
         transparent={true}
         onRequestClose={() => setShowEditModal(false)}
       >
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView style={styles.modalOverlay} behavior="padding">
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>
               {isAddingNew ? 'Add Weight Entry' : 'Edit Weight Entry'}
@@ -927,7 +929,7 @@ export default function SettingsScreen() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       {/* Food Import Preview Modal */}
@@ -1090,7 +1092,7 @@ export default function SettingsScreen() {
         transparent={true}
         onRequestClose={() => setShowApiKeyModal(false)}
       >
-        <View style={styles.modalOverlay}>
+        <KeyboardAvoidingView style={styles.modalOverlay} behavior="padding">
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>OpenAI API Key</Text>
@@ -1123,10 +1125,10 @@ export default function SettingsScreen() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
 
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
 
