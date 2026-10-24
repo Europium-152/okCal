@@ -4,7 +4,7 @@
  * This module implements weight trend smoothing to filter out daily fluctuations
  * caused by water retention, gut contents, and other transient factors.
  *
- * Based on The Hacker's Diet and MacroFactor approaches.
+ * Based on The Hacker's Diet approach.
  */
 
 import { WeightEntry } from '@/types';

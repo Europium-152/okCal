@@ -11,13 +11,11 @@ import {
   TextInput,
   Modal,
   KeyboardAvoidingView,
-  ActivityIndicator,
   Linking,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-import * as DocumentPicker from 'expo-document-picker';
 import { RootStackScreenProps } from '@/navigation/types';
 import {
   getAppSettings,
@@ -31,9 +29,6 @@ import {
 } from '@/utils/storage';
 import { Units, WeightEntry, FoodDatabase, OFFSearchRegion } from '@/types';
 import { kgFromLbs, lbsFromKg } from '@/constants/nutrition';
-import { importMacroFactorFoodLog, previewMacroFactorImport } from '@/services/importService';
-import { importMacroFactorWeightLog, previewMacroFactorWeightImport } from '@/services/weightImportService';
-import { formatImportSummary } from '@/utils/importSummary';
 import { DONATION_URL } from '@/constants/links';
 import { parseDate, getTodayString } from '@/utils/dateHelpers';
 import { parseDecimal } from '@/utils/parseDecimal';
@@ -51,25 +46,9 @@ export default function SettingsScreen() {
   const [editDate, setEditDate] = useState('');
   const [editWeight, setEditWeight] = useState('');
   const [isAddingNew, setIsAddingNew] = useState(false);
-  const [importing, setImporting] = useState(false);
-  const [showImportPreview, setShowImportPreview] = useState(false);
-  const [importPreview, setImportPreview] = useState<{
-    totalEntries: number;
-    dateRange: { start: string; end: string } | null;
-    conflictingDates: string[];
-    csvContent: string;
-  } | null>(null);
   const [openAIKey, setOpenAIKey] = useState('');
   const [showApiKeyModal, setShowApiKeyModal] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState('');
-  const [importingWeight, setImportingWeight] = useState(false);
-  const [showWeightImportPreview, setShowWeightImportPreview] = useState(false);
-  const [weightImportPreview, setWeightImportPreview] = useState<{
-    totalEntries: number;
-    dateRange: { start: string; end: string } | null;
-    conflictingDates: string[];
-    fileContent: ArrayBuffer;
-  } | null>(null);
 
   useEffect(() => {
     loadSettings();
@@ -280,153 +259,6 @@ export default function SettingsScreen() {
     } catch (error) {
       console.error('Error saving weight entry:', error);
       Alert.alert('Error', 'Failed to save entry. Please try again.');
-    }
-  };
-
-  const handleImportMacroFactor = async () => {
-    try {
-      setImporting(true);
-
-      // Pick CSV file
-      // Note: Using '*/*' to allow all file types because iOS 'On My iPhone'
-      // often grays out files when using specific MIME types without iCloud entitlements
-      const result = await DocumentPicker.getDocumentAsync({
-        type: '*/*',
-        copyToCacheDirectory: true,
-      });
-
-      if (result.canceled) {
-        setImporting(false);
-        return;
-      }
-
-      // Read file content
-      const file = result.assets[0];
-      const response = await fetch(file.uri);
-      const csvContent = await response.text();
-
-      // Generate preview
-      const preview = await previewMacroFactorImport(csvContent);
-
-      if (preview.totalEntries === 0) {
-        Alert.alert('No Data', 'No valid food entries found in the CSV file.');
-        setImporting(false);
-        return;
-      }
-
-      // Show preview modal
-      setImportPreview({
-        totalEntries: preview.totalEntries,
-        dateRange: preview.dateRange,
-        conflictingDates: preview.conflictingDates,
-        csvContent,
-      });
-      setShowImportPreview(true);
-      setImporting(false);
-    } catch (error) {
-      console.error('Error picking file:', error);
-      Alert.alert('Error', 'Failed to read CSV file. Please try again.');
-      setImporting(false);
-    }
-  };
-
-  const handleConfirmImport = async (overwrite: boolean) => {
-    if (!importPreview) return;
-
-    try {
-      setImporting(true);
-      setShowImportPreview(false);
-
-      const result = await importMacroFactorFoodLog(importPreview.csvContent, overwrite);
-
-      if (result.success) {
-        Alert.alert(
-          'Import Successful',
-          `${formatImportSummary(result)}\n\nDays: ${result.datesAffected.length}\nDate range: ${result.datesAffected[0]} to ${result.datesAffected[result.datesAffected.length - 1]}`
-        );
-      } else {
-        Alert.alert('Import Failed', result.error || 'Unknown error occurred');
-      }
-
-      setImportPreview(null);
-      setImporting(false);
-    } catch (error) {
-      console.error('Error importing data:', error);
-      Alert.alert('Error', 'Failed to import data. Please try again.');
-      setImporting(false);
-    }
-  };
-
-  const handleImportMacroFactorWeight = async () => {
-    try {
-      setImportingWeight(true);
-
-      // Pick Excel file
-      const result = await DocumentPicker.getDocumentAsync({
-        type: '*/*',
-        copyToCacheDirectory: true,
-      });
-
-      if (result.canceled) {
-        setImportingWeight(false);
-        return;
-      }
-
-      // Read file content as ArrayBuffer
-      const file = result.assets[0];
-      const response = await fetch(file.uri);
-      const arrayBuffer = await response.arrayBuffer();
-
-      // Generate preview
-      const preview = await previewMacroFactorWeightImport(arrayBuffer);
-
-      if (preview.totalEntries === 0) {
-        Alert.alert('No Data', 'No valid weight entries found in the Excel file.');
-        setImportingWeight(false);
-        return;
-      }
-
-      // Show preview modal
-      setWeightImportPreview({
-        totalEntries: preview.totalEntries,
-        dateRange: preview.dateRange,
-        conflictingDates: preview.conflictingDates,
-        fileContent: arrayBuffer,
-      });
-      setShowWeightImportPreview(true);
-      setImportingWeight(false);
-    } catch (error) {
-      console.error('Error picking file:', error);
-      Alert.alert('Error', 'Failed to read Excel file. Please try again.');
-      setImportingWeight(false);
-    }
-  };
-
-  const handleConfirmWeightImport = async (overwrite: boolean) => {
-    if (!weightImportPreview) return;
-
-    try {
-      setImportingWeight(true);
-      setShowWeightImportPreview(false);
-
-      const result = await importMacroFactorWeightLog(weightImportPreview.fileContent, overwrite);
-
-      if (result.success) {
-        const dateRange = result.datesAffected.length > 0
-          ? `\n\nDays: ${result.datesAffected.length}\nDate range: ${result.datesAffected[0]} to ${result.datesAffected[result.datesAffected.length - 1]}`
-          : '';
-        Alert.alert('Import Successful', `${formatImportSummary(result)}${dateRange}`);
-        await loadWeightEntries(); // Reload weight entries
-      } else {
-        Alert.alert('Import Failed', result.error || 'Unknown error occurred');
-      }
-
-      setWeightImportPreview(null);
-      setImportingWeight(false);
-    } catch (error) {
-      console.error('Error importing weight data:', error);
-      Alert.alert('Error', 'Failed to import weight data. Please try again.');
-      setImportingWeight(false);
     }
   };
 
@@ -737,55 +569,6 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Import External Data Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Ionicons name="cloud-download-outline" size={24} color={Colors.primary} />
-            <Text style={styles.sectionTitle}>Import External Data</Text>
-          </View>
-          <Text style={styles.sectionDescription}>
-            Import food logs from other tracking apps. Currently supports MacroFactor CSV exports.
-          </Text>
-
-          {/* Food Log Import */}
-          <TouchableOpacity
-            style={styles.importCard}
-            onPress={handleImportMacroFactor}
-            disabled={importing}
-          >
-            <View style={styles.importCardHeader}>
-              <Ionicons name="document-text-outline" size={24} color={Colors.primary} />
-              {importing ? (
-                <ActivityIndicator color={Colors.primary} style={{ marginLeft: 12 }} />
-              ) : (
-                <Text style={styles.importCardTitle}>Import MacroFactor Food Log</Text>
-              )}
-            </View>
-            <Text style={styles.importCardInfo}>
-              Export your food log from MacroFactor as a CSV file, then select it here to import your data.
-            </Text>
-          </TouchableOpacity>
-
-          {/* Weight Data Import */}
-          <TouchableOpacity
-            style={[styles.importCard, { marginTop: 12 }]}
-            onPress={handleImportMacroFactorWeight}
-            disabled={importingWeight}
-          >
-            <View style={styles.importCardHeader}>
-              <Ionicons name="analytics-outline" size={24} color={Colors.primary} />
-              {importingWeight ? (
-                <ActivityIndicator color={Colors.primary} style={{ marginLeft: 12 }} />
-              ) : (
-                <Text style={styles.importCardTitle}>Import MacroFactor Weight (kg)</Text>
-              )}
-            </View>
-            <Text style={styles.importCardInfo}>
-              Export your weight data from MacroFactor as an Excel file, then select it here to import your weight history.
-            </Text>
-          </TouchableOpacity>
-        </View>
-
         {/* Weight History Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -933,159 +716,6 @@ export default function SettingsScreen() {
             </View>
           </View>
         </KeyboardAvoidingView>
-      </Modal>
-
-      {/* Food Import Preview Modal */}
-      <Modal
-        visible={showImportPreview}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setShowImportPreview(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Food Import Preview</Text>
-
-            {importPreview && (
-              <>
-                <View style={styles.previewInfo}>
-                  <Text style={styles.previewLabel}>Total Entries:</Text>
-                  <Text style={styles.previewValue}>{importPreview.totalEntries}</Text>
-                </View>
-
-                {importPreview.dateRange && (
-                  <View style={styles.previewInfo}>
-                    <Text style={styles.previewLabel}>Date Range:</Text>
-                    <Text style={styles.previewValue}>
-                      {importPreview.dateRange.start} to {importPreview.dateRange.end}
-                    </Text>
-                  </View>
-                )}
-
-                {importPreview.conflictingDates.length > 0 && (
-                  <View style={styles.warningBox}>
-                    <Ionicons name="warning-outline" size={20} color="#FF9500" />
-                    <Text style={styles.warningText}>
-                      {importPreview.conflictingDates.length} days have existing data that will be affected.
-                    </Text>
-                  </View>
-                )}
-
-                <Text style={styles.overwriteQuestion}>
-                  Do you want to overwrite existing entries for dates in this import?
-                </Text>
-
-                <View style={styles.modalActions}>
-                  <TouchableOpacity
-                    style={[styles.modalButton, styles.cancelButton]}
-                    onPress={() => setShowImportPreview(false)}
-                  >
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.modalButton, styles.mergeButton]}
-                    onPress={() => handleConfirmImport(false)}
-                  >
-                    <Text style={styles.mergeButtonText}>Merge</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.modalButton, styles.overwriteButton]}
-                    onPress={() => handleConfirmImport(true)}
-                  >
-                    <Text style={styles.overwriteButtonText}>Overwrite</Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
-
-      {/* Weight Import Preview Modal */}
-      <Modal
-        visible={showWeightImportPreview}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setShowWeightImportPreview(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Weight Import Preview</Text>
-
-            {weightImportPreview && (
-              <>
-                <View style={styles.previewInfo}>
-                  <Text style={styles.previewLabel}>Total Entries:</Text>
-                  <Text style={styles.previewValue}>{weightImportPreview.totalEntries}</Text>
-                </View>
-
-                {weightImportPreview.dateRange && (
-                  <View style={styles.previewInfo}>
-                    <Text style={styles.previewLabel}>Date Range:</Text>
-                    <Text style={styles.previewValue}>
-                      {weightImportPreview.dateRange.start} to {weightImportPreview.dateRange.end}
-                    </Text>
-                  </View>
-                )}
-
-                {weightImportPreview.conflictingDates.length > 0 && (
-                  <View style={styles.warningBox}>
-                    <Ionicons name="warning-outline" size={20} color="#FF9500" />
-                    <Text style={styles.warningText}>
-                      {weightImportPreview.conflictingDates.length} days have existing data that will be affected.
-                    </Text>
-                  </View>
-                )}
-
-                <Text style={styles.overwriteQuestion}>
-                  Do you want to overwrite existing entries for dates in this import?
-                </Text>
-
-                <View style={styles.modalActions}>
-                  <TouchableOpacity
-                    style={[styles.modalButton, styles.cancelButton]}
-                    onPress={() => setShowWeightImportPreview(false)}
-                  >
-                    <Text style={styles.cancelButtonText}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.modalButton, styles.mergeButton]}
-                    onPress={() => handleConfirmWeightImport(false)}
-                  >
-                    <Text style={styles.mergeButtonText}>Merge</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.modalButton, styles.overwriteButton]}
-                    onPress={() => handleConfirmWeightImport(true)}
-                  >
-                    <Text style={styles.overwriteButtonText}>Overwrite</Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
-
-      {/* Loading Modal for Import Operations */}
-      <Modal
-        visible={importing || importingWeight}
-        transparent={true}
-        animationType="fade"
-        statusBarTranslucent={true}
-      >
-        <View style={styles.loadingOverlay}>
-          <View style={styles.loadingContent}>
-            <ActivityIndicator size="large" color={Colors.primary} />
-            <Text style={styles.loadingTitle}>
-              {importing ? 'Importing Food Logs...' : 'Importing Weight Data...'}
-            </Text>
-            <Text style={styles.loadingSubtitle}>
-              This may take a moment for large datasets.{'\n'}
-              Please do not close the app.
-            </Text>
-          </View>
-        </View>
       </Modal>
 
       {/* API Key Modal */}
@@ -1395,86 +1025,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  importCard: {
-    backgroundColor: '#f8f9fa',
-    borderRadius: 8,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#dee2e6',
-  },
-  importCardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    marginBottom: 8,
-  },
-  importCardTitle: {
-    color: Colors.primary,
-    fontSize: 16,
-    fontWeight: '600',
-    flex: 1,
-  },
-  importCardInfo: {
-    fontSize: 13,
-    color: '#666',
-    lineHeight: 18,
-  },
-  previewInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  previewLabel: {
-    fontSize: 14,
-    color: '#666',
-    fontWeight: '500',
-  },
-  previewValue: {
-    fontSize: 14,
-    color: '#333',
-    fontWeight: '600',
-  },
-  warningBox: {
-    flexDirection: 'row',
-    backgroundColor: '#FFF8E1',
-    borderRadius: 8,
-    padding: 12,
-    gap: 8,
-    marginTop: 12,
-    borderWidth: 1,
-    borderColor: '#FFE082',
-  },
-  warningText: {
-    flex: 1,
-    fontSize: 13,
-    color: '#F57C00',
-    lineHeight: 18,
-  },
-  overwriteQuestion: {
-    fontSize: 15,
-    color: '#333',
-    fontWeight: '600',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  mergeButton: {
-    backgroundColor: '#34C759',
-  },
-  mergeButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  overwriteButton: {
-    backgroundColor: '#FF9500',
-  },
-  overwriteButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
   subscriptionButton: {
     backgroundColor: 'white',
     padding: 16,
@@ -1527,37 +1077,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#FF9500',
-  },
-  loadingOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingContent: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 32,
-    alignItems: 'center',
-    minWidth: 280,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  loadingTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  loadingSubtitle: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    lineHeight: 20,
   },
   modalHeader: {
     flexDirection: 'row',
