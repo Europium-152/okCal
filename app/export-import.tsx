@@ -27,6 +27,7 @@ import {
   importLoggedFood,
   ExportDataset,
 } from '@/services/exportImportService';
+import { formatImportSummary } from '@/utils/importSummary';
 
 type DatasetOption = {
   id: ExportDataset;
@@ -149,9 +150,15 @@ export default function ExportImportScreen({ navigation }: RootStackScreenProps<
       });
 
       // Ask about overwrite
+      // Weight has one entry per date, so existing dates can be skipped. Food entries
+      // are never skipped (the same food can be logged twice), so the choice is to
+      // keep what is there and add the imported entries, or replace the days.
+      const isFood = datasetId === 'logged_food';
       Alert.alert(
         'Import Options',
-        'How do you want to handle existing data?',
+        isFood
+          ? 'How do you want to handle existing entries on the same dates?'
+          : 'How do you want to handle existing data?',
         [
           {
             text: 'Cancel',
@@ -159,7 +166,7 @@ export default function ExportImportScreen({ navigation }: RootStackScreenProps<
             onPress: () => setImporting(null),
           },
           {
-            text: 'Skip Duplicates',
+            text: isFood ? 'Add to Existing' : 'Skip Duplicates',
             onPress: () => performImport(datasetId, fileContent, false),
           },
           {
@@ -203,10 +210,7 @@ export default function ExportImportScreen({ navigation }: RootStackScreenProps<
         return;
       }
 
-      Alert.alert(
-        'Import Complete',
-        `Added: ${result.entriesAdded} entries\nSkipped: ${result.entriesSkipped} entries`
-      );
+      Alert.alert('Import Complete', formatImportSummary(result));
 
       setImporting(null);
     } catch (error) {

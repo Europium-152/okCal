@@ -13,6 +13,9 @@ import { parseDate } from '@/utils/dateHelpers';
 export interface ImportResult {
   success: boolean;
   entriesAdded: number;
+  /** Existing entries removed and replaced by imported ones (overwrite mode) */
+  entriesReplaced: number;
+  /** Always 0: merging keeps every imported food entry, since foods can be logged more than once */
   entriesSkipped: number;
   datesAffected: string[];
   error?: string;
@@ -116,6 +119,7 @@ export async function importMacroFactorFoodLog(
       return {
         success: false,
         entriesAdded: 0,
+        entriesReplaced: 0,
         entriesSkipped: 0,
         datesAffected: [],
         error: 'No valid entries found in CSV file',
@@ -134,10 +138,12 @@ export async function importMacroFactorFoodLog(
     const existingEntries = data ? JSON.parse(data) : [];
 
     let finalEntries: FoodEntry[];
+    let entriesReplaced = 0;
 
     if (overwriteExisting) {
       // Remove entries for dates in the import
       const filteredEntries = existingEntries.filter(e => !importDates.has(e.date));
+      entriesReplaced = existingEntries.length - filteredEntries.length;
       finalEntries = [...filteredEntries, ...newEntries];
     } else {
       // Keep all existing entries, add new ones
@@ -155,6 +161,7 @@ export async function importMacroFactorFoodLog(
     return {
       success: true,
       entriesAdded: newEntries.length,
+      entriesReplaced,
       entriesSkipped: 0,
       datesAffected,
     };
@@ -163,6 +170,7 @@ export async function importMacroFactorFoodLog(
     return {
       success: false,
       entriesAdded: 0,
+      entriesReplaced: 0,
       entriesSkipped: 0,
       datesAffected: [],
       error: error instanceof Error ? error.message : 'Unknown error occurred',

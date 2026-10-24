@@ -14,7 +14,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export interface WeightImportResult {
   success: boolean;
   entriesAdded: number;
+  /** Existing entries removed and replaced by imported ones (overwrite mode) */
+  entriesReplaced: number;
+  /** Imported entries not written because the date already had a weight (merge mode) */
   entriesSkipped: number;
+  /** Dates whose data actually changed */
   datesAffected: string[];
   error?: string;
 }
@@ -57,6 +61,7 @@ export async function importMacroFactorWeightLog(
       return {
         success: false,
         entriesAdded: 0,
+        entriesReplaced: 0,
         entriesSkipped: 0,
         datesAffected: [],
         error: 'No valid weight entries found in Excel file',
@@ -66,38 +71,36 @@ export async function importMacroFactorWeightLog(
     // Convert rows to weight entries
     const newEntries = rows.map(macroFactorWeightRowToEntry);
 
-    // Get unique dates in import
-    const importDates = new Set(newEntries.map(e => e.date));
-    const datesAffected = Array.from(importDates).sort();
-
     const data = await AsyncStorage.getItem('@weight_entries');
     const existingEntries = data ? JSON.parse(data) : [];
 
     // Determine final entries and stats
     let finalEntries: WeightEntry[];
-    let entriesAdded = 0;
+    let writtenEntries: WeightEntry[];
+    let entriesReplaced = 0;
     let entriesSkipped = 0;
 
     if (overwriteExisting) {
       // Remove existing entries for dates in the import
+      const importDates = new Set(newEntries.map(e => e.date));
       const filteredEntries = existingEntries.filter(e => !importDates.has(e.date));
-
-      // Count how many we're replacing
-      entriesSkipped = existingEntries.length - filteredEntries.length;
+      entriesReplaced = existingEntries.length - filteredEntries.length;
 
       // Combine filtered existing entries with new entries
       finalEntries = [...filteredEntries, ...newEntries];
-      entriesAdded = newEntries.length;
+      writtenEntries = newEntries;
     } else {
       // Skip entries for dates that already exist
       const existingDates = new Set(existingEntries.map(e => e.date));
-      const entriesToAdd = newEntries.filter(e => !existingDates.has(e.date));
-      entriesSkipped = newEntries.length - entriesToAdd.length;
+      writtenEntries = newEntries.filter(e => !existingDates.has(e.date));
+      entriesSkipped = newEntries.length - writtenEntries.length;
 
       // Combine all existing entries with new non-duplicate entries
-      finalEntries = [...existingEntries, ...entriesToAdd];
-      entriesAdded = entriesToAdd.length;
+      finalEntries = [...existingEntries, ...writtenEntries];
     }
+
+    const datesAffected = Array.from(new Set(writtenEntries.map(e => e.date))).sort();
+    const entriesAdded = writtenEntries.length;
 
     // Save to local AsyncStorage first (fast, non-blocking)
     await AsyncStorage.setItem('@weight_entries', JSON.stringify(finalEntries));
@@ -105,6 +108,7 @@ export async function importMacroFactorWeightLog(
     return {
       success: true,
       entriesAdded,
+      entriesReplaced,
       entriesSkipped,
       datesAffected,
     };
@@ -113,6 +117,7 @@ export async function importMacroFactorWeightLog(
     return {
       success: false,
       entriesAdded: 0,
+      entriesReplaced: 0,
       entriesSkipped: 0,
       datesAffected: [],
       error: error instanceof Error ? error.message : 'Unknown error occurred',

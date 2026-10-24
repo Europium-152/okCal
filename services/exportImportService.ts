@@ -22,6 +22,7 @@ export interface ExportResult {
 export interface ImportResult {
   success: boolean;
   entriesAdded: number;
+  entriesReplaced: number;
   entriesSkipped: number;
   error?: string;
 }
@@ -312,6 +313,7 @@ export async function importLoggedWeight(csvContent: string, overwrite: boolean 
       return {
         success: false,
         entriesAdded: 0,
+        entriesReplaced: 0,
         entriesSkipped: 0,
         error: 'CSV file is empty or invalid',
       };
@@ -353,6 +355,7 @@ export async function importLoggedWeight(csvContent: string, overwrite: boolean 
       return {
         success: false,
         entriesAdded: 0,
+        entriesReplaced: 0,
         entriesSkipped: 0,
         error: 'No valid entries found in CSV',
       };
@@ -361,13 +364,14 @@ export async function importLoggedWeight(csvContent: string, overwrite: boolean 
     // Handle existing entries
     const existingEntries = await getWeightEntries();
     let entriesToAdd: WeightEntry[];
+    let entriesReplaced = 0;
     let entriesSkipped = 0;
 
     if (overwrite) {
       // Remove existing entries for dates in import
       const importDates = new Set(newEntries.map(e => e.date));
       const filtered = existingEntries.filter(e => !importDates.has(e.date));
-      entriesSkipped = existingEntries.length - filtered.length;
+      entriesReplaced = existingEntries.length - filtered.length;
 
       // Save all entries (filtered + new)
       await saveWeightEntries([...filtered, ...newEntries]);
@@ -387,6 +391,7 @@ export async function importLoggedWeight(csvContent: string, overwrite: boolean 
     return {
       success: true,
       entriesAdded: entriesToAdd.length,
+      entriesReplaced,
       entriesSkipped,
     };
   } catch (error) {
@@ -394,6 +399,7 @@ export async function importLoggedWeight(csvContent: string, overwrite: boolean 
     return {
       success: false,
       entriesAdded: 0,
+      entriesReplaced: 0,
       entriesSkipped: 0,
       error: error instanceof Error ? error.message : 'Unknown error',
     };
@@ -411,6 +417,7 @@ export async function importLoggedFood(csvContent: string, overwrite: boolean = 
       return {
         success: false,
         entriesAdded: 0,
+        entriesReplaced: 0,
         entriesSkipped: 0,
         error: 'CSV file is empty or invalid',
       };
@@ -461,6 +468,7 @@ export async function importLoggedFood(csvContent: string, overwrite: boolean = 
       return {
         success: false,
         entriesAdded: 0,
+        entriesReplaced: 0,
         entriesSkipped: 0,
         error: 'No valid entries found in CSV',
       };
@@ -469,13 +477,13 @@ export async function importLoggedFood(csvContent: string, overwrite: boolean = 
     // Handle existing entries
     const existingEntries = await getFoodEntries();
     let entriesToAdd: FoodEntry[];
-    let entriesSkipped = 0;
+    let entriesReplaced = 0;
 
     if (overwrite) {
       // Remove existing entries for dates in import
       const importDates = new Set(newEntries.map(e => e.date));
       const filtered = existingEntries.filter(e => !importDates.has(e.date));
-      entriesSkipped = existingEntries.length - filtered.length;
+      entriesReplaced = existingEntries.length - filtered.length;
 
       // Save all entries (filtered + new) - bulk save
       await saveFoodEntries([...filtered, ...newEntries]);
@@ -492,13 +500,15 @@ export async function importLoggedFood(csvContent: string, overwrite: boolean = 
     return {
       success: true,
       entriesAdded: entriesToAdd.length,
-      entriesSkipped,
+      entriesReplaced,
+      entriesSkipped: 0, // food entries are never skipped: the same food can be logged more than once
     };
   } catch (error) {
     console.error('Import logged food error:', error);
     return {
       success: false,
       entriesAdded: 0,
+      entriesReplaced: 0,
       entriesSkipped: 0,
       error: error instanceof Error ? error.message : 'Unknown error',
     };

@@ -33,6 +33,7 @@ import { Units, WeightEntry, FoodDatabase, OFFSearchRegion } from '@/types';
 import { kgFromLbs, lbsFromKg } from '@/constants/nutrition';
 import { importMacroFactorFoodLog, previewMacroFactorImport } from '@/services/importService';
 import { importMacroFactorWeightLog, previewMacroFactorWeightImport } from '@/services/weightImportService';
+import { formatImportSummary } from '@/utils/importSummary';
 import { DONATION_URL } from '@/constants/links';
 import { parseDate, getTodayString } from '@/utils/dateHelpers';
 import { parseDecimal } from '@/utils/parseDecimal';
@@ -341,7 +342,7 @@ export default function SettingsScreen() {
       if (result.success) {
         Alert.alert(
           'Import Successful',
-          `Imported ${result.entriesAdded} food entries from ${result.datesAffected.length} days.\n\nDate range: ${result.datesAffected[0]} to ${result.datesAffected[result.datesAffected.length - 1]}`
+          `${formatImportSummary(result)}\n\nDays: ${result.datesAffected.length}\nDate range: ${result.datesAffected[0]} to ${result.datesAffected[result.datesAffected.length - 1]}`
         );
       } else {
         Alert.alert('Import Failed', result.error || 'Unknown error occurred');
@@ -411,10 +412,10 @@ export default function SettingsScreen() {
       const result = await importMacroFactorWeightLog(weightImportPreview.fileContent, overwrite);
 
       if (result.success) {
-        Alert.alert(
-          'Import Successful',
-          `Imported ${result.entriesAdded} weight entries from ${result.datesAffected.length} days.\n\nDate range: ${result.datesAffected[0]} to ${result.datesAffected[result.datesAffected.length - 1]}`
-        );
+        const dateRange = result.datesAffected.length > 0
+          ? `\n\nDays: ${result.datesAffected.length}\nDate range: ${result.datesAffected[0]} to ${result.datesAffected[result.datesAffected.length - 1]}`
+          : '';
+        Alert.alert('Import Successful', `${formatImportSummary(result)}${dateRange}`);
         await loadWeightEntries(); // Reload weight entries
       } else {
         Alert.alert('Import Failed', result.error || 'Unknown error occurred');
