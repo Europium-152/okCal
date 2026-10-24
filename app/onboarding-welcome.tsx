@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackScreenProps } from '@/navigation/types';
 import AppleLogo from '@/components/AppleLogo';
@@ -18,6 +19,8 @@ import { keyboardScrollProps } from '@/constants/keyboard';
 const { width, height } = Dimensions.get('window');
 
 export default function OnboardingWelcome({ navigation }: RootStackScreenProps<'OnboardingWelcome'>) {
+  const insets = useSafeAreaInsets();
+
   const handleContinue = () => {
     navigation.navigate('OnboardingSetup');
   };
@@ -78,7 +81,7 @@ export default function OnboardingWelcome({ navigation }: RootStackScreenProps<'
         </View>
       </View>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: Platform.OS === 'ios' ? 40 : 24 + insets.bottom }]}>
         <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
           <Text style={styles.continueButtonText}>Continue</Text>
           <Ionicons name="arrow-forward" size={20} color="#fff" />

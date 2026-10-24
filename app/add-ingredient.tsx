@@ -379,7 +379,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
     const totalFat = qty > 0 && f > 0 ? Math.round(((f * qty) / 100) * 10) / 10 : 0;
 
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => setInputMethod('select')}>
             <Ionicons name="arrow-back" size={24} color={Colors.primary} />
@@ -496,7 +496,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
   // Offline search view
   if (inputMethod === 'offline-search') {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
         <OfflineFoodSearch
           onSelectFood={handleSelectOfflineFood}
           onCancel={() => setInputMethod('select')}
@@ -509,7 +509,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
   // Search view
   if (inputMethod === 'search') {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => setInputMethod('select')}>
             <Ionicons name="arrow-back" size={24} color={Colors.primary} />
@@ -571,7 +571,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
     );
 
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => setInputMethod('select')}>
             <Ionicons name="arrow-back" size={24} color={Colors.primary} />
@@ -623,7 +623,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
     );
 
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => setInputMethod('select')}>
             <Ionicons name="arrow-back" size={24} color={Colors.primary} />
@@ -669,7 +669,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
   if (inputMethod === 'photo') {
     if (loading) {
       return (
-        <SafeAreaView style={styles.container} edges={['top']}>
+        <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={Colors.primary} />
             <Text style={styles.loadingText}>Analyzing photo...</Text>
@@ -680,7 +680,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
     }
 
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => setInputMethod('select')}>
             <Ionicons name="arrow-back" size={24} color={Colors.primary} />
@@ -732,7 +732,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
   if (inputMethod === 'text') {
     if (loading) {
       return (
-        <SafeAreaView style={styles.container} edges={['top']}>
+        <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color={Colors.primary} />
             <Text style={styles.loadingText}>Analyzing description...</Text>
@@ -743,7 +743,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
     }
 
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => setInputMethod('select')}>
             <Ionicons name="arrow-back" size={24} color={Colors.primary} />
@@ -793,7 +793,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
 
   // Selection grid (default view)
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color={Colors.primary} />

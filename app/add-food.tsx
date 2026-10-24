@@ -2,7 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Alert,
+  Platform,
 } from 'react-native';
+import { Colors } from '@/constants/colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootStackScreenProps } from '@/navigation/types';
 import { saveFoodEntry, getFoodEntries, getRecipes, getAppSettings } from '@/utils/storage';
 import { FoodEntry, Recipe, UnifiedFoodItem, FoodDatabase, OFFSearchRegion } from '@/types';
@@ -28,7 +31,24 @@ import { parseDecimal } from '@/utils/parseDecimal';
 
 type InputMethod = 'select' | 'manual' | 'barcode' | 'search' | 'offline-search' | 'photo' | 'text' | 'history' | 'recipes';
 
-export default function AddFood({ navigation, route }: RootStackScreenProps<'AddFood'>) {
+// Keeps every Add Food step (and its pinned buttons) clear of the Android navigation bar.
+// iOS is left alone, and the camera view stays full-bleed.
+export default function AddFood(props: RootStackScreenProps<'AddFood'>) {
+  const insets = useSafeAreaInsets();
+  const [fullBleed, setFullBleed] = useState(false);
+  const bottomPadding = Platform.OS === 'android' && !fullBleed ? insets.bottom : 0;
+  return (
+    <View style={{ flex: 1, paddingBottom: bottomPadding, backgroundColor: Colors.background }}>
+      <AddFoodContent {...props} onFullBleedChange={setFullBleed} />
+    </View>
+  );
+}
+
+function AddFoodContent({
+  navigation,
+  route,
+  onFullBleedChange,
+}: RootStackScreenProps<'AddFood'> & { onFullBleedChange: (fullBleed: boolean) => void }) {
   const params = route.params || {};
 
   // Custom hooks for nutrition form and date/time entry
@@ -36,6 +56,10 @@ export default function AddFood({ navigation, route }: RootStackScreenProps<'Add
   const dateTime = useDateTimeEntry(params.date as string);
 
   const [inputMethod, setInputMethod] = useState<InputMethod>('select');
+
+  useEffect(() => {
+    onFullBleedChange(inputMethod === 'barcode');
+  }, [inputMethod, onFullBleedChange]);
   const [foodDatabase, setFoodDatabase] = useState<FoodDatabase>('US');
   const [offSearchRegion, setOffSearchRegion] = useState<OFFSearchRegion>('US');
 

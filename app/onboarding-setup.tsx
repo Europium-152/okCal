@@ -11,6 +11,7 @@ import {
   Modal,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { RootStackScreenProps } from '@/navigation/types';
 import { saveAppSettings, saveUserProfile, saveWeightEntry } from '@/utils/storage';
@@ -33,6 +34,7 @@ const DEFAULT_BIRTH_DATE = getDateYearsAgo(25);
 type OnboardingStep = 'units' | 'database' | 'profile' | 'goals';
 
 export default function OnboardingSetup({ navigation }: RootStackScreenProps<'OnboardingSetup'>) {
+  const insets = useSafeAreaInsets();
   const [currentStep, setCurrentStep] = useState<OnboardingStep>('units');
   const [isSaving, setIsSaving] = useState(false);
 
@@ -552,7 +554,7 @@ export default function OnboardingSetup({ navigation }: RootStackScreenProps<'On
         {renderStep()}
       </KeyboardAwareScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: Platform.OS === 'ios' ? 32 : 16 + insets.bottom }]}>
         {currentStepIndex > 0 && (
           <TouchableOpacity style={styles.backButton} onPress={handleBack}>
             <Ionicons name="arrow-back" size={20} color="#666" />
