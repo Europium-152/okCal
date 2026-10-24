@@ -8,6 +8,7 @@ import {
   addDataChangeListener,
   generateTDEEDataHash,
   generateWeightDataHash,
+  clearAllUserData,
 } from '../storage';
 import { FoodEntry, WeightEntry, FastingDay, UserProfile } from '@/types';
 
@@ -573,6 +574,26 @@ describe('storage', () => {
 
       expect(typeof hash).toBe('string');
       expect(hash).toContain('0|'); // Should have 0 entries
+    });
+  });
+
+  describe('clearAllUserData', () => {
+    it('should remove user data, the OpenAI API key and pending recipe ingredients', async () => {
+      await clearAllUserData();
+
+      const removed = (AsyncStorage.multiRemove as jest.Mock).mock.calls[0][0];
+      expect(removed).toEqual(
+        expect.arrayContaining([
+          '@food_entries',
+          '@weight_entries',
+          '@user_profile',
+          '@app_settings',
+          '@recipes',
+          '@openai_api_key',
+          '@pending_ingredient',
+          '@pending_ingredients',
+        ])
+      );
     });
   });
 });

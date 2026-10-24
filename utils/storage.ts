@@ -10,6 +10,8 @@ const APP_SETTINGS_KEY = '@app_settings';
 const FASTING_DAYS_KEY = '@fasting_days';
 const RECIPES_KEY = '@recipes';
 const OPENAI_API_KEY = '@openai_api_key';
+const PENDING_INGREDIENT_KEY = '@pending_ingredient';
+const PENDING_INGREDIENTS_KEY = '@pending_ingredients';
 
 // In-memory cache to avoid repeated JSON parsing
 let foodEntriesCache: FoodEntry[] | null = null;
@@ -714,6 +716,9 @@ export const clearAllUserData = async (): Promise<void> => {
       TDEE_CACHE_KEY,
       DAILY_TDEE_CACHE_KEY,
       WEIGHT_TREND_CACHE_KEY,
+      OPENAI_API_KEY,
+      PENDING_INGREDIENT_KEY,
+      PENDING_INGREDIENTS_KEY,
     ];
 
     await AsyncStorage.multiRemove(keysToRemove);

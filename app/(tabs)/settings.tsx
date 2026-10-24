@@ -160,7 +160,7 @@ export default function SettingsScreen() {
   const handleDeleteAllData = () => {
     Alert.alert(
       'Delete All Data',
-      'This permanently deletes all the data stored on this device (food logs, weight entries, recipes, profile). It cannot be undone. Consider exporting a backup first.',
+      'This permanently deletes all the data stored on this device (food logs, weight entries, recipes, profile, OpenAI API key). It cannot be undone. Consider exporting a backup first.',
       [
         { text: 'Cancel', style: 'cancel' },
         {
