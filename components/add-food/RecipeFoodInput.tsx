@@ -12,6 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Recipe } from '@/types';
 import { sortByRelevance } from '@/utils/fuzzySearch';
+import { formatCalories, formatMacro } from '@/utils/nutritionCalculator';
 
 interface RecipeFoodInputProps {
   recipes: Recipe[];
@@ -100,16 +101,16 @@ export default function RecipeFoodInput({
                 <View style={styles.searchResultNutrients}>
                   <View style={styles.nutrientItem}>
                     <Ionicons name="flame" size={14} color="#FF6B6B" />
-                    <Text style={styles.nutrientText}>{item.caloriesPer100} cal</Text>
+                    <Text style={styles.nutrientText}>{formatCalories(item.caloriesPer100)} cal</Text>
                   </View>
                   <View style={styles.nutrientItem}>
-                    <Text style={styles.nutrientText}>P: {item.proteinPer100}g</Text>
+                    <Text style={styles.nutrientText}>P: {formatMacro(item.proteinPer100)}g</Text>
                   </View>
                   <View style={styles.nutrientItem}>
-                    <Text style={styles.nutrientText}>C: {item.carbsPer100}g</Text>
+                    <Text style={styles.nutrientText}>C: {formatMacro(item.carbsPer100)}g</Text>
                   </View>
                   <View style={styles.nutrientItem}>
-                    <Text style={styles.nutrientText}>F: {item.fatPer100}g</Text>
+                    <Text style={styles.nutrientText}>F: {formatMacro(item.fatPer100)}g</Text>
                   </View>
                 </View>
                 <View style={styles.recipeInfo}>

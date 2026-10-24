@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Recipe } from '@/types';
 import { getRecipes, deleteRecipe } from '@/utils/storage';
 import { sortByRelevance } from '@/utils/fuzzySearch';
+import { formatCalories, formatMacro } from '@/utils/nutritionCalculator';
 
 export default function RecipesScreen({ navigation }: RootStackScreenProps<'Recipes'>) {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -109,11 +110,11 @@ export default function RecipesScreen({ navigation }: RootStackScreenProps<'Reci
         <View style={styles.nutritionRow}>
           <View style={styles.macroItem}>
             <Ionicons name="flame" size={14} color="#FF6B6B" />
-            <Text style={styles.macroValue}>{item.caloriesPer100} cal</Text>
+            <Text style={styles.macroValue}>{formatCalories(item.caloriesPer100)} cal</Text>
           </View>
-          <Text style={styles.macroValue}>{item.proteinPer100}g P</Text>
-          <Text style={styles.macroValue}>{item.carbsPer100}g C</Text>
-          <Text style={styles.macroValue}>{item.fatPer100}g F</Text>
+          <Text style={styles.macroValue}>{formatMacro(item.proteinPer100)}g P</Text>
+          <Text style={styles.macroValue}>{formatMacro(item.carbsPer100)}g C</Text>
+          <Text style={styles.macroValue}>{formatMacro(item.fatPer100)}g F</Text>
           <Text style={styles.per100Label}>per 100g</Text>
         </View>
       </View>

@@ -57,10 +57,10 @@ function macroFactorRowToFoodEntry(row: MacroFactorRow): FoodEntry {
     carbs: Math.round(row.carbs * 10) / 10,
     fat: Math.round(row.fat * 10) / 10,
     // Per-100g values (calculated)
-    caloriesPer100: Math.round(caloriesPer100g),
-    proteinPer100: Math.round(proteinPer100g * 10) / 10,
-    carbsPer100: Math.round(carbsPer100g * 10) / 10,
-    fatPer100: Math.round(fatPer100g * 10) / 10,
+    caloriesPer100: caloriesPer100g,
+    proteinPer100: proteinPer100g,
+    carbsPer100: carbsPer100g,
+    fatPer100: fatPer100g,
   };
 }
 

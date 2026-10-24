@@ -12,7 +12,7 @@ import { FoodEntry, Recipe, UnifiedFoodItem, FoodDatabase, OFFSearchRegion } fro
 import BarcodeScanner from '@/components/BarcodeScanner';
 import { lookupProductByBarcode, ProductInfo, searchOFFFoods } from '@/services/foodLookup';
 import { OfflineFoodItem } from '@/services/offlineFoodSearch';
-import { detectUnit } from '@/utils/nutritionCalculator';
+import { detectUnit, formatCalories, formatMacro } from '@/utils/nutritionCalculator';
 import { parseDate } from '@/utils/dateHelpers';
 import * as ImagePicker from 'expo-image-picker';
 import { processFoodImage, processFoodDescription, EstimatedFood } from '@/services/aiService';
@@ -284,10 +284,10 @@ function AddFoodContent({
     // Calculate per-100 values from the total values
     const { calories, protein, carbs, fat, servingSize } = estimatedFood;
     const per100 = {
-      calories: Math.round((calories / servingSize) * 100),
-      protein: Math.round(((protein / servingSize) * 100) * 10) / 10,
-      carbs: Math.round(((carbs / servingSize) * 100) * 10) / 10,
-      fat: Math.round(((fat / servingSize) * 100) * 10) / 10,
+      calories: (calories / servingSize) * 100,
+      protein: (protein / servingSize) * 100,
+      carbs: (carbs / servingSize) * 100,
+      fat: (fat / servingSize) * 100,
     };
 
     const entry: FoodEntry = {
@@ -378,6 +378,7 @@ function AddFoodContent({
 
     // Calculate timestamp from date and time
     const timestamp = dateTime.getTimestamp();
+    const per100 = nutritionForm.getPer100();
 
     const entry: FoodEntry = {
       id: Date.now().toString(),
@@ -385,10 +386,10 @@ function AddFoodContent({
       name: nutritionForm.name.trim(),
       quantity: parseDecimal(nutritionForm.quantity),
       unit: nutritionForm.unit,
-      caloriesPer100: parseDecimal(nutritionForm.caloriesPer100),
-      proteinPer100: nutritionForm.proteinPer100 ? parseDecimal(nutritionForm.proteinPer100) : undefined,
-      carbsPer100: nutritionForm.carbsPer100 ? parseDecimal(nutritionForm.carbsPer100) : undefined,
-      fatPer100: nutritionForm.fatPer100 ? parseDecimal(nutritionForm.fatPer100) : undefined,
+      caloriesPer100: per100.calories,
+      proteinPer100: nutritionForm.proteinPer100 ? per100.protein : undefined,
+      carbsPer100: nutritionForm.carbsPer100 ? per100.carbs : undefined,
+      fatPer100: nutritionForm.fatPer100 ? per100.fat : undefined,
       calories: parseDecimal(nutritionForm.totalCalories),
       protein: nutritionForm.totalProtein ? parseDecimal(nutritionForm.totalProtein) : undefined,
       carbs: nutritionForm.totalCarbs ? parseDecimal(nutritionForm.totalCarbs) : undefined,
@@ -495,15 +496,18 @@ function AddFoodContent({
 
   // Handle selecting a history entry
   const handleSelectHistoryEntry = (entry: FoodEntry) => {
-    nutritionForm.setNutritionData({
-      name: entry.name,
-      quantity: entry.quantity.toString(),
-      unit: entry.unit,
-      caloriesPer100: entry.caloriesPer100.toString(),
-      proteinPer100: entry.proteinPer100?.toString() || '',
-      carbsPer100: entry.carbsPer100?.toString() || '',
-      fatPer100: entry.fatPer100?.toString() || '',
-    });
+    nutritionForm.setNutritionData(
+      {
+        name: entry.name,
+        quantity: entry.quantity.toString(),
+        unit: entry.unit,
+        caloriesPer100: formatCalories(entry.caloriesPer100),
+        proteinPer100: entry.proteinPer100 != null ? formatMacro(entry.proteinPer100) : '',
+        carbsPer100: entry.carbsPer100 != null ? formatMacro(entry.carbsPer100) : '',
+        fatPer100: entry.fatPer100 != null ? formatMacro(entry.fatPer100) : '',
+      },
+      entry
+    );
     setInputMethod('manual');
     setHistorySearchQuery('');
   };
@@ -520,15 +524,18 @@ function AddFoodContent({
 
   // Handle selecting a recipe
   const handleSelectRecipe = (recipe: Recipe) => {
-    nutritionForm.setNutritionData({
-      name: recipe.name,
-      quantity: '100',
-      unit: 'g',
-      caloriesPer100: recipe.caloriesPer100.toString(),
-      proteinPer100: recipe.proteinPer100.toString(),
-      carbsPer100: recipe.carbsPer100.toString(),
-      fatPer100: recipe.fatPer100.toString(),
-    });
+    nutritionForm.setNutritionData(
+      {
+        name: recipe.name,
+        quantity: '100',
+        unit: 'g',
+        caloriesPer100: formatCalories(recipe.caloriesPer100),
+        proteinPer100: formatMacro(recipe.proteinPer100),
+        carbsPer100: formatMacro(recipe.carbsPer100),
+        fatPer100: formatMacro(recipe.fatPer100),
+      },
+      recipe
+    );
     setInputMethod('manual');
     setRecipesSearchQuery('');
   };

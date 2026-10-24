@@ -2,6 +2,9 @@ import {
   calculateNutrition,
   recalculateFoodEntry,
   detectUnit,
+  formatCalories,
+  formatMacro,
+  resolvePrecise,
   NutritionalValues,
 } from '../nutritionCalculator';
 import { FoodEntry } from '@/types';
@@ -299,6 +302,31 @@ describe('nutritionCalculator', () => {
     it('should detect ml even when combined with other text', () => {
       expect(detectUnit('250ml bottle')).toBe('ml');
       expect(detectUnit('contains 100ml of liquid')).toBe('ml');
+    });
+  });
+});
+
+describe('display formatting', () => {
+  it('rounds calories to whole numbers and macros to one decimal', () => {
+    expect(formatCalories(318.57142857142856)).toBe('319');
+    expect(formatMacro(7.2857142857)).toBe('7.3');
+    expect(formatMacro(0.1 + 0.2)).toBe('0.3');
+    expect(formatMacro(12)).toBe('12');
+  });
+
+  describe('resolvePrecise', () => {
+    it('returns the exact value while the text matches its rounded form', () => {
+      expect(resolvePrecise('7.3', 7.2857, formatMacro)).toBe(7.2857);
+    });
+
+    it('returns the typed value once the text differs', () => {
+      expect(resolvePrecise('8', 7.2857, formatMacro)).toBe(8);
+      expect(resolvePrecise('7,5', 7.2857, formatMacro)).toBe(7.5);
+    });
+
+    it('parses the text when there is no exact value', () => {
+      expect(resolvePrecise('12.5', undefined, formatMacro)).toBe(12.5);
+      expect(resolvePrecise('', undefined, formatMacro)).toBeNaN();
     });
   });
 });

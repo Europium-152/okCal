@@ -12,6 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { FoodEntry } from '@/types';
 import { sortByRelevance } from '@/utils/fuzzySearch';
+import { formatCalories, formatMacro } from '@/utils/nutritionCalculator';
 
 interface HistoryFoodInputProps {
   historyEntries: FoodEntry[];
@@ -112,21 +113,21 @@ export default function HistoryFoodInput({
                 <View style={styles.searchResultNutrients}>
                   <View style={styles.nutrientItem}>
                     <Ionicons name="flame" size={14} color="#FF6B6B" />
-                    <Text style={styles.nutrientText}>{calories} cal</Text>
+                    <Text style={styles.nutrientText}>{formatCalories(calories)} cal</Text>
                   </View>
                   {protein > 0 && (
                     <View style={styles.nutrientItem}>
-                      <Text style={styles.nutrientText}>P: {protein}g</Text>
+                      <Text style={styles.nutrientText}>P: {formatMacro(protein)}g</Text>
                     </View>
                   )}
                   {carbs > 0 && (
                     <View style={styles.nutrientItem}>
-                      <Text style={styles.nutrientText}>C: {carbs}g</Text>
+                      <Text style={styles.nutrientText}>C: {formatMacro(carbs)}g</Text>
                     </View>
                   )}
                   {fat > 0 && (
                     <View style={styles.nutrientItem}>
-                      <Text style={styles.nutrientText}>F: {fat}g</Text>
+                      <Text style={styles.nutrientText}>F: {formatMacro(fat)}g</Text>
                     </View>
                   )}
                 </View>

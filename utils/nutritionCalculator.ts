@@ -1,4 +1,5 @@
 import { FoodEntry } from '@/types';
+import { parseDecimal } from '@/utils/parseDecimal';
 
 export interface NutritionalValues {
   calories: number;
@@ -25,6 +26,25 @@ export const calculateNutrition = (
     carbs: per100.carbs ? Math.round(per100.carbs * multiplier * 10) / 10 : undefined,
     fat: per100.fat ? Math.round(per100.fat * multiplier * 10) / 10 : undefined,
   };
+};
+
+/** Display formatting: whole calories, macros to 1 decimal. Never used for storage. */
+export const formatCalories = (value: number): string => String(Math.round(value));
+export const formatMacro = (value: number): string => String(Math.round(value * 10) / 10);
+
+/**
+ * Value of a form field that may have been filled from a full-precision source
+ * but is shown rounded. While the text still equals the rounded form of the
+ * source value it is returned as-is; once the user edits the text, the typed
+ * value wins.
+ */
+export const resolvePrecise = (
+  text: string,
+  exact: number | undefined,
+  format: (value: number) => string
+): number => {
+  if (exact !== undefined && format(exact) === text.trim()) return exact;
+  return parseDecimal(text);
 };
 
 /**

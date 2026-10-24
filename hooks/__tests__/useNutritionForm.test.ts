@@ -271,4 +271,50 @@ describe('useNutritionForm', () => {
     // Negative quantity should result in empty/zero totals
     expect(result.current.totalCalories).toBe('');
   });
+
+  describe('exact per100 values behind rounded text', () => {
+    const recipeText = { name: 'Stew', quantity: '1000', caloriesPer100: '319', proteinPer100: '7.3' };
+    const recipeExact = { caloriesPer100: 318.57142857142856, proteinPer100: 7.2857142857 };
+
+    it('uses the exact values for getPer100 and totals while unedited', () => {
+      const { result } = renderHook(() => useNutritionForm());
+
+      act(() => {
+        result.current.setNutritionData(recipeText, recipeExact);
+      });
+
+      expect(result.current.caloriesPer100).toBe('319');
+      expect(result.current.getPer100().calories).toBe(318.57142857142856);
+      expect(result.current.getPer100().protein).toBe(7.2857142857);
+      // 10x the exact value (3186), not 10x the rounded one (3190)
+      expect(result.current.totalCalories).toBe('3186');
+    });
+
+    it('falls back to the typed value once a field is edited', () => {
+      const { result } = renderHook(() => useNutritionForm());
+
+      act(() => {
+        result.current.setNutritionData(recipeText, recipeExact);
+      });
+      act(() => {
+        result.current.setCaloriesPer100('319');
+      });
+
+      expect(result.current.getPer100().calories).toBe(319);
+      expect(result.current.getPer100().protein).toBe(7.2857142857);
+    });
+
+    it('drops exact values when data is set without them', () => {
+      const { result } = renderHook(() => useNutritionForm());
+
+      act(() => {
+        result.current.setNutritionData(recipeText, recipeExact);
+      });
+      act(() => {
+        result.current.setNutritionData({ caloriesPer100: '319', proteinPer100: '7.3' });
+      });
+
+      expect(result.current.getPer100().calories).toBe(319);
+    });
+  });
 });

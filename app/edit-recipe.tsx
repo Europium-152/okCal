@@ -21,6 +21,7 @@ import { Recipe, RecipeIngredient } from '@/types';
 import { saveRecipe, getRecipeById } from '@/utils/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { parseDecimal } from '@/utils/parseDecimal';
+import { formatCalories, formatMacro } from '@/utils/nutritionCalculator';
 
 export default function EditRecipe({ navigation, route }: RootStackScreenProps<'EditRecipe'>) {
   const params = route.params || {};
@@ -136,11 +137,12 @@ export default function EditRecipe({ navigation, route }: RootStackScreenProps<'
     carbsPer100: number,
     fatPer100: number
   ) => {
+    // Full precision is kept; rounding happens only when displaying
     return {
-      calories: Math.round((calPer100 * qty) / 100),
-      protein: Math.round(((protPer100 * qty) / 100) * 10) / 10,
-      carbs: Math.round(((carbsPer100 * qty) / 100) * 10) / 10,
-      fat: Math.round(((fatPer100 * qty) / 100) * 10) / 10,
+      calories: (calPer100 * qty) / 100,
+      protein: (protPer100 * qty) / 100,
+      carbs: (carbsPer100 * qty) / 100,
+      fat: (fatPer100 * qty) / 100,
     };
   };
 
@@ -165,12 +167,12 @@ export default function EditRecipe({ navigation, route }: RootStackScreenProps<'
     const totalCarbs = ingredients.reduce((sum, ing) => sum + (ing.carbs || 0), 0);
     const totalFat = ingredients.reduce((sum, ing) => sum + (ing.fat || 0), 0);
 
-    // Calculate per-100g values
+    // Calculate per-100g values (full precision)
     return {
-      caloriesPer100: Math.round((totalCalories * 100) / prepWeight),
-      proteinPer100: Math.round(((totalProtein * 100) / prepWeight) * 10) / 10,
-      carbsPer100: Math.round(((totalCarbs * 100) / prepWeight) * 10) / 10,
-      fatPer100: Math.round(((totalFat * 100) / prepWeight) * 10) / 10,
+      caloriesPer100: (totalCalories * 100) / prepWeight,
+      proteinPer100: (totalProtein * 100) / prepWeight,
+      carbsPer100: (totalCarbs * 100) / prepWeight,
+      fatPer100: (totalFat * 100) / prepWeight,
     };
   };
 
@@ -229,10 +231,10 @@ export default function EditRecipe({ navigation, route }: RootStackScreenProps<'
             {item.quantity}
             {item.unit}
           </Text>
-          <Text style={styles.ingredientMacro}>{item.calories} cal</Text>
-          <Text style={styles.ingredientMacro}>{item.protein}g P</Text>
-          <Text style={styles.ingredientMacro}>{item.carbs}g C</Text>
-          <Text style={styles.ingredientMacro}>{item.fat}g F</Text>
+          <Text style={styles.ingredientMacro}>{formatCalories(item.calories)} cal</Text>
+          <Text style={styles.ingredientMacro}>{formatMacro(item.protein || 0)}g P</Text>
+          <Text style={styles.ingredientMacro}>{formatMacro(item.carbs || 0)}g C</Text>
+          <Text style={styles.ingredientMacro}>{formatMacro(item.fat || 0)}g F</Text>
         </View>
       </View>
     );
@@ -303,11 +305,11 @@ export default function EditRecipe({ navigation, route }: RootStackScreenProps<'
             <View style={styles.previewRow}>
               <View style={styles.previewItem}>
                 <Ionicons name="flame" size={16} color="#FF6B6B" />
-                <Text style={styles.previewValue}>{nutrition.caloriesPer100} cal</Text>
+                <Text style={styles.previewValue}>{formatCalories(nutrition.caloriesPer100)} cal</Text>
               </View>
-              <Text style={styles.previewValue}>{nutrition.proteinPer100}g P</Text>
-              <Text style={styles.previewValue}>{nutrition.carbsPer100}g C</Text>
-              <Text style={styles.previewValue}>{nutrition.fatPer100}g F</Text>
+              <Text style={styles.previewValue}>{formatMacro(nutrition.proteinPer100)}g P</Text>
+              <Text style={styles.previewValue}>{formatMacro(nutrition.carbsPer100)}g C</Text>
+              <Text style={styles.previewValue}>{formatMacro(nutrition.fatPer100)}g F</Text>
             </View>
           </View>
         )}

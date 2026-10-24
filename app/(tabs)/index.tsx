@@ -41,6 +41,7 @@ import { WeightChart } from '@/components/WeightChart';
 import { CalorieChart } from '@/components/CalorieChart';
 import { calculateWeightTrend } from '@/utils/weightTrend';
 import { calculateDailyTDEE, calculateDailyTDEEAsync } from '@/services/dailyTDEECalculator';
+import { formatCalories } from '@/utils/nutritionCalculator';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -633,7 +634,7 @@ export default function Dashboard() {
           <View style={styles.calorieSection}>
             <Text style={styles.calorieLabel}>Calories</Text>
             <Text style={styles.calorieValue}>
-              {todayCalories} / {nutritionTarget.calories}
+              {formatCalories(todayCalories)} / {nutritionTarget.calories}
             </Text>
             <View style={styles.progressBar}>
               <View

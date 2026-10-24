@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Colors } from '@/constants/colors';
 import { keyboardScrollProps, searchInputProps } from '@/constants/keyboard';
 import {
@@ -24,6 +24,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { processFoodImage, processFoodDescription, EstimatedFood } from '@/services/aiService';
 import BarcodeScanner from '@/components/BarcodeScanner';
 import { parseDecimal } from '@/utils/parseDecimal';
+import { formatCalories, formatMacro, resolvePrecise } from '@/utils/nutritionCalculator';
 import KeyboardAwareScrollView from '@/components/KeyboardAwareScrollView';
 
 type InputMethod = 'select' | 'manual' | 'barcode' | 'search' | 'offline-search' | 'photo' | 'text' | 'history' | 'recipes';
@@ -38,10 +39,26 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState('100');
   const [unit, setUnit] = useState<'g' | 'ml'>('g');
-  const [caloriesPer100, setCaloriesPer100] = useState('');
-  const [proteinPer100, setProteinPer100] = useState('');
-  const [carbsPer100, setCarbsPer100] = useState('');
-  const [fatPer100, setFatPer100] = useState('');
+  const [caloriesPer100, setCaloriesPer100Raw] = useState('');
+  const [proteinPer100, setProteinPer100Raw] = useState('');
+  const [carbsPer100, setCarbsPer100Raw] = useState('');
+  const [fatPer100, setFatPer100Raw] = useState('');
+  // Full-precision values behind the rounded text fields (set when picking a recipe)
+  const exactPer100 = useRef<Partial<Record<'calories' | 'protein' | 'carbs' | 'fat', number>>>({});
+  const per100Setter = (key: 'calories' | 'protein' | 'carbs' | 'fat', set: (value: string) => void) => (value: string) => {
+    delete exactPer100.current[key];
+    set(value);
+  };
+  const setCaloriesPer100 = per100Setter('calories', setCaloriesPer100Raw);
+  const setProteinPer100 = per100Setter('protein', setProteinPer100Raw);
+  const setCarbsPer100 = per100Setter('carbs', setCarbsPer100Raw);
+  const setFatPer100 = per100Setter('fat', setFatPer100Raw);
+  const getPer100 = () => ({
+    calories: resolvePrecise(caloriesPer100, exactPer100.current.calories, formatCalories),
+    protein: resolvePrecise(proteinPer100, exactPer100.current.protein, formatMacro),
+    carbs: resolvePrecise(carbsPer100, exactPer100.current.carbs, formatMacro),
+    fat: resolvePrecise(fatPer100, exactPer100.current.fat, formatMacro),
+  });
 
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -75,7 +92,8 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
     }
 
     const qty = parseDecimal(quantity);
-    const cal = parseDecimal(caloriesPer100);
+    const per100 = getPer100();
+    const cal = per100.calories;
 
     if (!qty || qty <= 0 || !cal || cal <= 0) {
       Alert.alert('Error', 'Please enter valid quantity and calories');
@@ -88,9 +106,9 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
       quantity: qty,
       unit,
       caloriesPer100: cal,
-      proteinPer100: parseDecimal(proteinPer100) || 0,
-      carbsPer100: parseDecimal(carbsPer100) || 0,
-      fatPer100: parseDecimal(fatPer100) || 0,
+      proteinPer100: per100.protein || 0,
+      carbsPer100: per100.carbs || 0,
+      fatPer100: per100.fat || 0,
       timestamp: Date.now(),
     };
 
@@ -173,10 +191,10 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
       // Calculate per-100 values from the total values
       const { calories, protein, carbs, fat, servingSize } = estimatedFood;
       const per100 = {
-        calories: Math.round((calories / servingSize) * 100),
-        protein: Math.round(((protein / servingSize) * 100) * 10) / 10,
-        carbs: Math.round(((carbs / servingSize) * 100) * 10) / 10,
-        fat: Math.round(((fat / servingSize) * 100) * 10) / 10,
+        calories: (calories / servingSize) * 100,
+        protein: (protein / servingSize) * 100,
+        carbs: (carbs / servingSize) * 100,
+        fat: (fat / servingSize) * 100,
       };
 
       // Create a single ingredient from the consolidated food entry
@@ -229,10 +247,10 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
       // Calculate per-100 values from the total values
       const { calories, protein, carbs, fat, servingSize } = estimatedFood;
       const per100 = {
-        calories: Math.round((calories / servingSize) * 100),
-        protein: Math.round(((protein / servingSize) * 100) * 10) / 10,
-        carbs: Math.round(((carbs / servingSize) * 100) * 10) / 10,
-        fat: Math.round(((fat / servingSize) * 100) * 10) / 10,
+        calories: (calories / servingSize) * 100,
+        protein: (protein / servingSize) * 100,
+        carbs: (carbs / servingSize) * 100,
+        fat: (fat / servingSize) * 100,
       };
 
       // Create ingredient from the estimated food
@@ -321,10 +339,16 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
     setName(entry.name);
     setQuantity(entry.quantity.toString());
     setUnit(entry.unit);
-    setCaloriesPer100(entry.caloriesPer100.toString());
-    setProteinPer100(entry.proteinPer100?.toString() || '');
-    setCarbsPer100(entry.carbsPer100?.toString() || '');
-    setFatPer100(entry.fatPer100?.toString() || '');
+    setCaloriesPer100Raw(formatCalories(entry.caloriesPer100));
+    setProteinPer100Raw(entry.proteinPer100 != null ? formatMacro(entry.proteinPer100) : '');
+    setCarbsPer100Raw(entry.carbsPer100 != null ? formatMacro(entry.carbsPer100) : '');
+    setFatPer100Raw(entry.fatPer100 != null ? formatMacro(entry.fatPer100) : '');
+    exactPer100.current = {
+      calories: entry.caloriesPer100,
+      protein: entry.proteinPer100,
+      carbs: entry.carbsPer100,
+      fat: entry.fatPer100,
+    };
     setInputMethod('manual');
     setHistorySearchQuery('');
   };
@@ -338,10 +362,16 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
     setName(recipe.name);
     setQuantity('100');
     setUnit('g');
-    setCaloriesPer100(recipe.caloriesPer100.toString());
-    setProteinPer100(recipe.proteinPer100.toString());
-    setCarbsPer100(recipe.carbsPer100.toString());
-    setFatPer100(recipe.fatPer100.toString());
+    setCaloriesPer100Raw(formatCalories(recipe.caloriesPer100));
+    setProteinPer100Raw(formatMacro(recipe.proteinPer100));
+    setCarbsPer100Raw(formatMacro(recipe.carbsPer100));
+    setFatPer100Raw(formatMacro(recipe.fatPer100));
+    exactPer100.current = {
+      calories: recipe.caloriesPer100,
+      protein: recipe.proteinPer100,
+      carbs: recipe.carbsPer100,
+      fat: recipe.fatPer100,
+    };
     setInputMethod('manual');
     setRecipesSearchQuery('');
   };
@@ -368,10 +398,11 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
   // Manual entry view
   if (inputMethod === 'manual') {
     const qty = parseDecimal(quantity) || 0;
-    const cal = parseDecimal(caloriesPer100) || 0;
-    const prot = parseDecimal(proteinPer100) || 0;
-    const carb = parseDecimal(carbsPer100) || 0;
-    const f = parseDecimal(fatPer100) || 0;
+    const preciseHere = getPer100();
+    const cal = preciseHere.calories || 0;
+    const prot = preciseHere.protein || 0;
+    const carb = preciseHere.carbs || 0;
+    const f = preciseHere.fat || 0;
 
     const totalCalories = qty > 0 && cal > 0 ? Math.round((cal * qty) / 100) : 0;
     const totalProtein = qty > 0 && prot > 0 ? Math.round(((prot * qty) / 100) * 10) / 10 : 0;
@@ -604,7 +635,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
             >
               <Text style={styles.resultName}>{item.name}</Text>
               <Text style={styles.resultMacros}>
-                {item.caloriesPer100} cal per 100{item.unit}
+                {formatCalories(item.caloriesPer100)} cal per 100{item.unit}
               </Text>
             </TouchableOpacity>
           )}
@@ -656,7 +687,7 @@ export default function AddIngredient({ navigation, route }: RootStackScreenProp
             >
               <Text style={styles.resultName}>{item.name}</Text>
               <Text style={styles.resultMacros}>
-                {item.caloriesPer100} cal per 100g
+                {formatCalories(item.caloriesPer100)} cal per 100g
               </Text>
             </TouchableOpacity>
           )}

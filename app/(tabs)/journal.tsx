@@ -32,6 +32,7 @@ import BatchActionBar from '@/components/journal/BatchActionBar';
 import FastingToggle from '@/components/journal/FastingToggle';
 import EntryEditModal from '@/components/journal/EntryEditModal';
 import DatePickerModal from '@/components/journal/DatePickerModal';
+import { formatCalories, formatMacro } from '@/utils/nutritionCalculator';
 
 export default function Journal() {
   const navigation = useNavigation();
@@ -198,16 +199,16 @@ export default function Journal() {
   const meals = groupEntriesIntoMeals(entries);
 
   const totalCalories = entries.reduce((sum, entry) => sum + entry.calories, 0);
-  const totalProtein = Math.round(entries.reduce((sum, entry) => sum + (entry.protein || 0), 0) * 10) / 10;
-  const totalCarbs = Math.round(entries.reduce((sum, entry) => sum + (entry.carbs || 0), 0) * 10) / 10;
-  const totalFat = Math.round(entries.reduce((sum, entry) => sum + (entry.fat || 0), 0) * 10) / 10;
+  const totalProtein = entries.reduce((sum, entry) => sum + (entry.protein || 0), 0);
+  const totalCarbs = entries.reduce((sum, entry) => sum + (entry.carbs || 0), 0);
+  const totalFat = entries.reduce((sum, entry) => sum + (entry.fat || 0), 0);
 
   const renderMeal = ({ item, index }: { item: FoodEntry[], index: number }) => {
     // Calculate meal totals
     const mealCalories = item.reduce((sum, entry) => sum + entry.calories, 0);
-    const mealProtein = Math.round(item.reduce((sum, entry) => sum + (entry.protein || 0), 0) * 10) / 10;
-    const mealCarbs = Math.round(item.reduce((sum, entry) => sum + (entry.carbs || 0), 0) * 10) / 10;
-    const mealFat = Math.round(item.reduce((sum, entry) => sum + (entry.fat || 0), 0) * 10) / 10;
+    const mealProtein = item.reduce((sum, entry) => sum + (entry.protein || 0), 0);
+    const mealCarbs = item.reduce((sum, entry) => sum + (entry.carbs || 0), 0);
+    const mealFat = item.reduce((sum, entry) => sum + (entry.fat || 0), 0);
 
     return (
       <View style={styles.mealGroup}>
@@ -217,11 +218,11 @@ export default function Journal() {
           <View style={styles.mealSummaryRow}>
             <View style={styles.macroItem}>
               <Ionicons name="flame" size={14} color="#FF6B6B" />
-              <Text style={styles.mealSummaryValue}>{mealCalories} cal</Text>
+              <Text style={styles.mealSummaryValue}>{formatCalories(mealCalories)} cal</Text>
             </View>
-            <Text style={styles.mealSummaryValue}>{mealProtein}g P</Text>
-            <Text style={styles.mealSummaryValue}>{mealCarbs}g C</Text>
-            <Text style={styles.mealSummaryValue}>{mealFat}g F</Text>
+            <Text style={styles.mealSummaryValue}>{formatMacro(mealProtein)}g P</Text>
+            <Text style={styles.mealSummaryValue}>{formatMacro(mealCarbs)}g C</Text>
+            <Text style={styles.mealSummaryValue}>{formatMacro(mealFat)}g F</Text>
           </View>
         </View>
 

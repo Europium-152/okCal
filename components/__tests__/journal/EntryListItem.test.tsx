@@ -34,6 +34,19 @@ describe('EntryListItem', () => {
     jest.clearAllMocks();
   });
 
+  describe('rounding for display', () => {
+    it('should round full-precision totals without altering the entry', () => {
+      const entry = { ...mockEntry, calories: 164.6, protein: 30.8571428, carbs: 0.30000000000000004, fat: 3.64 };
+      const { getByText } = render(<EntryListItem {...defaultProps} entry={entry} />);
+
+      expect(getByText('165 cal')).toBeTruthy();
+      expect(getByText('30.9g P')).toBeTruthy();
+      expect(getByText('0.3g C')).toBeTruthy();
+      expect(getByText('3.6g F')).toBeTruthy();
+      expect(entry.protein).toBe(30.8571428);
+    });
+  });
+
   describe('rendering', () => {
     it('should render entry name', () => {
       const { getByText } = render(<EntryListItem {...defaultProps} />);

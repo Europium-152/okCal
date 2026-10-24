@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Calendar } from 'react-native-calendars';
 import { formatDisplayDate, parseDate } from '@/utils/dateHelpers';
+import { formatCalories, formatMacro } from '@/utils/nutritionCalculator';
 
 interface JournalHeaderProps {
   selectedDate: string;
@@ -61,7 +62,7 @@ export default function JournalHeader({
       <View style={styles.summaryCard}>
         <Text style={styles.summaryTitle}>Daily Total</Text>
         <Text style={styles.summaryText}>
-          {totalCalories} cal • {totalProtein}g P • {totalCarbs}g C • {totalFat}g F
+          {formatCalories(totalCalories)} cal • {formatMacro(totalProtein)}g P • {formatMacro(totalCarbs)}g C • {formatMacro(totalFat)}g F
         </Text>
       </View>
 

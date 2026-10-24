@@ -3,6 +3,7 @@ import { Colors } from '@/constants/colors';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FoodEntry } from '@/types';
+import { formatCalories, formatMacro } from '@/utils/nutritionCalculator';
 
 interface EntryListItemProps {
   entry: FoodEntry;
@@ -58,19 +59,19 @@ export default function EntryListItem({
           <View style={styles.macrosContainer}>
             <View style={styles.macroItem}>
               <Ionicons name="flame" size={14} color="#FF6B6B" />
-              <Text style={styles.macroValue}>{entry.calories} cal</Text>
+              <Text style={styles.macroValue}>{formatCalories(entry.calories)} cal</Text>
             </View>
 
             <Text style={styles.macroValue}>
-              {entry.protein !== undefined ? entry.protein : 0}g P
+              {formatMacro(entry.protein ?? 0)}g P
             </Text>
 
             <Text style={styles.macroValue}>
-              {entry.carbs !== undefined ? entry.carbs : 0}g C
+              {formatMacro(entry.carbs ?? 0)}g C
             </Text>
 
             <Text style={styles.macroValue}>
-              {entry.fat !== undefined ? entry.fat : 0}g F
+              {formatMacro(entry.fat ?? 0)}g F
             </Text>
           </View>
         </View>
